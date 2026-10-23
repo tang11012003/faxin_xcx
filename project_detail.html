@@ -1,0 +1,4206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>发薪-01 项目</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background-color: #F8F9FB;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      color: #202536;
+    }
+    .phone-container {
+      width: 375px;
+      min-height: 100vh;
+      background: #FFFFFF;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
+      padding-bottom: 84px;
+    }
+
+    /* 顶部渐变背景区域 (浅薄荷绿渐变) */
+    .top-header-area {
+      background: linear-gradient(180deg, #CEF3DF 0%, #E6F8EE 55%, #F7FCF9 100%);
+      padding: 12px 16px 20px 16px;
+      position: relative;
+    }
+
+    
+    /* 小程序原生顶部导航 */
+    .nav-bar {
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .nav-back {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      cursor: pointer;
+    }
+    .nav-back svg {
+      width: 20px;
+      height: 20px;
+      stroke: #202536;
+    }
+    .capsule-menu {
+      width: 86px;
+      height: 32px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0 6px;
+      background: rgba(255, 255, 255, 0.85);
+    }
+    .capsule-dots {
+      display: flex;
+      gap: 3px;
+    }
+    .capsule-dots span {
+      width: 3.5px;
+      height: 3.5px;
+      background: #000;
+      border-radius: 50%;
+    }
+    .capsule-divider {
+      width: 1px;
+      height: 14px;
+      background: rgba(0, 0, 0, 0.1);
+    }
+    .capsule-circle {
+      width: 15px;
+      height: 15px;
+      border: 1.8px solid #000;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .capsule-circle-inner {
+      width: 5px;
+      height: 5px;
+      background: #000;
+      border-radius: 50%;
+    }
+
+    /* 项目标题与创建日期行 */
+    .project-title-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-top: 4px;
+    }
+    .project-name {
+      font-size: 24px;
+      font-weight: 700;
+      color: #202536;
+      line-height: 28px;
+    }
+    .project-detail-link {
+      font-size: 14px;
+      color: #9497B1;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+    .project-detail-link:hover {
+      color: #202536;
+    }
+    .created-date {
+      font-size: 13px;
+      color: #9497B1;
+      margin-top: 4px;
+      margin-bottom: 16px;
+    }
+
+    /* 三合一添加员工快捷卡片 (横向 3 列) */
+    
+    .btn-sync-all {
+      font-size: 12px;
+      font-weight: 600;
+      color: #009944;
+      background: #E8F7ED;
+      border: 1px solid rgba(0, 153, 68, 0.25);
+      border-radius: 14px;
+      padding: 3px 9px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+    .btn-sync-all:hover {
+      background: #D8F2E2;
+    }
+
+    /* 联动状态胶囊标签 */
+    .sync-status-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+    .sync-tag {
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-weight: 500;
+    }
+    .sync-tag.success {
+      background: #E8F7ED;
+      color: #009944;
+      border: 1px solid rgba(0, 153, 68, 0.2);
+    }
+    .sync-tag.warning {
+      background: #FFF7E6;
+      color: #FA8C16;
+      border: 1px solid rgba(250, 140, 22, 0.25);
+      cursor: pointer;
+    }
+    .sync-tag.warning:hover {
+      background: #FFE7BA;
+    }
+    .sync-tag.action-inline {
+      text-decoration: underline;
+      font-weight: 700;
+      margin-left: 2px;
+    }
+
+    
+    /* 同步创建电子签项目勾选栏 (完全遵循真机风格，零 emoji) */
+    
+    /* 联动服务跳转入口卡片 (严格按照用户 XMind 脑图设计：去保险、电子签对应项目页面操作) */
+    .linkage-hub-card {
+      margin: 10px 16px 2px 16px;
+      background: #FFFFFF;
+      border: 1px solid #E5E7EB;
+      border-radius: 10px;
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    }
+    .linkage-hub-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+    }
+    .linkage-hub-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .linkage-tag-icon {
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+    .linkage-tag-icon.contract {
+      background: #E8F7ED;
+      color: #009944;
+      border: 1px solid rgba(0, 153, 68, 0.2);
+    }
+    .linkage-tag-icon.insurance {
+      background: #E6F4FF;
+      color: #1677FF;
+      border: 1px solid rgba(22, 119, 255, 0.2);
+    }
+    .linkage-hub-title {
+      color: #202536;
+      font-weight: 600;
+    }
+    .linkage-hub-sub {
+      color: #8C90A4;
+      font-size: 12px;
+    }
+    .linkage-hub-action {
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+    .linkage-hub-action.contract {
+      color: #009944;
+    }
+    .linkage-hub-action.insurance {
+      color: #1677FF;
+    }
+    .linkage-hub-action:hover {
+      text-decoration: underline;
+    }
+
+    .sync-contract-card {
+      margin: 12px 16px 4px 16px;
+      padding: 10px 14px;
+      background: #FFFFFF;
+      border: 1px solid #E5E7EB;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+    }
+    .sync-contract-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .custom-check-input {
+      width: 17px;
+      height: 17px;
+      accent-color: #009944;
+      cursor: pointer;
+    }
+    .sync-label-main {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #202536;
+      cursor: pointer;
+    }
+    .sync-contract-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .sync-template-tag {
+      font-size: 12px;
+      color: #009944;
+      background: #E8F7ED;
+      padding: 2px 7px;
+      border-radius: 4px;
+      border: 1px solid rgba(0, 153, 68, 0.2);
+    }
+    .sync-view-link {
+      font-size: 12px;
+      color: #1677FF;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+    .sync-view-link:hover {
+      text-decoration: underline;
+    }
+    .badge-full {
+      background: #FF4D4F;
+      color: #FFFFFF;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 1px 5px;
+      border-radius: 3px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+    .contract-status-tag {
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+    .contract-status-tag.waiting {
+      background: #FFF7E6;
+      color: #FA8C16;
+      border: 1px solid #FFE7BA;
+    }
+    .contract-status-tag.signed {
+      background: #E8F7ED;
+      color: #009944;
+      border: 1px solid rgba(0, 153, 68, 0.2);
+    }
+
+    .add-action-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .action-card {
+      background: #FFFFFF;
+      border-radius: 10px;
+      padding: 12px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .action-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+    /* 卡片微弧形底色装饰 */
+    .action-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 38px;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      z-index: 0;
+      opacity: 0.45;
+    }
+    .action-card.scan::before {
+      background: linear-gradient(180deg, #FFEBD9 0%, #FFFFFF 100%);
+    }
+    .action-card.old::before {
+      background: linear-gradient(180deg, #D9F1FF 0%, #FFFFFF 100%);
+    }
+    .action-card.manual::before {
+      background: linear-gradient(180deg, #FFDEEF 0%, #FFFFFF 100%);
+    }
+
+    .card-icon-wrap {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 1;
+    }
+    .card-main-text {
+      font-size: 14px;
+      font-weight: 700;
+      color: #202536;
+      line-height: 18px;
+      position: relative;
+      z-index: 1;
+      margin-bottom: 3px;
+    }
+    .card-sub-text {
+      font-size: 10.5px;
+      color: #9497B1;
+      line-height: 12px;
+      position: relative;
+      z-index: 1;
+      white-space: nowrap;
+    }
+
+    /* 名单统计与操作栏 */
+    .list-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 16px 12px 16px;
+      background: #FFFFFF;
+    }
+    .stat-text {
+      font-size: 14px;
+      font-weight: 600;
+      color: #202536;
+    }
+    .stat-needed {
+      font-size: 13px;
+      font-weight: 400;
+      color: #9497B1;
+      margin-left: 4px;
+    }
+    .export-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #202536;
+      cursor: pointer;
+    }
+    .export-btn svg {
+      width: 16px;
+      height: 16px;
+      stroke: #202536;
+      stroke-width: 2;
+    }
+
+    /* 搜索栏 */
+    .search-container {
+      padding: 0 16px 14px 16px;
+      background: #FFFFFF;
+    }
+    .search-input-box {
+      height: 38px;
+      background: #F5F6F8;
+      border-radius: 19px;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      gap: 8px;
+    }
+    .search-input-box svg {
+      width: 15px;
+      height: 15px;
+      stroke: #9497B1;
+      stroke-width: 2;
+    }
+    .search-input {
+      border: none;
+      background: transparent;
+      outline: none;
+      font-size: 13.5px;
+      color: #202536;
+      width: 100%;
+    }
+    .search-input::placeholder {
+      color: #9497B1;
+    }
+
+    /* 员工名单列表样式 (精细 1:1 还原) */
+    .employee-list {
+      padding: 0 16px;
+      background: #FFFFFF;
+    }
+    .employee-card-item {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 14px 0 16px 0;
+      border-bottom: 1px solid #F2F3F7;
+    }
+    .emp-left-block {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    /* 绿底方块头像 + 性别角标 */
+    .emp-avatar-box {
+      position: relative;
+      width: 44px;
+      height: 44px;
+    }
+    .emp-avatar-green {
+      width: 44px;
+      height: 44px;
+      background: #009944;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .gender-badge {
+      position: absolute;
+      bottom: -2px;
+      right: -3px;
+      width: 15px;
+      height: 15px;
+      border-radius: 4px;
+      background: #FFE8ED;
+      color: #FF4D79;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #FFFFFF;
+    }
+
+    /* 员工详情文字 */
+    .emp-content {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .emp-header-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .emp-name-text {
+      font-size: 16px;
+      font-weight: 700;
+      color: #202536;
+      line-height: 20px;
+    }
+    .emp-code-text {
+      font-size: 14px;
+      color: #9497B1;
+    }
+    .emp-age-badge {
+      background: #F0F1F5;
+      color: #565868;
+      font-size: 11px;
+      padding: 1px 6px;
+      border-radius: 4px;
+      line-height: 16px;
+      font-weight: 500;
+    }
+    .emp-status-badge {
+      background: rgba(82, 110, 255, 0.08);
+      color: #526FFF;
+      font-size: 11px;
+      padding: 1px 6px;
+      border-radius: 3px;
+      line-height: 16px;
+      font-weight: 500;
+    }
+    .emp-meta-line {
+      font-size: 12px;
+      color: #9497B1;
+      line-height: 16px;
+    }
+    .emp-custom-tags {
+      margin-top: 4px;
+      display: flex;
+      gap: 6px;
+    }
+    .custom-tag {
+      background: #F2F3F7;
+      color: #565868;
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    /* 右侧操作按钮 */
+    .emp-more-btn {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #9497B1;
+      font-size: 18px;
+      letter-spacing: 1px;
+      margin-top: 2px;
+    }
+
+    /* 列表末尾提示 */
+    .list-end-tip {
+      text-align: center;
+      font-size: 12px;
+      color: #C2C5D6;
+      padding: 24px 0 30px 0;
+    }
+
+    /* 空状态展示区 */
+    .empty-state-area {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 0 100px 0;
+      background: #FFFFFF;
+    }
+    .empty-illustration {
+      width: 78px;
+      height: 78px;
+      margin-bottom: 16px;
+    }
+    .empty-label {
+      font-size: 14px;
+      color: #9497B1;
+    }
+
+    /* 底部固定操作条 (MasterGo 740:109213 平铺三按钮：签合同 / 去投保 / 去发薪) */
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      width: 375px;
+      height: 74px;
+      background: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 16px 20px 16px;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+      border-top: 1px solid #F0F1F5;
+      z-index: 30;
+      box-sizing: border-box;
+    }
+    .btn-bottom-action {
+      height: 44px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+      position: relative;
+      user-select: none;
+    }
+    .btn-bottom-action:active {
+      transform: scale(0.98);
+    }
+    .btn-bottom-action.btn-contract,
+    .btn-bottom-action.btn-insurance {
+      flex: 1;
+      background: #F4F4F7;
+      border: 1px solid #E9ECF2;
+      color: #202536;
+    }
+    .btn-bottom-action.btn-contract:active,
+    .btn-bottom-action.btn-insurance:active {
+      background: #E8E9EE;
+    }
+    .btn-bottom-action.btn-pay {
+      flex: 1.25;
+      background: #00D679;
+      border: none;
+      color: #FFFFFF;
+      font-size: 15px;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(0, 214, 121, 0.28);
+    }
+    .btn-bottom-action.btn-pay:active {
+      background: #00BF6C;
+    }
+    .btn-contract-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 16px;
+      height: 16px;
+      padding: 0 4px;
+      border-radius: 8px;
+      background: #FF4D4F;
+      color: #FFFFFF;
+      font-size: 10px;
+      font-weight: 600;
+      line-height: 1;
+      margin-left: 2px;
+    }
+    .btn-more-actions {
+      display: none;
+    }
+    .btn-main-action {
+      display: none;
+    }
+
+    /* 兼容旧式单个发薪按钮样式 */
+    .btn-pay {
+      width: 100%;
+      height: 48px;
+      background: #00D679;
+      border: none;
+      border-radius: 24px;
+      color: #FFFFFF;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0, 214, 121, 0.25);
+    }
+
+    /* 半屏抽屉组件 (MasterGo 740:125612 1:1 还原) */
+    .drawer-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 100;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      backdrop-filter: blur(2px);
+    }
+    .drawer-sheet {
+      width: 375px;
+      max-width: 100%;
+      background: #FFFFFF;
+      border-radius: 16px 16px 0 0;
+      padding: 12px 16px 28px 16px;
+      box-sizing: border-box;
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.12);
+      max-height: 85vh;
+      overflow-y: auto;
+      animation: slideUpDrawer 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    @keyframes slideUpDrawer {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+    .drawer-drag-handle {
+      width: 36px;
+      height: 4px;
+      background: #E2E4EA;
+      border-radius: 2px;
+      margin: 4px auto 14px auto;
+    }
+    .drawer-header {
+      margin-bottom: 16px;
+      text-align: left;
+    }
+    .drawer-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #202536;
+      line-height: 24px;
+    }
+    .drawer-subtitle {
+      font-size: 12px;
+      color: #9497B1;
+      margin-top: 2px;
+    }
+    .drawer-menu-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .drawer-menu-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 14px;
+      background: #F8F9FB;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .drawer-menu-item:active {
+      background: #EEF0F5;
+    }
+    .drawer-item-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+      flex-shrink: 0;
+    }
+    .drawer-item-icon.icon-contract {
+      background: #E6F4FF;
+    }
+    .drawer-item-icon.icon-insurance {
+      background: #E8F7ED;
+    }
+    .drawer-item-icon.icon-export {
+      background: #F9F0FF;
+    }
+    .drawer-item-content {
+      flex: 1;
+      min-width: 0;
+    }
+    .drawer-item-title-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 2px;
+    }
+    .drawer-item-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #202536;
+    }
+    .drawer-item-badge {
+      font-size: 11px;
+      padding: 1px 6px;
+      border-radius: 4px;
+      background: #E6F4FF;
+      color: #1677FF;
+      font-weight: 500;
+    }
+    .drawer-item-badge.success {
+      background: #E8F7ED;
+      color: #009944;
+    }
+    .drawer-item-desc {
+      font-size: 12px;
+      color: #8C8FA6;
+      line-height: 16px;
+    }
+    .drawer-arrow {
+      margin-left: 8px;
+      flex-shrink: 0;
+    }
+    .drawer-cancel-btn {
+      width: 100%;
+      height: 44px;
+      background: #F4F4F7;
+      border: none;
+      border-radius: 8px;
+      color: #565868;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+    }
+    .drawer-cancel-btn:active {
+      background: #E8E9EE;
+    }
+
+    /* 一键批量签约抽屉专属样式 */
+    .invite-config-box {
+      background: #F8F9FB;
+      border-radius: 8px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+    .invite-config-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .invite-label {
+      color: #7D8099;
+    }
+    .invite-val {
+      color: #202536;
+      font-weight: 500;
+    }
+    .invite-val.highlight {
+      color: #009944;
+      font-weight: 600;
+    }
+    .invite-emp-scroll {
+      max-height: 140px;
+      overflow-y: auto;
+      border: 1px solid #ECEEF2;
+      border-radius: 8px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .invite-emp-chip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 10px;
+      background: #FFFFFF;
+      border-radius: 6px;
+      border: 1px solid #F0F1F5;
+      font-size: 12px;
+    }
+    .invite-tip-text {
+      font-size: 11px;
+      color: #9497B1;
+      line-height: 16px;
+      margin-top: 6px;
+    }
+
+    /* 模态框通用 */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 20px;
+    }
+    .modal-card {
+      width: 310px;
+      background: #FFFFFF;
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    .modal-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #202536;
+      margin-bottom: 12px;
+    }
+    .qr-placeholder {
+      width: 160px;
+      height: 160px;
+      background: #FAFAFC;
+      border: 1px dashed #D0D3DE;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 8px 0;
+    }
+    .modal-tip {
+      font-size: 12px;
+      color: #9497B1;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .modal-btn {
+      width: 100%;
+      height: 38px;
+      background: #00D679;
+      border: none;
+      border-radius: 19px;
+      color: #FFFFFF;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    </style>
+
+<style id="protoWebAnnotationCss">
+.protoWeb-root {
+  --protoWeb-layer-root: 2147483000;
+  --protoWeb-accent: #3388FF;
+  --protoWeb-accent-dark: #2167D9;
+  --protoWeb-accent-soft: #F0F9FF;
+  --protoWeb-ink: #223355;
+  --protoWeb-muted: #6B7A99;
+  position: fixed;
+  inset: 0;
+  z-index: var(--protoWeb-layer-root);
+  width: auto;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: visible;
+  background: transparent;
+  pointer-events: none;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+  font-size: 14px;
+  letter-spacing: 0;
+}
+.protoWeb-root::backdrop { background: transparent; pointer-events: none; }
+.protoWeb-marker-layer { position: fixed; inset: 0; pointer-events: none; z-index: 15; }
+.protoWeb-marker {
+  position: fixed;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 2px solid #FFFFFF;
+  border-radius: 50%;
+  background: var(--protoWeb-accent);
+  color: #FFFFFF;
+  box-shadow: 0 0 0 2px rgba(33,103,217,.72), 0 5px 14px rgba(33,103,217,.32);
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+  z-index: 2;
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.protoWeb-marker:hover,
+.protoWeb-marker.is-active {
+  background: var(--protoWeb-accent-dark);
+  box-shadow: 0 0 0 3px rgba(255,255,255,.95), 0 0 0 6px rgba(51,136,255,.28), 0 7px 18px rgba(33,103,217,.36);
+  transform: translate(-50%, -50%) scale(1.08);
+}
+.protoWeb-launcher,
+.protoWeb-menu,
+.protoWeb-panel,
+.protoWeb-review-mode-group {
+  display: none !important;
+}
+.protoWeb-launcher {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border: 2px solid var(--protoWeb-accent);
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--protoWeb-accent), var(--protoWeb-accent-dark));
+  color: #FFFFFF;
+  box-shadow: 0 8px 24px rgba(33,103,217,.34), 0 0 0 3px rgba(255,255,255,.92);
+  display: grid;
+  place-items: center;
+  pointer-events: auto;
+  touch-action: none;
+  user-select: none;
+  z-index: 30;
+  cursor: grab;
+}
+.protoWeb-launcher:active { cursor: grabbing; }
+.protoWeb-launcher:hover { background: linear-gradient(135deg, #4795FF, #1B58C0); }
+.protoWeb-launcher.is-active {
+  background: var(--protoWeb-accent);
+  border-color: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(51,136,255,.24), 0 9px 26px rgba(33,103,217,.38);
+}
+.protoWeb-launcher-symbol { font-size: 17px; font-weight: 700; line-height: 1; }
+.protoWeb-launcher-count {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 5px;
+  border: 2px solid #FFFFFF;
+  border-radius: 11px;
+  background: var(--protoWeb-accent);
+  color: #FFFFFF;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  font-weight: 700;
+}
+.protoWeb-menu {
+  position: fixed;
+  width: 264px;
+  padding: 6px;
+  border: 1px solid rgba(51,136,255,.28);
+  border-radius: 6px;
+  background: #FFFFFF;
+  box-shadow: 0 16px 40px rgba(33,103,217,.22), 0 4px 12px rgba(8,17,38,.12);
+  display: none;
+  pointer-events: auto;
+  z-index: 40;
+}
+.protoWeb-menu.is-open { display: block; }
+.protoWeb-menu-row,
+.protoWeb-menu-link {
+  min-height: 54px;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 4px;
+  background: #FFFFFF;
+  color: var(--protoWeb-ink);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+}
+.protoWeb-menu-row { justify-content: space-between; }
+.protoWeb-menu-link { width: 100%; cursor: pointer; }
+.protoWeb-menu-link:hover { background: var(--protoWeb-accent-soft); }
+.protoWeb-menu-mode { padding: 8px 10px 10px; border-bottom: 1px solid #E9ECF2; }
+.protoWeb-menu-mode-label { display: block; margin-bottom: 7px; color: var(--protoWeb-muted); font-size: 12px; line-height: 1.4; }
+.protoWeb-menu-mode-group {
+  height: 34px;
+  padding: 2px;
+  border: 1px solid #DDE1EB;
+  border-radius: 4px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: #F5F7FA;
+}
+.protoWeb-menu-mode-group button {
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: var(--protoWeb-muted);
+  font-size: 13px;
+}
+.protoWeb-menu-mode-group button.is-active {
+  background: #FFFFFF;
+  color: var(--protoWeb-accent-dark);
+  box-shadow: 0 1px 4px rgba(8,17,38,.12);
+  font-weight: 600;
+}
+.protoWeb-menu-copy { min-width: 0; flex: 1; }
+.protoWeb-menu-copy strong { display: block; font-size: 14px; font-weight: 600; line-height: 1.5; }
+.protoWeb-menu-copy small { display: block; margin-top: 2px; color: var(--protoWeb-muted); font-size: 12px; line-height: 1.4; }
+.protoWeb-menu-arrow { color: var(--protoWeb-accent); font-size: 22px; line-height: 1; }
+.protoWeb-toggle {
+  position: relative;
+  width: 38px;
+  height: 22px;
+  padding: 0;
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: 11px;
+  background: #C9CFDA;
+  transition: background .18s ease;
+}
+.protoWeb-toggle::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  box-shadow: 0 1px 4px rgba(8,17,38,.2);
+  transition: transform .18s ease;
+}
+.protoWeb-toggle[aria-checked="true"] { background: var(--protoWeb-accent); }
+.protoWeb-toggle[aria-checked="true"]::after { transform: translateX(16px); }
+.protoWeb-panel {
+  position: fixed;
+  left: max(24px, calc(100vw - 530px));
+  top: 92px;
+  width: 440px;
+  height: 460px;
+  min-width: 320px;
+  min-height: 220px;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 32px);
+  border: 1px solid rgba(51,136,255,.36);
+  border-top: 3px solid var(--protoWeb-accent);
+  border-radius: 6px;
+  background: #FFFFFF;
+  box-shadow: 0 20px 58px rgba(33,103,217,.24), 0 5px 16px rgba(8,17,38,.14);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  pointer-events: auto;
+  z-index: 20;
+}
+.protoWeb-panel.is-open { display: flex; }
+.protoWeb-panel.is-collapsed { width: 360px; height: 50px !important; min-height: 50px; }
+.protoWeb-panel.is-collapsed .protoWeb-panel-body,
+.protoWeb-panel.is-collapsed .protoWeb-panel-footer,
+.protoWeb-panel.is-collapsed .protoWeb-resize-handle { display: none; }
+.protoWeb-panel-header,
+.protoWeb-docs-header {
+  height: 48px;
+  min-height: 48px;
+  padding: 0 10px 0 14px;
+  background: linear-gradient(90deg, var(--protoWeb-accent-dark), var(--protoWeb-accent));
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  user-select: none;
+}
+.protoWeb-panel-header { cursor: move; touch-action: none; }
+.protoWeb-panel-heading,
+.protoWeb-docs-title {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 600;
+}
+.protoWeb-panel-tools { display: flex; align-items: center; gap: 2px; }
+.protoWeb-icon-button {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: rgba(255,255,255,.82);
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  line-height: 1;
+}
+.protoWeb-icon-button:hover { background: rgba(255,255,255,.12); color: #FFFFFF; }
+.protoWeb-panel-body {
+  flex: 1;
+  min-height: 0;
+  padding: 18px 20px 20px;
+  overflow: auto;
+  color: #353B47;
+  background: #FFFFFF;
+}
+.protoWeb-content h1,
+.protoWeb-content h2,
+.protoWeb-content h3 {
+  margin: 20px 0 10px;
+  color: var(--protoWeb-ink);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.protoWeb-content > :first-child { margin-top: 0; }
+.protoWeb-content h4 { margin: 16px 0 8px; color: var(--protoWeb-ink); font-size: 14px; }
+.protoWeb-content p { margin: 0 0 10px; line-height: 1.75; }
+.protoWeb-content ul,
+.protoWeb-content ol { margin: 8px 0 12px; padding-left: 22px; line-height: 1.75; }
+.protoWeb-content strong { color: var(--protoWeb-ink); }
+.protoWeb-content em { color: var(--protoWeb-muted); }
+.protoWeb-content a { color: var(--protoWeb-accent); text-decoration: none; }
+.protoWeb-content a:hover { text-decoration: underline; }
+.protoWeb-content blockquote {
+  margin: 12px 0;
+  padding: 10px 12px;
+  border-left: 3px solid var(--protoWeb-accent);
+  background: var(--protoWeb-accent-soft);
+  color: #52617A;
+}
+.protoWeb-content blockquote p:last-child { margin-bottom: 0; }
+.protoWeb-content hr { margin: 18px 0; border: 0; border-top: 1px solid #DDE1EB; }
+.protoWeb-content code {
+  padding: 2px 5px;
+  border-radius: 3px;
+  background: #F1F3F6;
+  color: #A34800;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 12px;
+}
+.protoWeb-content pre {
+  margin: 12px 0 16px;
+  padding: 14px 16px;
+  overflow: auto;
+  border: 1px solid #253552;
+  border-radius: 4px;
+  background: #172033;
+  color: #E8EEF8;
+  line-height: 1.65;
+  tab-size: 2;
+}
+.protoWeb-content pre code { padding: 0; background: transparent; color: inherit; white-space: pre; }
+.protoWeb-content img {
+  display: block;
+  max-width: 100%;
+  max-height: 560px;
+  height: auto;
+  margin: 12px auto 8px;
+  border: 1px solid #DDE1EB;
+  border-radius: 4px;
+  background: #F5F7FA;
+  object-fit: contain;
+}
+.protoWeb-content table {
+  width: 100%;
+  margin: 12px 0;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 13px;
+}
+.protoWeb-content th,
+.protoWeb-content td {
+  padding: 8px 10px;
+  border: 1px solid #DDE1EB;
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.55;
+  word-break: break-word;
+}
+.protoWeb-content th { background: #F5F7FA; color: var(--protoWeb-ink); font-weight: 600; }
+.protoWeb-mermaid {
+  margin: 12px 0 16px;
+  padding: 14px;
+  overflow: auto;
+  border: 1px solid #C9DDF8;
+  border-radius: 4px;
+  background: #F8FBFF;
+  text-align: center;
+}
+.protoWeb-mermaid svg { display: inline-block; max-width: 100%; height: auto; }
+.protoWeb-mermaid-error { border-color: #F5A3A3 !important; background: #FFF2F0 !important; color: #B42318 !important; }
+.protoWeb-panel-footer {
+  height: 48px;
+  min-height: 48px;
+  padding: 0 12px;
+  border-top: 1px solid #E1E5EC;
+  background: #FAFBFC;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.protoWeb-nav-button {
+  height: 30px;
+  padding: 0 10px;
+  border: 1px solid #C9CFDA;
+  border-radius: 4px;
+  background: #FFFFFF;
+  color: #353B47;
+  font-size: 13px;
+}
+.protoWeb-nav-button:hover:not(:disabled) { border-color: var(--protoWeb-accent); color: var(--protoWeb-accent-dark); }
+.protoWeb-nav-button:disabled { cursor: not-allowed; color: #A8B0BE; background: #F5F7FA; }
+.protoWeb-page-count { color: var(--protoWeb-muted); font-size: 12px; }
+.protoWeb-resize-handle { position: absolute; z-index: 5; pointer-events: auto; }
+.protoWeb-resize-handle[data-direction="n"] { top: -4px; left: 14px; right: 14px; height: 9px; cursor: ns-resize; }
+.protoWeb-resize-handle[data-direction="s"] { bottom: -4px; left: 14px; right: 14px; height: 9px; cursor: ns-resize; }
+.protoWeb-resize-handle[data-direction="e"] { top: 14px; right: -4px; bottom: 14px; width: 9px; cursor: ew-resize; }
+.protoWeb-resize-handle[data-direction="w"] { top: 14px; left: -4px; bottom: 14px; width: 9px; cursor: ew-resize; }
+.protoWeb-resize-handle[data-direction="ne"],
+.protoWeb-resize-handle[data-direction="nw"],
+.protoWeb-resize-handle[data-direction="se"],
+.protoWeb-resize-handle[data-direction="sw"] { width: 18px; height: 18px; }
+.protoWeb-resize-handle[data-direction="ne"] { top: -4px; right: -4px; cursor: nesw-resize; }
+.protoWeb-resize-handle[data-direction="nw"] { top: -4px; left: -4px; cursor: nwse-resize; }
+.protoWeb-resize-handle[data-direction="se"] { right: 0; bottom: 0; cursor: nwse-resize; }
+.protoWeb-resize-handle[data-direction="sw"] { left: -4px; bottom: -4px; cursor: nesw-resize; }
+.protoWeb-resize-handle[data-direction="se"]::after {
+  content: "";
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 12px;
+  height: 12px;
+  border-right: 2px solid var(--protoWeb-accent);
+  border-bottom: 2px solid var(--protoWeb-accent);
+  background: repeating-linear-gradient(135deg, transparent 0 3px, rgba(51,136,255,.62) 3px 4px);
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+}
+.protoWeb-docs-backdrop {
+  position: fixed;
+  inset: 0;
+  padding: 32px;
+  background: rgba(8,17,38,.42);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  z-index: 50;
+}
+.protoWeb-docs-backdrop.is-open { display: flex; }
+.protoWeb-docs {
+  width: min(1180px, calc(100vw - 64px));
+  height: min(820px, calc(100vh - 64px));
+  min-width: 760px;
+  min-height: 520px;
+  border: 1px solid rgba(51,136,255,.4);
+  border-top: 3px solid var(--protoWeb-accent);
+  border-radius: 6px;
+  background: #FFFFFF;
+  box-shadow: 0 28px 80px rgba(8,17,38,.3), 0 0 0 3px rgba(255,255,255,.92);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.protoWeb-docs-header { height: 52px; min-height: 52px; padding-left: 18px; }
+.protoWeb-docs-meta { color: rgba(255,255,255,.76); font-size: 12px; }
+.protoWeb-docs-main { min-height: 0; flex: 1; display: flex; }
+.protoWeb-docs-nav {
+  width: 220px;
+  min-width: 220px;
+  padding: 14px 10px;
+  overflow: auto;
+  border-right: 1px solid #DDE1EB;
+  background: #F8FAFD;
+}
+.protoWeb-docs-nav button {
+  width: 100%;
+  height: 42px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #52617A;
+  text-align: left;
+  font-size: 14px;
+}
+.protoWeb-docs-nav button:hover { background: #EDF4FF; color: var(--protoWeb-accent-dark); }
+.protoWeb-docs-nav button.is-active {
+  background: #E8F2FF;
+  color: var(--protoWeb-accent-dark);
+  font-weight: 600;
+  box-shadow: inset 3px 0 0 var(--protoWeb-accent);
+}
+.protoWeb-docs-body {
+  min-width: 0;
+  flex: 1;
+  padding: 24px 28px 32px;
+  overflow: auto;
+  background: #FFFFFF;
+}
+.protoWeb-docs-content { max-width: 900px; margin: 0 auto; }
+.protoWeb-docs-content h1 { font-size: 20px; }
+.protoWeb-docs-content h2 { font-size: 16px; }
+.protoWeb-docs-content table { table-layout: auto; }
+
+/* Web 三栏审阅：说明与标注可调宽，业务原型按固定设计画布等比缩放。 */
+.protoWeb-review-workspace[hidden] { display: none !important; }
+.protoWeb-review-workspace {
+  --protoWeb-review-left-width: 360px;
+  --protoWeb-review-right-width: 380px;
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: var(--protoWeb-review-left-width) 8px minmax(0, 1fr) 8px var(--protoWeb-review-right-width);
+  background: #EEF1F5;
+  color: #223355;
+  pointer-events: auto;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+  font-size: 14px;
+  letter-spacing: 0;
+}
+.protoWeb-review-workspace.is-left-collapsed { grid-template-columns: 44px 0 minmax(0, 1fr) 8px var(--protoWeb-review-right-width); }
+.protoWeb-review-workspace.is-right-collapsed { grid-template-columns: var(--protoWeb-review-left-width) 8px minmax(0, 1fr) 0 44px; }
+.protoWeb-review-workspace.is-left-collapsed.is-right-collapsed { grid-template-columns: 44px 0 minmax(0, 1fr) 0 44px; }
+.protoWeb-review-side {
+  min-width: 0;
+  min-height: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #FFFFFF;
+  box-shadow: 0 0 22px rgba(8,17,38,.08);
+}
+.protoWeb-review-left { grid-column: 1; grid-row: 1; border-right: 1px solid #DDE1EB; }
+.protoWeb-review-splitter-left { grid-column: 2; grid-row: 1; }
+.protoWeb-review-center { grid-column: 3; grid-row: 1; }
+.protoWeb-review-splitter-right { grid-column: 4; grid-row: 1; }
+.protoWeb-review-right { grid-column: 5; grid-row: 1; border-left: 1px solid #DDE1EB; }
+.protoWeb-review-splitter {
+  position: relative;
+  min-width: 0;
+  cursor: col-resize;
+  touch-action: none;
+  background: #EEF1F5;
+  z-index: 2;
+}
+.protoWeb-review-splitter::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 3px;
+  height: 48px;
+  border-radius: 2px;
+  background: #B8C2D3;
+  transform: translate(-50%, -50%);
+  transition: height .15s ease, background .15s ease;
+}
+.protoWeb-review-splitter:hover::after,
+.protoWeb-review-splitter.is-dragging::after { height: 72px; background: #3388FF; }
+.is-left-collapsed .protoWeb-review-splitter-left,
+.is-right-collapsed .protoWeb-review-splitter-right { display: none; }
+.protoWeb-review-workspace.is-resizing { cursor: col-resize; user-select: none; }
+.protoWeb-review-side-header {
+  height: 52px;
+  min-height: 52px;
+  padding: 0 10px 0 16px;
+  border-bottom: 1px solid #E9ECF2;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #FFFFFF;
+}
+.protoWeb-review-side-title { min-width: 0; flex: 1; font-size: 15px; font-weight: 600; color: #223355; }
+.protoWeb-review-icon-button {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: #6B7A99;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  line-height: 1;
+}
+.protoWeb-review-icon-button:hover { border-color: #C9DDF8; background: #F0F9FF; color: #2167D9; }
+.protoWeb-review-rail {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 10px;
+  background: #FFFFFF;
+  pointer-events: auto;
+  z-index: 4;
+}
+.is-left-collapsed .protoWeb-review-left > :not(.protoWeb-review-rail),
+.is-right-collapsed .protoWeb-review-right > :not(.protoWeb-review-rail) { display: none; }
+.is-left-collapsed .protoWeb-review-left .protoWeb-review-rail,
+.is-right-collapsed .protoWeb-review-right .protoWeb-review-rail { display: flex !important; }
+.protoWeb-review-docs-main { min-height: 0; flex: 1; display: grid; grid-template-columns: 112px minmax(0, 1fr); }
+.protoWeb-review-docs-nav {
+  min-width: 0;
+  padding: 12px 8px;
+  overflow-y: auto;
+  border-right: 1px solid #E9ECF2;
+  background: #F8FAFD;
+}
+.protoWeb-review-docs-nav button {
+  width: 100%;
+  min-height: 38px;
+  padding: 8px 9px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #52617A;
+  text-align: left;
+  font-size: 13px;
+  line-height: 1.45;
+}
+.protoWeb-review-docs-nav button:hover { background: #EDF4FF; color: #2167D9; }
+.protoWeb-review-docs-nav button.is-active { background: #E8F2FF; color: #2167D9; font-weight: 600; box-shadow: inset 3px 0 0 #3388FF; }
+.protoWeb-review-docs-body { min-width: 0; padding: 18px 16px 28px; overflow: auto; }
+.protoWeb-review-center { min-width: 0; min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
+.protoWeb-review-toolbar {
+  height: 52px;
+  min-height: 52px;
+  padding: 0 14px;
+  border-bottom: 1px solid #DDE1EB;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #F8FAFD;
+}
+.protoWeb-review-mode-group {
+  height: 34px;
+  padding: 2px;
+  border: 1px solid #DDE1EB;
+  border-radius: 4px;
+  display: inline-flex;
+  background: #FFFFFF;
+}
+.protoWeb-review-mode-group button {
+  height: 28px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: #6B7A99;
+  font-size: 13px;
+}
+.protoWeb-review-mode-group button.is-active { background: #3388FF; color: #FFFFFF; }
+.protoWeb-review-scope { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #6B7A99; font-size: 12px; }
+.protoWeb-review-canvas { min-width: 0; min-height: 0; flex: 1; position: relative; overflow: hidden; background: #DDE3EC; }
+.protoWeb-review-prototype-frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 375px;
+  height: 812px;
+  overflow: hidden;
+  background: #FFFFFF;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.16);
+  border-radius: 36px;
+  border: 8px solid #1F2329;
+  overflow: hidden;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 1px rgba(34,51,85,.12), 0 12px 32px rgba(8,17,38,.18);
+  transform-origin: 0 0;
+  will-change: transform;
+  pointer-events: auto;
+}
+.protoWeb-review-prototype-frame > [data-proto-app] { width: 100% !important; height: 100% !important; min-width: 100%; min-height: 100%; }
+body.protoWeb-review-mode .protoWeb-launcher,
+body.protoWeb-review-mode .protoWeb-menu,
+body.protoWeb-review-mode .protoWeb-panel,
+body.protoWeb-review-mode .protoWeb-docs-backdrop { display: none !important; }
+.protoWeb-review-note-tools {
+  min-height: 46px;
+  padding: 8px 12px;
+  border-bottom: 1px solid #E9ECF2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: #FAFBFC;
+}
+.protoWeb-review-note-tools span { color: #6B7A99; font-size: 12px; }
+.protoWeb-review-toggle-wrap { display: inline-flex; align-items: center; gap: 8px; color: #52617A; font-size: 13px; }
+.protoWeb-review-toggle {
+  position: relative;
+  width: 38px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: 11px;
+  background: #C9CFDA;
+}
+.protoWeb-review-toggle::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  box-shadow: 0 1px 4px rgba(8,17,38,.2);
+  transition: transform .18s ease;
+}
+.protoWeb-review-toggle[aria-checked="true"] { background: #3388FF; }
+.protoWeb-review-toggle[aria-checked="true"]::after { transform: translateX(16px); }
+.protoWeb-review-note-list { min-height: 0; flex: 1; padding: 12px; overflow: auto; background: #F8FAFD; }
+.protoWeb-review-empty { padding: 32px 12px; color: #A8B4C8; text-align: center; }
+.protoWeb-review-note-card {
+  position: relative;
+  padding: 14px 14px 14px 50px;
+  border: 1px solid #DDE1EB;
+  border-left: 3px solid #7FB0FF;
+  border-radius: 6px;
+  background: #FFFFFF;
+  box-shadow: 0 3px 10px rgba(8,17,38,.05);
+  cursor: pointer;
+}
+.protoWeb-review-note-card + .protoWeb-review-note-card { margin-top: 10px; }
+.protoWeb-review-note-card:hover { border-color: #9FC5FF; }
+.protoWeb-review-note-card.is-active { border-color: #3388FF; border-left-color: #2167D9; box-shadow: 0 0 0 2px rgba(51,136,255,.12), 0 6px 16px rgba(33,103,217,.12); }
+.protoWeb-review-note-index {
+  position: absolute;
+  top: 13px;
+  left: 13px;
+  width: 26px;
+  height: 26px;
+  border: 2px solid #FFFFFF;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #3388FF;
+  color: #FFFFFF;
+  box-shadow: 0 0 0 2px rgba(33,103,217,.45), 0 4px 10px rgba(33,103,217,.22);
+  font-size: 12px;
+  font-weight: 700;
+}
+.protoWeb-review-note-card h3 { margin: 1px 0 8px; color: #223355; font-size: 14px; font-weight: 600; line-height: 1.55; }
+.protoWeb-review-note-card .protoWeb-content { color: #6B7A99; font-size: 13px; line-height: 1.65; }
+.protoWeb-review-note-card .protoWeb-content h1,
+.protoWeb-review-note-card .protoWeb-content h2,
+.protoWeb-review-note-card .protoWeb-content h3 { font-size: 14px; }
+.protoWeb-review-note-card .protoWeb-content img { max-height: 280px; }
+.protoWeb-review-note-card .protoWeb-content table { table-layout: auto; font-size: 12px; }
+.protoWeb-review-target-highlight { outline: 2px solid #3388FF !important; outline-offset: 3px; box-shadow: 0 0 0 6px rgba(51,136,255,.12) !important; }
+
+@media (max-width: 1440px) {
+  .protoWeb-review-workspace { --protoWeb-review-left-width: 300px; --protoWeb-review-right-width: 340px; }
+  .protoWeb-review-docs-main { grid-template-columns: 96px minmax(0, 1fr); }
+}
+@media (max-width: 900px) {
+  .protoWeb-docs-backdrop { padding: 12px; }
+  .protoWeb-docs { width: calc(100vw - 24px); height: calc(100vh - 24px); min-width: 0; min-height: 0; }
+  .protoWeb-docs-nav { width: 168px; min-width: 168px; }
+  .protoWeb-docs-body { padding: 20px; }
+  .protoWeb-docs-meta { display: none; }
+}
+
+</style>
+
+  
+
+
+  
+
+
+  
+
+
+  <style id="fneModalCss">
+  .feature-not-enabled-mask {
+    position: absolute !important;
+    inset: 0 !important;
+    background: rgba(15, 23, 42, 0.55) !important;
+    backdrop-filter: blur(2px) !important;
+    z-index: 9999 !important;
+    display: none !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 20px !important;
+    box-sizing: border-box !important;
+  }
+  .feature-not-enabled-mask.active {
+    display: flex !important;
+  }
+  .feature-not-enabled-box {
+    width: 100% !important;
+    max-width: 290px !important;
+    background: #FFFFFF !important;
+    border-radius: 16px !important;
+    padding: 24px 20px 20px 20px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.22) !important;
+    animation: fnePopIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+  @keyframes fnePopIn {
+    from { opacity: 0; transform: scale(0.92); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  .fne-icon-wrap {
+    width: 52px !important;
+    height: 52px !important;
+    border-radius: 26px !important;
+    background: #FFF7E6;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-bottom: 14px !important;
+  }
+  .fne-title {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: #1F2329 !important;
+    margin-bottom: 8px !important;
+  }
+  .fne-desc {
+    font-size: 13px !important;
+    line-height: 19px !important;
+    color: #64748B !important;
+    margin-bottom: 20px !important;
+    text-align: center !important;
+  }
+  .fne-btn {
+    width: 100% !important;
+    height: 40px !important;
+    background: #00D679 !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: #FFFFFF !important;
+    cursor: pointer !important;
+    transition: opacity 0.15s ease !important;
+  }
+  .fne-btn:active {
+    opacity: 0.85 !important;
+  }
+  </style>
+
+
+  <script id="fneModalJs">
+  window.showFeatureNotEnabledModal = function(type) {
+    const drawer = document.getElementById('moreActionsDrawer');
+    if (drawer) drawer.style.display = 'none';
+
+    const modal = document.getElementById('featureNotEnabledModal');
+    const title = document.getElementById('fneTitle');
+    const desc = document.getElementById('fneDesc');
+    const iconWrap = document.getElementById('fneIconWrap');
+    if (!modal) return;
+    
+    if (type === 'contract') {
+      title.textContent = '电子合同暂未开通';
+      desc.textContent = '当前企业暂未开通【电子合同】服务。如需开通，请联系管理员。';
+      if (iconWrap) iconWrap.style.background = '#E6F4FF';
+    } else if (type === 'insurance') {
+      title.textContent = '投保服务暂未开通';
+      desc.textContent = '当前企业暂未开通【保险】服务。如需开通，请联系管理员。';
+      if (iconWrap) iconWrap.style.background = '#FFF7E6';
+    } else {
+      title.textContent = '功能暂未开通';
+      desc.textContent = '当前功能暂未向企业开放。如需使用，请联系企业主管理员配置开通。';
+    }
+    modal.classList.add('active');
+  };
+  window.closeFeatureNotEnabledModal = function(e) {
+    if (e && e.target && e.target !== e.currentTarget) return;
+    const modal = document.getElementById('featureNotEnabledModal');
+    if (modal) modal.classList.remove('active');
+  };
+  </script>
+
+
+  <style>
+  /* 未开通按钮置灰样式 (实现一半灰、一半没灰) */
+  .btn-bottom-action.is-disabled-feature {
+    background: #F2F3F5 !important;
+    color: #B4B9C2 !important;
+    border: 1px solid #E5E6EB !important;
+    opacity: 0.72;
+    cursor: pointer;
+  }
+
+  /* 修复弹窗遮罩：固定在屏幕视口中，100%全覆盖且绝对居中，杜绝半截灰 */
+  .feature-not-enabled-mask {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: rgba(15, 23, 42, 0.55) !important;
+    backdrop-filter: blur(2px) !important;
+    z-index: 99999 !important;
+    display: none !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 20px !important;
+    box-sizing: border-box !important;
+  }
+  .feature-not-enabled-mask.active {
+    display: flex !important;
+  }
+  </style>
+
+</head>
+<body data-proto-platform="web">
+  <div class="phone-container" data-proto-app data-proto-platform="web" data-proto-scope="page:project_detail">
+    <!-- 顶部浅绿微光背景区 -->
+    <div class="top-header-area">
+      <!-- 导航栏 -->
+      <div class="nav-bar">
+        <div class="nav-back" onclick="window.location.href='shouye.html'">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </div>
+        <div class="capsule-menu">
+          <div class="capsule-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="capsule-divider"></div>
+          <div class="capsule-circle">
+            <div class="capsule-circle-inner"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 项目标题行 -->
+      <!-- 项目标题行 (需打卡 发薪-02，对照 media_1792551621191_e2bf028a.png) -->
+      <div class="project-title-row">
+        <div style="display:flex; align-items:center;">
+          <h1 class="project-name">发薪-01</h1>
+          <span class="badge-full">满</span>
+        </div>
+        <div class="project-detail-link" onclick="viewProjectDetail()">
+          <span>项目详情</span>
+          <svg style="width:14px; height:14px; stroke:#9497B1;" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </div>
+      </div>
+      <div class="created-date" style="margin-bottom:12px;">创建日期：2026-10-19</div>
+
+
+    </div>
+
+    <!-- 名单统计与操作栏 -->
+    <div class="list-header-row">
+      <div class="stat-text">
+        有效报名: <span id="validCount">3</span>人 <span class="stat-needed">(需报名: 10人)</span>
+      </div>
+      <div class="export-btn" onclick="exportList()">
+        <span>导出名单</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="17 8 12 3 7 8"></polyline>
+          <line x1="12" y1="3" x2="12" y2="15"></line>
+        </svg>
+      </div>
+    </div>
+
+    <!-- 搜索输入框 -->
+    <div class="search-container">
+      <div class="search-input-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" class="search-input" id="searchKeyword" placeholder="请输入想要查找的姓名" oninput="handleSearch()">
+      </div>
+    </div>
+
+    <!-- 空状态展示区 -->
+    <div class="empty-state-area" id="emptyState">
+      <div class="empty-illustration">
+        <svg width="78" height="78" viewBox="0 0 78 78" fill="none">
+          <rect x="22" y="14" width="42" height="42" rx="6" fill="#E8EAEE"/>
+          <rect x="14" y="22" width="42" height="42" rx="6" fill="#F0F1F4" stroke="#FFFFFF" stroke-width="2"/>
+          <rect x="18" y="30" width="22" height="5" rx="2.5" fill="#D3D6DE"/>
+          <rect x="18" y="39" width="16" height="5" rx="2.5" fill="#D3D6DE"/>
+          <rect x="18" y="48" width="10" height="5" rx="2.5" fill="#D3D6DE"/>
+        </svg>
+      </div>
+      <div class="empty-label">暂无人员</div>
+    </div>
+
+    <!-- 真实人员列表 (1:1 还原用户真实截图) -->
+    <div class="employee-list" id="employeeList">
+      <!-- 动态/默认注入人员列表 -->
+    </div>
+
+    <!-- 列表末尾提示 -->
+    <div class="list-end-tip" id="listEndTip">没有更多了</div>
+
+    <!-- 底部固定操作条 (MasterGo 740:109213 1:1 三按钮平铺：签合同 / 去投保 / 去发薪) -->
+    
+    <!-- 功能未开通友好提示弹窗 (嵌入手机容器，100%居中可见) -->
+    <div id="featureNotEnabledModal" class="feature-not-enabled-mask" style="display:none;" onclick="closeFeatureNotEnabledModal(event)">
+      <div class="feature-not-enabled-box" onclick="event.stopPropagation()">
+        <div class="fne-icon-wrap" id="fneIconWrap">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FA8C16" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+        </div>
+        <div class="fne-title" id="fneTitle">功能暂未开通</div>
+        <div class="fne-desc" id="fneDesc">当前企业暂未开通该服务。如需开通，请联系管理员。</div>
+        <button class="fne-btn" type="button" onclick="closeFeatureNotEnabledModal()">我知道了</button>
+      </div>
+    </div>
+
+    <div class="bottom-bar" id="projectBottomBar">
+      <button class="btn-bottom-action btn-contract is-disabled-feature" onclick="showFeatureNotEnabledModal('contract')" id="btnBottomContract">
+        <span>签合同</span>
+      </button>
+      <button class="btn-bottom-action btn-insurance is-disabled-feature" onclick="showFeatureNotEnabledModal('insurance')" id="btnBottomInsurance">
+        <span>去投保</span>
+      </button>
+      <button class="btn-bottom-action btn-pay" onclick="handlePayAction()" id="btnBottomPay">
+        <span>去发薪</span>
+      </button>
+    </div>
+
+    <!-- 更多操作半屏抽屉 (MasterGo 740:125612 1:1 还原) -->
+    <div class="drawer-overlay" id="moreActionsDrawer" onclick="closeMoreActionsDrawer(event)">
+      <div class="drawer-sheet" onclick="event.stopPropagation()">
+        <div class="drawer-drag-handle"></div>
+        <div class="drawer-header">
+          <div class="drawer-title">更多操作</div>
+          <div class="drawer-subtitle">发薪-01 / 昆山科森科技</div>
+        </div>
+        <div class="drawer-menu-list">
+          <!-- 签合同 (MasterGo 740:125612) -->
+          <div class="drawer-menu-item" onclick="showFeatureNotEnabledModal('contract')">
+            <div class="drawer-item-icon icon-contract">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1677FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+            </div>
+            <div class="drawer-item-content">
+              <div class="drawer-item-title-row">
+                <span class="drawer-item-title">签合同</span>
+                <span class="drawer-item-badge">临时用工协议-日结</span>
+              </div>
+              <div class="drawer-item-desc">管理电子劳动合同、查看签署进度、批量推签</div>
+            </div>
+            <svg class="drawer-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9497B1" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </div>
+
+          <!-- 去投保 (MasterGo 740:125612) -->
+          <div class="drawer-menu-item" onclick="showFeatureNotEnabledModal('insurance')">
+            <div class="drawer-item-icon icon-insurance">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00D679" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
+            </div>
+            <div class="drawer-item-content">
+              <div class="drawer-item-title-row">
+                <span class="drawer-item-title">去投保</span>
+                <span class="drawer-item-badge success">安心日保标准版</span>
+              </div>
+              <div class="drawer-item-desc">雇主责任险、每日动态按岗投保、工伤免责保障</div>
+            </div>
+            <svg class="drawer-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9497B1" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </div>
+
+          <!-- 导出名单 (MasterGo 740:125612) -->
+          <div class="drawer-menu-item" onclick="handleDrawerExport()">
+            <div class="drawer-item-icon icon-export">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#722ED1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+            </div>
+            <div class="drawer-item-content">
+              <div class="drawer-item-title-row">
+                <span class="drawer-item-title">导出名单</span>
+              </div>
+              <div class="drawer-item-desc">导出花名册及合同签署、日保在保明细报表</div>
+            </div>
+            <svg class="drawer-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9497B1" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </div>
+        </div>
+
+        <button class="drawer-cancel-btn" onclick="closeMoreActionsDrawer()">取消</button>
+      </div>
+    </div>
+
+    <!-- 一键批量邀请新员工签约抽屉 -->
+    <div class="drawer-overlay" id="inviteSignDrawer" onclick="closeInviteSignDrawer(event)">
+      <div class="drawer-sheet" onclick="event.stopPropagation()">
+        <div class="drawer-drag-handle"></div>
+        <div class="drawer-header">
+          <div class="drawer-title">一键批量邀请新员工签约</div>
+          <div class="drawer-subtitle">通过微信服务通知与短信向员工发送电子劳动合同</div>
+        </div>
+
+        <div class="invite-config-box">
+          <div class="invite-config-row">
+            <span class="invite-label">签约模板：</span>
+            <span class="invite-val highlight">《临时用工协议-日结》</span>
+          </div>
+          <div class="invite-config-row">
+            <span class="invite-label">发起主体：</span>
+            <span class="invite-val">苏州蓝豚跃动网络科技有限公司</span>
+          </div>
+          <div class="invite-config-row">
+            <span class="invite-label">推送渠道：</span>
+            <span class="invite-val">微信服务通知 + 短信直达链接</span>
+          </div>
+          <div class="invite-config-row">
+            <span class="invite-label">待签员工：</span>
+            <span class="invite-val" id="invitePendingEmpCount">共 1 位新员工</span>
+          </div>
+        </div>
+
+        <!-- 待签员工预览卡片 -->
+        <div class="invite-emp-scroll" id="inviteEmpPreviewList">
+          <!-- 动态展示待签约员工卡片 -->
+        </div>
+
+        <div class="invite-tip-text">
+          员工收到通知后人脸核身并签字，签署完成后自动回传生成有效存证法律文件。
+        </div>
+
+        <div style="display:flex; gap:10px; margin-top:14px;">
+          <button class="modal-btn" style="background:#F0F1F5; color:#565868; flex:1;" onclick="closeInviteSignDrawer()">取消</button>
+          <button class="modal-btn" style="background:#00D679; flex:2;" onclick="confirmBatchInviteSign()">立即一键发送邀请</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 签约邀请已发送反馈抽屉 -->
+    <div class="drawer-overlay" id="inviteSuccessDrawer" onclick="closeInviteSuccessDrawer(event)">
+      <div class="drawer-sheet" onclick="event.stopPropagation()">
+        <div class="drawer-drag-handle"></div>
+        <div style="text-align:center; padding:10px 0 16px 0;">
+          <div style="width:48px; height:48px; border-radius:24px; background:#E8F7ED; color:#009944; display:flex; align-items:center; justify-content:center; margin:0 auto 12px auto;">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="drawer-title" style="font-size:18px; margin-bottom:6px;">签约邀请发送成功</div>
+          <div style="font-size:13px; color:#6B7280; line-height:20px; padding:0 10px;" id="inviteSuccessMsg">
+            已成功向 1 位新员工推送《临时用工协议-日结》，等待员工在微信端完成签字。
+          </div>
+        </div>
+
+        <div style="background:#F8F9FB; border-radius:8px; padding:12px; margin-bottom:16px; font-size:12px; color:#565868; line-height:18px;">
+          <strong>闭环演示模式：</strong>可直接点击下方【模拟员工完成签署】，系统将把所有待签人员状态变更为“已签署”，底部主按钮自动流转为【我要发薪】。
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <button class="modal-btn" style="background:#00D679;" onclick="simulateCompleteSigning()">模拟员工完成签署 (完成闭环)</button>
+          <button class="modal-btn" style="background:#F0F1F5; color:#565868;" onclick="closeInviteSuccessDrawer()">我知道了</button>
+        </div>
+      </div>
+    </div>
+
+
+
+    <!-- 修改备注标签内联模态框 (替代原生 prompt) -->
+    <div class="modal-overlay" id="remarkModal">
+      <div class="modal-card" style="width:300px; text-align:left;">
+        <div class="modal-title" style="font-size:16px; font-weight:700; align-self:center; margin-bottom:12px;">修改员工标签</div>
+        <div style="font-size:12px; color:#7D8099; margin-bottom:8px;">快捷标签：</div>
+        <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px;">
+          <span class="custom-tag" style="cursor:pointer;" onclick="setQuickTag('女神')">女神</span>
+          <span class="custom-tag" style="cursor:pointer;" onclick="setQuickTag('熟练工')">熟练工</span>
+          <span class="custom-tag" style="cursor:pointer;" onclick="setQuickTag('日结工')">日结工</span>
+          <span class="custom-tag" style="cursor:pointer;" onclick="setQuickTag('班长')">班长</span>
+        </div>
+        <input type="text" id="remarkTagInput" placeholder="自定义标签内容" style="width:100%; height:36px; border:1px solid #DCDFE6; border-radius:6px; padding:0 10px; font-size:14px; box-sizing:border-box; margin-bottom:14px;">
+        <div style="display:flex; gap:8px;">
+          <button class="modal-btn" style="background:#F0F1F5; color:#565868; flex:1;" onclick="closeRemarkModal()">取消</button>
+          <button class="modal-btn" style="background:#00D679; flex:1;" onclick="confirmRemark()">保存</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 移出员工确认内联模态框 (替代原生 confirm) -->
+    <div class="modal-overlay" id="deleteConfirmModal">
+      <div class="modal-card" style="width:290px; text-align:center;">
+        <div style="font-size:16px; font-weight:700; margin-bottom:8px; color:#202536;">确认移出员工</div>
+        <div style="font-size:13px; color:#6B7280; margin-bottom:16px;" id="deleteConfirmText">确定将该员工移出当前发薪项目吗？</div>
+        <div style="display:flex; gap:8px;">
+          <button class="modal-btn" style="background:#F0F1F5; color:#565868; flex:1;" onclick="closeDeleteConfirmModal()">取消</button>
+          <button class="modal-btn" style="background:#FF4D4F; flex:1;" onclick="confirmDeleteEmp()">移出</button>
+        </div>
+      </div>
+    </div>
+
+    
+    <!-- 一站式联动规则与配置弹窗 -->
+    <div class="modal-overlay" id="linkageModal">
+      <div class="modal-card" style="width:330px; text-align:left;">
+        <div class="modal-title" style="align-self:center; font-size:17px; font-weight:700;">项目一站式联动服务</div>
+        <div style="background:#F5F9F6; border-radius:8px; padding:12px; margin-bottom:12px; font-size:12px; color:#4E5969; line-height:18px;">
+          <strong style="color:#009944;">免去多产品切换：</strong>本项目已打通「电子签」与「安心日保」。员工进入本项目时自动发起合同推签并申报保单，无需再去其他系统重复勾选。
+        </div>
+        <div style="font-size:13px; font-weight:600; color:#202536; margin-bottom:6px;">联动规则配置：</div>
+        <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:8px 10px; background:#F8F9FB; border-radius:6px; font-size:13px;">
+            <span> 绑定合同模版：</span>
+            <span style="color:#009944; font-weight:600;">《劳务用工协议V2.0》▾</span>
+          </div>
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:8px 10px; background:#F8F9FB; border-radius:6px; font-size:13px;">
+            <span> 安心日保方案：</span>
+            <span style="color:#009944; font-weight:600;">安心日保标准版(60万) ▾</span>
+          </div>
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:8px 10px; background:#F8F9FB; border-radius:6px; font-size:13px;">
+            <span> 新员工加入动作：</span>
+            <span style="color:#202536; font-weight:600;">自动推送签字 + 动态报保</span>
+          </div>
+        </div>
+        <button class="modal-btn" onclick="closeLinkageModal()">保存并生效</button>
+      </div>
+    </div>
+
+    <!-- 一键同步确认面板 (弹窗) -->
+    <div class="modal-overlay" id="syncModal">
+      <div class="modal-card" style="width:320px;">
+        <div class="modal-title" style="font-size:16px; font-weight:700;">一键同步项目成员</div>
+        <div style="font-size:13px; color:#6B7280; text-align:center; margin-bottom:14px;">
+          系统将自动核对所有成员的「电子合同」与「安心日保」状态
+        </div>
+        <div style="width:100%; background:#F8F9FB; border-radius:8px; padding:12px; margin-bottom:16px; font-size:13px; line-height:22px;">
+          <div style="display:flex; justify-content:space-between;">
+            <span> 电子合同：</span>
+            <span id="syncContractText" style="color:#202536; font-weight:600;">2人已签，1人待签</span>
+          </div>
+          <div style="display:flex; justify-content:space-between;">
+            <span> 安心日保：</span>
+            <span id="syncInsuranceText" style="color:#202536; font-weight:600;">2人在保，1人待投</span>
+          </div>
+        </div>
+        <button class="modal-btn" onclick="executeFullSync()" style="margin-bottom:8px;">立即一键全员同步 (催签+投保)</button>
+        <button class="modal-btn" style="background:#F0F1F5; color:#565868;" onclick="closeSyncModal()">稍后再说</button>
+      </div>
+    </div>
+
+    <!-- 发薪合规拦截/确认半屏面板 -->
+    <div class="modal-overlay" id="payComplianceModal">
+      <div class="modal-card" style="width:330px; text-align:left;">
+        <div class="modal-title" style="align-self:center; font-size:17px; font-weight:700; color:#202536;">发薪前合规提醒</div>
+        <div style="background:#FFF9E6; border:1px solid #FFE58F; border-radius:8px; padding:10px 12px; margin-bottom:12px; font-size:12px; color:#D48806; line-height:18px;">
+          检测到本项目内有员工尚未完成电子合同签署或日保在保，为了保障企业用工合规与工伤免责，建议同步完成后发薪。
+        </div>
+        <div style="font-size:13px; color:#202536; margin-bottom:12px;" id="complianceDetails">
+          <!-- 动态填充待处理项 -->
+        </div>
+        <button class="modal-btn" onclick="executeFullSyncAndPay()" style="margin-bottom:8px;"> 一键同步合规并继续发薪</button>
+        <button class="modal-btn" style="background:#F0F1F5; color:#565868;" onclick="directPayAnyway()">跳过，直接前往发薪</button>
+      </div>
+    </div>
+
+    
+    <!-- 安心日保加保/管理半屏面板 (对应脑图：安心日保导入发薪项目，后续从项目中操作加保) -->
+    <div class="modal-overlay" id="insuranceModal">
+      <div class="modal-card" style="width:320px; text-align:left;">
+        <div class="modal-title" style="align-self:center; font-size:16px; font-weight:700;">安心日保管理</div>
+        <div style="background:#F0F7FF; border:1px solid #D6E8FE; border-radius:8px; padding:10px 12px; margin-bottom:12px; font-size:12px; color:#1677FF; line-height:18px;">
+          当前发薪项目【发薪-01】已自动伴生投保。当前在保 10 人，保单今日 00:00 - 24:00 动态生效中。
+        </div>
+        <div style="font-size:13px; color:#202536; line-height:22px; margin-bottom:14px;">
+          <div>• 投保方案：安心日保标准版 (身故/伤残60万)</div>
+          <div>• 自动在保人员：郭玉莲、陈晒晒、田晓辉等 10 人</div>
+          <div>• 计费方式：按实际在岗人数日结扣费</div>
+        </div>
+        <button class="modal-btn" style="background:#1677FF; margin-bottom:8px;" onclick="simulateAddInsurance()">为新加入员工一键加保</button>
+        <button class="modal-btn" style="background:#F0F1F5; color:#565868;" onclick="closeInsuranceModal()">关闭</button>
+      </div>
+    </div>
+
+
+
+    <!-- 员工更多操作弹窗 -->
+    <div class="modal-overlay" id="empMoreModal">
+      <div class="modal-card" style="padding:16px;">
+        <div class="modal-title" id="moreModalEmpName">员工操作</div>
+        <button class="modal-btn" style="background:#F5F6F8; color:#202536; margin-bottom:8px;" onclick="openRemarkModal()">修改备注标签 (如 女神)</button>
+        <button class="modal-btn" style="background:#FFF1F0; color:#FF4D4F;" onclick="openDeleteConfirmModal()">移出本项目</button>
+      </div>
+    </div>
+
+
+    
+  </div>
+
+  <script>
+    // 默认初始化真实数据 (1:1 严格对齐图三设计)
+    let employees = [
+      {
+        id: '4380',
+        name: '郭玉莲',
+        code: '4380',
+        gender: 'female',
+        age: '30岁',
+        avatarPhoto: true,
+        joinTime: '2026-10-20 17:34:50',
+        inviter: '郭郭线上',
+        contractStatus: 'pending',
+        insuranceStatus: 'pending'
+      },
+      {
+        id: '5518',
+        name: '陈晒晒',
+        code: '5518',
+        gender: 'male',
+        age: '33岁',
+        avatarBg: '#008837',
+        avatarText: '晒晒',
+        joinTime: '2026-10-20 17:34:24',
+        inviter: '郭郭线上',
+        contractStatus: 'pending',
+        insuranceStatus: 'pending'
+      },
+      {
+        id: '0010',
+        name: '田晓辉',
+        code: '0010',
+        gender: 'male',
+        age: '40岁',
+        avatarBg: '#FA8C16',
+        avatarText: '晓辉',
+        joinTime: '2026-10-20 17:34:24',
+        inviter: '郭郭线上',
+        contractStatus: 'pending',
+        insuranceStatus: 'pending'
+      }
+    ];
+
+    let currentSelectedEmpId = null;
+
+    function renderList() {
+      const emptyState = document.getElementById('emptyState');
+      const listElem = document.getElementById('employeeList');
+      const validCountElem = document.getElementById('validCount');
+      const endTip = document.getElementById('listEndTip');
+
+      validCountElem.innerText = employees.length;
+
+      if (employees.length === 0) {
+        emptyState.style.display = 'flex';
+        listElem.style.display = 'none';
+        endTip.style.display = 'none';
+      } else {
+        emptyState.style.display = 'none';
+        listElem.style.display = 'block';
+        endTip.style.display = 'block';
+
+        listElem.innerHTML = employees.map(emp => `
+          <div class="employee-card-item" data-id="${emp.id}">
+            <div class="emp-left-block">
+              <!-- 头像及性别标 (1:1 还原图三) -->
+              <div class="emp-avatar-box">
+                ${emp.avatarPhoto ? `
+                  <div style="width:44px; height:44px; border-radius:8px; overflow:hidden; position:relative; background:#6BA4D9;">
+                    <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+                      <rect width="44" height="44" fill="#78AEE5"/>
+                      <path d="M0 26 C12 24, 28 28, 44 24 L44 44 L0 44 Z" fill="#1A4F8B"/>
+                      <path d="M5 8 Q8 6 11 8 Q14 6 17 8" stroke="#FFFFFF" stroke-width="1" fill="none"/>
+                      <path d="M22 6 Q25 4 28 6 Q31 4 34 6" stroke="#FFFFFF" stroke-width="1" fill="none"/>
+                      <circle cx="26" cy="20" r="5" fill="#FFE0B2"/>
+                      <path d="M22 24 C22 20, 30 20, 30 24 L32 44 L20 44 Z" fill="#4B2C20"/>
+                      <circle cx="31" cy="26" r="3" fill="#FF80AB"/>
+                    </svg>
+                  </div>
+                ` : `
+                  <div class="emp-avatar-green" style="background: ${emp.avatarBg || '#009944'};">${emp.avatarText || (emp.name.length > 2 ? emp.name.slice(-2) : emp.name)}</div>
+                `}
+                <div class="gender-badge" style="${emp.gender === 'female' ? 'background:#FFE8ED;' : 'background:#E6F4FF;'}">
+                  ${emp.gender === 'female' ? `
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#FF4D79" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="8" r="5"></circle>
+                      <line x1="12" y1="13" x2="12" y2="21"></line>
+                      <line x1="9" y1="17" x2="15" y2="17"></line>
+                    </svg>
+                  ` : `
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#1677FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="10" cy="14" r="5"></circle>
+                      <line x1="19" y1="5" x2="13.5" y2="10.5"></line>
+                      <polyline points="14 5 19 5 19 10"></polyline>
+                    </svg>
+                  `}
+                </div>
+              </div>
+
+              <!-- 员工信息 (1:1 还原图三，纯净三行) -->
+              <div class="emp-content">
+                <div class="emp-header-line">
+                  <span class="emp-name-text">${emp.name}</span>
+                  <span class="emp-code-text">(${emp.code})</span>
+                  <span class="emp-age-badge">${emp.age}</span>
+                </div>
+                <div class="emp-meta-line">加入时间: ${emp.joinTime}</div>
+                <div class="emp-meta-line">邀请人: ${emp.inviter}</div>
+              </div>
+            </div>
+
+            <!-- 右侧更多 (1:1 还原图三三点) -->
+            <div class="emp-more-btn" onclick="openMoreModal('${emp.id}')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#9497B1">
+                <circle cx="5" cy="12" r="2"/>
+                <circle cx="12" cy="12" r="2"/>
+                <circle cx="19" cy="12" r="2"/>
+              </svg>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // 计算待签约人数
+      const pendingContractList = employees.filter(e => e.contractStatus !== 'signed');
+      updateBottomBarState(pendingContractList.length);
+    }
+
+    // 智能自适应底部操作栏状态
+    function updateBottomBarState(pendingCount) {
+      // 底部操作栏保持三按钮标准状态，不显示数字红点角标
+    }
+
+    // 签合同按钮点击：直接跳转至创建合同页面 (1:1 响应用户需求)
+    function handleContractAction() {
+      window.location.href = "contract_create.html";
+    }
+
+    // 去投保按钮点击：直接跳转至安心日保添加项目页面 (1:1 响应用户需求)
+    function handleInsuranceAction() {
+      window.location.href = "insurance_create.html";
+    }
+
+    // 底部主按钮点击分发：有待签员工时优先邀请签约，全员已签署时直接前往发薪
+    function handleMainAction() {
+      const pendingEmployees = employees.filter(e => e.contractStatus !== 'signed');
+      if (pendingEmployees.length > 0) {
+        openInviteSignDrawer();
+      } else {
+        handlePayAction();
+      }
+    }
+
+    function handlePayAction() {
+      window.location.href = "pay_salary.html";
+    }
+
+    function viewProjectDetail() {
+      window.location.href = 'project_info.html';
+    }
+
+    // 更多操作抽屉 (MasterGo 740:125612)
+    function openMoreActionsDrawer() {
+      const drawer = document.getElementById('moreActionsDrawer');
+      if (drawer) drawer.style.display = 'flex';
+    }
+    function closeMoreActionsDrawer(event) {
+      if (event && event.target && event.target !== event.currentTarget) return;
+      const drawer = document.getElementById('moreActionsDrawer');
+      if (drawer) drawer.style.display = 'none';
+    }
+    function handleDrawerContract() {
+      closeMoreActionsDrawer();
+      window.location.href = "contract_create.html";
+    }
+    function handleDrawerInsurance() {
+      closeMoreActionsDrawer();
+      openInsuranceModal();
+    }
+    function handleDrawerExport() {
+      closeMoreActionsDrawer();
+      exportList();
+    }
+
+    // 一键批量邀请签约抽屉
+    function openInviteSignDrawer() {
+      const drawer = document.getElementById('inviteSignDrawer');
+      const pendingEmps = employees.filter(e => e.contractStatus !== 'signed');
+      
+      document.getElementById('invitePendingEmpCount').innerText = `共 ${pendingEmps.length} 位新员工`;
+      
+      const previewList = document.getElementById('inviteEmpPreviewList');
+      if (previewList) {
+        previewList.innerHTML = pendingEmps.map(emp => `
+          <div class="invite-emp-chip">
+            <span style="font-weight:600; color:#202536;">${emp.name} (${emp.code})</span>
+            <span style="color:#FA8C16; font-size:11px; background:#FFF7E6; padding:1px 6px; border-radius:4px;">待签约</span>
+          </div>
+        `).join('');
+      }
+
+      if (drawer) drawer.style.display = 'flex';
+    }
+    function closeInviteSignDrawer(event) {
+      if (event && event.target && event.target !== event.currentTarget) return;
+      const drawer = document.getElementById('inviteSignDrawer');
+      if (drawer) drawer.style.display = 'none';
+    }
+
+    // 确认批量发送邀请
+    function confirmBatchInviteSign() {
+      closeInviteSignDrawer();
+      const pendingCount = employees.filter(e => e.contractStatus !== 'signed').length;
+      
+      const successDrawer = document.getElementById('inviteSuccessDrawer');
+      const msgElem = document.getElementById('inviteSuccessMsg');
+      if (msgElem) {
+        msgElem.innerText = `已成功向 ${pendingCount} 位新员工推送《临时用工协议-日结》，等待员工在微信端完成人脸核身与电子签名。`;
+      }
+      if (successDrawer) successDrawer.style.display = 'flex';
+    }
+    function closeInviteSuccessDrawer(event) {
+      if (event && event.target && event.target !== event.currentTarget) return;
+      const drawer = document.getElementById('inviteSuccessDrawer');
+      if (drawer) drawer.style.display = 'none';
+    }
+
+    // 模拟员工在微信完成签署 (完成闭环)
+    function simulateCompleteSigning() {
+      employees.forEach(emp => {
+        emp.contractStatus = 'signed';
+        emp.status = '在岗';
+      });
+      renderList();
+      closeInviteSuccessDrawer();
+    }
+
+    // 单个催签/邀请
+    function openSingleInviteModal(empId) {
+      const emp = employees.find(e => e.id === empId);
+      if (!emp) return;
+      emp.contractStatus = 'signed';
+      renderList();
+    }
+
+    function insureSingle(empId) {
+      const emp = employees.find(e => e.id === empId);
+      if (!emp) return;
+      emp.insuranceStatus = 'insured';
+      renderList();
+    }
+
+    // 电子签项目跳转
+    function goToContractDetail() {
+      window.location.href = "contract_detail.html";
+    }
+    function goToContractList() {
+      window.location.href = "contract_list.html";
+    }
+
+    // 安心日保管理弹窗
+    function openInsuranceModal() {
+      document.getElementById('insuranceModal').style.display = 'flex';
+    }
+    function closeInsuranceModal() {
+      document.getElementById('insuranceModal').style.display = 'none';
+    }
+    function simulateAddInsurance() {
+      employees.forEach(emp => {
+        emp.insuranceStatus = 'insured';
+      });
+      renderList();
+      closeInsuranceModal();
+    }
+
+
+
+    // 员工卡片更多操作
+    function openMoreModal(id) {
+      currentSelectedEmpId = id;
+      const emp = employees.find(e => e.id === id);
+      document.getElementById('moreModalEmpName').innerText = `${emp.name} (${emp.code}) 操作`;
+      document.getElementById('empMoreModal').style.display = 'flex';
+    }
+
+    // 修改备注标签内联模态框 (替代 prompt)
+    function openRemarkModal() {
+      document.getElementById('empMoreModal').style.display = 'none';
+      const emp = employees.find(e => e.id === currentSelectedEmpId);
+      document.getElementById('remarkTagInput').value = emp ? (emp.tag || '') : '';
+      document.getElementById('remarkModal').style.display = 'flex';
+    }
+    function closeRemarkModal() {
+      document.getElementById('remarkModal').style.display = 'none';
+    }
+    function setQuickTag(tag) {
+      document.getElementById('remarkTagInput').value = tag;
+    }
+    function confirmRemark() {
+      const tag = document.getElementById('remarkTagInput').value.trim();
+      const emp = employees.find(e => e.id === currentSelectedEmpId);
+      if (emp) {
+        emp.tag = tag;
+        renderList();
+      }
+      closeRemarkModal();
+    }
+
+    // 移出员工确认内联模态框 (替代 confirm)
+    function openDeleteConfirmModal() {
+      document.getElementById('empMoreModal').style.display = 'none';
+      const emp = employees.find(e => e.id === currentSelectedEmpId);
+      if (emp) {
+        document.getElementById('deleteConfirmText').innerText = `确定将员工 ${emp.name} (${emp.code}) 移出当前发薪项目吗？`;
+      }
+      document.getElementById('deleteConfirmModal').style.display = 'flex';
+    }
+    function closeDeleteConfirmModal() {
+      document.getElementById('deleteConfirmModal').style.display = 'none';
+    }
+    function confirmDeleteEmp() {
+      employees = employees.filter(e => e.id !== currentSelectedEmpId);
+      renderList();
+      closeDeleteConfirmModal();
+    }
+
+    // 导出花名册弹窗
+    function exportList() {
+      const modal = document.createElement('div');
+      modal.className = 'modal-overlay';
+      modal.style.display = 'flex';
+      modal.innerHTML = `
+        <div class="modal-card" style="width:280px; text-align:center;">
+          <div style="width:40px; height:40px; border-radius:20px; background:#E8F7ED; color:#009944; display:flex; align-items:center; justify-content:center; margin:0 auto 10px auto;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="modal-title" style="margin-bottom:6px;">导出成功</div>
+          <div class="modal-tip" style="margin-bottom:14px;">已生成包含 ${employees.length} 位员工的花名册及电子合同签署、安心日保在保汇总明细报表。</div>
+          <button class="modal-btn" onclick="this.closest('.modal-overlay').remove()">知道了</button>
+        </div>
+      `;
+      modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+      document.body.appendChild(modal);
+    }
+
+    function handleSearch() {
+      const kw = document.getElementById('searchKeyword').value.trim();
+      const items = document.querySelectorAll('.employee-card-item');
+      items.forEach(item => {
+        if (!kw || item.innerText.includes(kw)) {
+          item.style.display = 'flex';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+
+    // 一键同步弹窗
+    function openSyncModal() {
+      const pendingContract = employees.filter(e => e.contractStatus !== 'signed').length;
+      const signedContract = employees.length - pendingContract;
+      const pendingIns = employees.filter(e => e.insuranceStatus !== 'insured').length;
+      const insuredIns = employees.length - pendingIns;
+
+      document.getElementById('syncContractText').innerText = `${signedContract}人已签，${pendingContract}人待签`;
+      document.getElementById('syncInsuranceText').innerText = `${insuredIns}人在保，${pendingIns}人待投`;
+      document.getElementById('syncModal').style.display = 'flex';
+    }
+    function closeSyncModal() {
+      document.getElementById('syncModal').style.display = 'none';
+    }
+    function executeFullSync() {
+      employees.forEach(emp => {
+        emp.contractStatus = 'signed';
+        emp.insuranceStatus = 'insured';
+      });
+      renderList();
+      closeSyncModal();
+    }
+
+    // 初始化渲染
+    renderList();
+
+    // 模态框遮罩关闭通用绑定
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) overlay.style.display = 'none';
+      });
+    });
+  </script>
+
+<script id="prototypeAnnotationData" type="application/json">
+{
+  "prototypeId": "project_detail",
+  "version": 4,
+  "review": {
+    "designWidth": 375,
+    "designHeight": 812
+  },
+  "globalMeta": {
+    "name": "原型说明",
+    "version": "V1.0",
+    "updatedAt": "2026-10-21"
+  },
+  "globalSections": [
+    {
+      "id": "sec_overview",
+      "title": "1. 业务背景与概述",
+      "content": "<p><span>让企业在一个项目里一站式完成「签电子合同 → 投保 → 发薪」，打通发薪专户与电子签、保险能力，免去多产品切换。</span></p>",
+      "format": "html"
+    }
+  ],
+  "annotations": [
+    {
+      "id": "note-mvkfxa6s-1-89fd349c79",
+      "scope": "page:project_detail",
+      "target": "#projectBottomBar",
+      "x": 0.31599238096160837,
+      "y": 0.4042287784321713,
+      "title": "签合同 去投保 去发薪业务说明",
+      "content": "<p>未开通置灰</p>",
+      "format": "html",
+      "type": "original",
+      "typeLabel": "原有",
+      "badge": "原有"
+    }
+  ]
+}
+</script>
+
+<div class="protoWeb-root" id="prototypeAnnotationRoot" popover="manual" aria-label="原型标注层">
+  <div class="protoWeb-review-workspace" id="protoWebReviewWorkspace" aria-label="三栏审阅模式">
+    <aside class="protoWeb-review-side protoWeb-review-left" aria-label="原型说明">
+      <header class="protoWeb-review-side-header">
+        <span class="protoWeb-review-side-title">原型说明</span>
+        <button class="protoWeb-review-icon-button" id="protoWebReviewCollapseLeft" type="button" title="收起原型说明" aria-label="收起原型说明">‹</button>
+      </header>
+      <div class="protoWeb-review-docs-main">
+        <nav class="protoWeb-review-docs-nav" id="protoWebReviewDocsNav" aria-label="原型说明目录"></nav>
+        <article class="protoWeb-review-docs-body protoWeb-content" id="protoWebReviewDocsBody"></article>
+      </div>
+      <div class="protoWeb-review-rail">
+        <button class="protoWeb-review-icon-button" id="protoWebReviewExpandLeft" type="button" title="展开原型说明" aria-label="展开原型说明">›</button>
+      </div>
+    </aside>
+    <div class="protoWeb-review-splitter protoWeb-review-splitter-left" id="protoWebReviewSplitterLeft" role="separator" aria-label="调整原型说明宽度" aria-orientation="vertical" title="拖拽调整原型说明宽度"></div>
+    <section class="protoWeb-review-center">
+      <header class="protoWeb-review-toolbar">
+        <span class="protoWeb-review-scope" id="protoWebReviewScope">当前页面</span>
+        <div class="protoWeb-review-mode-group" aria-label="标注浏览模式">
+          <button id="protoWebReviewModeFloat" type="button">浮动标注</button>
+          <button class="is-active" id="protoWebReviewModeColumns" type="button" aria-current="true">三栏审阅</button>
+        </div>
+      </header>
+      <div class="protoWeb-review-canvas" id="protoWebReviewCanvas">
+        <div class="protoWeb-review-prototype-frame" id="protoWebReviewPrototypeFrame"></div>
+      </div>
+    </section>
+    <div class="protoWeb-review-splitter protoWeb-review-splitter-right" id="protoWebReviewSplitterRight" role="separator" aria-label="调整当前标注宽度" aria-orientation="vertical" title="拖拽调整当前标注宽度"></div>
+    <aside class="protoWeb-review-side protoWeb-review-right" aria-label="当前标注">
+      <header class="protoWeb-review-side-header">
+        <button class="protoWeb-review-icon-button" id="protoWebReviewCollapseRight" type="button" title="收起当前标注" aria-label="收起当前标注">›</button>
+        <span class="protoWeb-review-side-title">当前标注</span>
+      </header>
+      <div class="protoWeb-review-note-tools">
+        <span id="protoWebReviewNoteCount">0 条</span>
+        <label class="protoWeb-review-toggle-wrap">显示圆点
+          <button class="protoWeb-review-toggle" id="protoWebReviewNoteToggle" type="button" role="switch" aria-checked="false" aria-label="显示页面标注"></button>
+        </label>
+      </div>
+      <div class="protoWeb-review-note-list" id="protoWebReviewNoteList"></div>
+      <div class="protoWeb-review-rail">
+        <button class="protoWeb-review-icon-button" id="protoWebReviewExpandRight" type="button" title="展开当前标注" aria-label="展开当前标注">‹</button>
+      </div>
+    </aside>
+  </div>
+  <div class="protoWeb-marker-layer" id="protoWebMarkerLayer"></div>
+  <section class="protoWeb-panel" id="protoWebPanel" role="dialog" aria-label="原型标注详情">
+    <header class="protoWeb-panel-header" id="protoWebPanelHeader">
+      <span class="protoWeb-panel-heading" id="protoWebPanelHeading">标注详情</span>
+      <span class="protoWeb-panel-tools">
+        <button class="protoWeb-icon-button" id="protoWebCollapse" type="button" title="收起标注窗口" aria-label="收起标注窗口">−</button>
+        <button class="protoWeb-icon-button" id="protoWebClose" type="button" title="关闭标注详情" aria-label="关闭标注详情">×</button>
+      </span>
+    </header>
+    <div class="protoWeb-panel-body">
+      <article class="protoWeb-content" id="protoWebContent"></article>
+    </div>
+    <footer class="protoWeb-panel-footer">
+      <button class="protoWeb-nav-button" id="protoWebPrev" type="button">上一条</button>
+      <span class="protoWeb-page-count" id="protoWebPageCount">1 / 1</span>
+      <button class="protoWeb-nav-button" id="protoWebNext" type="button">下一条</button>
+    </footer>
+    <span class="protoWeb-resize-handle" data-direction="n" aria-hidden="true"></span>
+    <span class="protoWeb-resize-handle" data-direction="ne" aria-hidden="true"></span>
+    <span class="protoWeb-resize-handle" data-direction="e" aria-hidden="true"></span>
+    <span class="protoWeb-resize-handle" data-direction="se" aria-hidden="true"></span>
+    <span class="protoWeb-resize-handle" data-direction="s" aria-hidden="true"></span>
+    <span class="protoWeb-resize-handle" data-direction="sw" aria-hidden="true"></span>
+    <span class="protoWeb-resize-handle" data-direction="w" aria-hidden="true"></span>
+    <span class="protoWeb-resize-handle" data-direction="nw" aria-hidden="true"></span>
+  </section>
+  <div class="protoWeb-menu" id="protoWebMenu" role="menu" aria-label="原型标注菜单">
+    <div class="protoWeb-menu-mode">
+      <span class="protoWeb-menu-mode-label">浏览模式</span>
+      <div class="protoWeb-menu-mode-group" aria-label="选择标注浏览模式">
+        <button class="is-active" id="protoWebMenuModeFloat" type="button" aria-current="true">浮动标注</button>
+        <button id="protoWebOpenReview" type="button">三栏审阅</button>
+      </div>
+    </div>
+    <div class="protoWeb-menu-row">
+      <span class="protoWeb-menu-copy"><strong>显示标注</strong><small id="protoWebMenuCount">当前页面 0 条</small></span>
+      <button class="protoWeb-toggle" id="protoWebPageToggle" type="button" role="switch" aria-checked="false" aria-label="显示页面标注"></button>
+    </div>
+    <button class="protoWeb-menu-link" id="protoWebOpenDocs" type="button" role="menuitem">
+      <span class="protoWeb-menu-copy"><strong>原型说明</strong><small>查看跨页面需求与整体说明</small></span>
+      <span class="protoWeb-menu-arrow" aria-hidden="true">›</span>
+    </button>
+  </div>
+  <div class="protoWeb-docs-backdrop" id="protoWebDocsBackdrop">
+    <section class="protoWeb-docs" id="protoWebDocs" role="dialog" aria-modal="true" aria-labelledby="protoWebDocsTitle">
+      <header class="protoWeb-docs-header">
+        <span class="protoWeb-docs-title" id="protoWebDocsTitle">原型说明</span>
+        <span class="protoWeb-docs-meta" id="protoWebDocsMeta"></span>
+        <button class="protoWeb-icon-button" id="protoWebDocsClose" type="button" title="关闭原型说明" aria-label="关闭原型说明">×</button>
+      </header>
+      <div class="protoWeb-docs-main">
+        <nav class="protoWeb-docs-nav" id="protoWebDocsNav" aria-label="原型说明目录"></nav>
+        <div class="protoWeb-docs-body" id="protoWebDocsBody">
+          <article class="protoWeb-content protoWeb-docs-content" id="protoWebDocsContent"></article>
+        </div>
+      </div>
+    </section>
+  </div>
+  <button class="protoWeb-launcher" id="protoWebLauncher" type="button" aria-haspopup="menu" aria-expanded="false" title="打开原型标注菜单">
+    <span class="protoWeb-launcher-symbol">注</span>
+    <span class="protoWeb-launcher-count" id="protoWebLauncherCount">0</span>
+  </button>
+</div>
+
+<script id="protoWebWebAnnotationRuntime">
+(() => {
+  const dataNode = document.getElementById("prototypeAnnotationData");
+  const root = document.getElementById("prototypeAnnotationRoot");
+  const markerLayer = document.getElementById("protoWebMarkerLayer");
+  const launcher = document.getElementById("protoWebLauncher");
+  const launcherCount = document.getElementById("protoWebLauncherCount");
+  const menu = document.getElementById("protoWebMenu");
+  const menuCount = document.getElementById("protoWebMenuCount");
+  const pageToggle = document.getElementById("protoWebPageToggle");
+  const openDocsButton = document.getElementById("protoWebOpenDocs");
+  const panel = document.getElementById("protoWebPanel");
+  const panelHeader = document.getElementById("protoWebPanelHeader");
+  const panelHeading = document.getElementById("protoWebPanelHeading");
+  const content = document.getElementById("protoWebContent");
+  const pageCount = document.getElementById("protoWebPageCount");
+  const prevButton = document.getElementById("protoWebPrev");
+  const nextButton = document.getElementById("protoWebNext");
+  const collapseButton = document.getElementById("protoWebCollapse");
+  const closeButton = document.getElementById("protoWebClose");
+  const docsBackdrop = document.getElementById("protoWebDocsBackdrop");
+  const docsNav = document.getElementById("protoWebDocsNav");
+  const docsBody = document.getElementById("protoWebDocsBody");
+  const docsContent = document.getElementById("protoWebDocsContent");
+  const docsMeta = document.getElementById("protoWebDocsMeta");
+  const docsCloseButton = document.getElementById("protoWebDocsClose");
+  const menuFloatModeButton = document.getElementById("protoWebMenuModeFloat");
+  const openReviewButton = document.getElementById("protoWebOpenReview");
+  const reviewWorkspace = document.getElementById("protoWebReviewWorkspace");
+  const reviewCanvas = document.getElementById("protoWebReviewCanvas");
+  const reviewPrototypeFrame = document.getElementById("protoWebReviewPrototypeFrame");
+  const reviewLeftSplitter = document.getElementById("protoWebReviewSplitterLeft");
+  const reviewRightSplitter = document.getElementById("protoWebReviewSplitterRight");
+  const reviewFloatModeButton = document.getElementById("protoWebReviewModeFloat");
+  const reviewColumnsModeButton = document.getElementById("protoWebReviewModeColumns");
+  const reviewCollapseLeftButton = document.getElementById("protoWebReviewCollapseLeft");
+  const reviewExpandLeftButton = document.getElementById("protoWebReviewExpandLeft");
+  const reviewCollapseRightButton = document.getElementById("protoWebReviewCollapseRight");
+  const reviewExpandRightButton = document.getElementById("protoWebReviewExpandRight");
+  const reviewDocsNav = document.getElementById("protoWebReviewDocsNav");
+  const reviewDocsBody = document.getElementById("protoWebReviewDocsBody");
+  const reviewNoteList = document.getElementById("protoWebReviewNoteList");
+  const reviewNoteCount = document.getElementById("protoWebReviewNoteCount");
+  const reviewNoteToggle = document.getElementById("protoWebReviewNoteToggle");
+  const reviewScopeLabel = document.getElementById("protoWebReviewScope");
+
+  if (!dataNode || !root) return;
+
+  let annotationData;
+  try {
+    annotationData = JSON.parse(dataNode.textContent);
+  } catch (error) {
+    console.error("原型标注数据解析失败", error);
+    root.hidden = true;
+    return;
+  }
+
+  const annotations = Array.isArray(annotationData.annotations) ? annotationData.annotations : [];
+  const globalSections = Array.isArray(annotationData.globalSections) ? annotationData.globalSections : [];
+  const storageKey = `protoWeb-ui:${annotationData.prototypeId || "prototype"}`;
+  const reviewStorageKey = `protoWeb-review:${annotationData.prototypeId || "prototype"}`;
+  const reviewOptions = annotationData.review && typeof annotationData.review === "object" ? annotationData.review : {};
+  const reviewDesignWidth = Number(reviewOptions.designWidth) > 0 ? Number(reviewOptions.designWidth) : 375;
+    const reviewDesignHeight = Number(reviewOptions.designHeight) > 0 ? Number(reviewOptions.designHeight) : 812;
+  const reviewCanvasMargin = 16;
+  const reviewPlacementAnchors = new Map();
+  let enabled = false;
+  let currentNoteId = "";
+  let currentPanelNotes = [];
+  let currentPanelScope = "";
+  let panelScopeMismatchSince = 0;
+  let currentGlobalSectionId = globalSections[0]?.id || "";
+  let layoutFrame = 0;
+  let contextRefreshFrame = 0;
+  let contextRefreshUntil = 0;
+  let saveTimer = 0;
+  let mermaidRenderCounter = 0;
+  let restoredPanelSize = { width: 440, height: 460 };
+  let annotationAuditTimer = 0;
+  let reviewLayoutFrame = 0;
+  let reviewSyncFrame = 0;
+  let reviewRenderVersion = 0;
+  let reviewActiveNoteId = "";
+  let reviewContextSignature = "";
+  let reviewPendingSignature = "";
+  let launcherPlacementBeforeReview = null;
+  let implicitOverlayContext = null;
+  const rootFallbackBaseZIndex = 2147483000;
+  const rootFallbackMaxZIndex = 2147483646;
+
+  openDocsButton.hidden = globalSections.length === 0;
+
+  if (window.mermaid) {
+    window.mermaid.initialize({
+      startOnLoad: false,
+      securityLevel: "strict",
+      theme: "base",
+      themeVariables: {
+        primaryColor: "#F0F9FF",
+        primaryTextColor: "#223355",
+        primaryBorderColor: "#3388FF",
+        lineColor: "#6B7A99",
+        secondaryColor: "#E8F4FF",
+        tertiaryColor: "#F5F7FA",
+        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif',
+        fontSize: "14px"
+      },
+      flowchart: { curve: "basis", htmlLabels: true }
+    });
+  }
+
+  function readPreferences() {
+    try {
+      return JSON.parse(localStorage.getItem(storageKey) || "{}") || {};
+    } catch (error) {
+      return {};
+    }
+  }
+
+  function savePreferences() {
+    if (isReviewMode() && reviewPrototypeFrame && reviewPrototypeFrame.children.length > 0) return;
+    clearTimeout(saveTimer);
+    saveTimer = window.setTimeout(() => {
+      const launcherRect = launcher.getBoundingClientRect();
+      const panelRect = panel.getBoundingClientRect();
+      const preferences = {
+        launcher: { left: launcherRect.left, top: launcherRect.top },
+        panel: {
+          left: panelRect.left,
+          top: panelRect.top,
+          width: panel.classList.contains("is-collapsed") ? restoredPanelSize.width : panelRect.width,
+          height: panel.classList.contains("is-collapsed") ? restoredPanelSize.height : panelRect.height
+        }
+      };
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(preferences));
+      } catch (error) {}
+    }, 120);
+  }
+
+  function restorePreferences() {
+    const preferences = readPreferences();
+    if (preferences.launcher) {
+      launcher.style.left = `${preferences.launcher.left}px`;
+      launcher.style.top = `${preferences.launcher.top}px`;
+      launcher.style.right = "auto";
+      launcher.style.bottom = "auto";
+    }
+    if (preferences.panel) {
+      const width = Math.max(320, Number(preferences.panel.width) || 440);
+      const height = Math.max(220, Number(preferences.panel.height) || 460);
+      restoredPanelSize = { width, height };
+      panel.style.left = `${Number(preferences.panel.left) || Math.max(24, window.innerWidth - width - 88)}px`;
+      panel.style.top = `${Number(preferences.panel.top) || 92}px`;
+      panel.style.width = `${width}px`;
+      panel.style.height = `${height}px`;
+    } else {
+      panel.style.left = `${Math.max(24, window.innerWidth - 528)}px`;
+      panel.style.top = "92px";
+    }
+  }
+
+  function isElementVisible(element, requireViewport = false) {
+    if (!element) return false;
+    const style = getComputedStyle(element);
+    if (style.display === "none" || style.visibility === "hidden" || Number(style.opacity) === 0) return false;
+    if (element.hidden || element.getAttribute("aria-hidden") === "true") return false;
+    const rect = element.getBoundingClientRect();
+    if (rect.width <= 0 || rect.height <= 0) return false;
+    if (!requireViewport) return true;
+    return rect.right > 0 && rect.bottom > 0 && rect.left < window.innerWidth && rect.top < window.innerHeight;
+  }
+
+  function isScopeCandidateVisible(item) {
+    if (!item?.node || !isElementVisible(item.node, true)) return false;
+    if (item.layer > 0 || !item.scope.startsWith("page:")) {
+      const style = getComputedStyle(item.node);
+      if (style.pointerEvents === "none") return false;
+    }
+    return true;
+  }
+
+  function rememberImplicitOverlayScope(target) {
+    const trigger = target?.closest?.("[data-proto-route],[data-drawer],[data-modal],[data-dialog]");
+    if (!trigger) return;
+    let scope = trigger.dataset.protoRoute || "";
+    let kind = "";
+    if (scope.includes(":")) {
+      kind = scope.split(":", 1)[0];
+    } else if (trigger.dataset.drawer) {
+      kind = "drawer";
+      scope = `drawer:${trigger.dataset.drawer}`;
+    } else if (trigger.dataset.modal) {
+      kind = "modal";
+      scope = `modal:${trigger.dataset.modal}`;
+    } else if (trigger.dataset.dialog) {
+      kind = "modal";
+      scope = `modal:${trigger.dataset.dialog}`;
+    }
+    if (!scope || !kind) return;
+    implicitOverlayContext = { scope, kind };
+    scheduleContextRefresh(true);
+  }
+
+  function getImplicitOverlayContext() {
+    if (!implicitOverlayContext) return null;
+    const selectors = implicitOverlayContext.kind === "drawer"
+      ? ".drawer-overlay.open,.drawer.open,[data-drawer-overlay].open,[data-drawer-overlay][aria-hidden='false']"
+      : ".modal-overlay.open,.dialog-overlay.open,.modal.open,.dialog.open,[role='dialog'][aria-modal='true']";
+    const overlays = Array.from(document.querySelectorAll(selectors))
+      .filter(node => isElementVisible(node, true));
+    if (!overlays.length) return null;
+    overlays.sort((a, b) => {
+      const zA = Number.parseInt(getComputedStyle(a).zIndex, 10) || 0;
+      const zB = Number.parseInt(getComputedStyle(b).zIndex, 10) || 0;
+      return zA - zB || (a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1);
+    });
+    const overlay = overlays[overlays.length - 1];
+    const panelSelector = implicitOverlayContext.kind === "drawer"
+      ? ".drawer,[role='dialog'],aside"
+      : "[role='dialog'],.modal,.dialog";
+    const panel = Array.from(overlay.querySelectorAll(panelSelector)).find(node => isElementVisible(node, true));
+    return {
+      node: panel || overlay,
+      scope: implicitOverlayContext.scope,
+      layer: implicitOverlayContext.kind === "drawer" ? 20 : 30,
+      implicit: true
+    };
+  }
+
+  function isElementRenderable(element, scopeNode) {
+    if (!element || !element.isConnected) return false;
+    let current = element;
+    while (current && current.nodeType === 1) {
+      const style = getComputedStyle(current);
+      if (current.hidden || current.getAttribute("aria-hidden") === "true") return false;
+      if (style.display === "none" || style.visibility === "hidden" || Number(style.opacity) === 0) return false;
+      if (current === scopeNode || current === document.body) break;
+      current = current.parentElement;
+    }
+    const rect = element.getBoundingClientRect();
+    return rect.width > 0 && rect.height > 0;
+  }
+
+  function isElementUndersized(element) {
+    const rect = element.getBoundingClientRect();
+    return rect.width < 4 || rect.height < 4;
+  }
+
+  function getClippedTargetRect(target) {
+    if (!target) return null;
+    const original = target.getBoundingClientRect();
+    let left = Math.max(0, original.left);
+    let top = Math.max(0, original.top);
+    let right = Math.min(window.innerWidth, original.right);
+    let bottom = Math.min(window.innerHeight, original.bottom);
+    let parent = target.parentElement;
+
+    while (parent && parent !== document.body) {
+      const style = getComputedStyle(parent);
+      if (parent === reviewPrototypeFrame || /(auto|scroll|hidden|clip)/.test(`${style.overflow}${style.overflowX}${style.overflowY}`)) {
+        const rect = parent.getBoundingClientRect();
+        left = Math.max(left, rect.left);
+        top = Math.max(top, rect.top);
+        right = Math.min(right, rect.right);
+        bottom = Math.min(bottom, rect.bottom);
+      }
+      parent = parent.parentElement;
+    }
+
+    if (right <= left || bottom <= top) return null;
+    return { original, visible: { left, top, right, bottom } };
+  }
+
+  function isPopoverOpen() {
+    try {
+      return root.matches(":popover-open");
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function inspectHostLayers() {
+    let maxZIndex = 0;
+    let maxElement = null;
+    document.body.querySelectorAll("*").forEach(element => {
+      if (element === root || root.contains(element)) return;
+      const style = getComputedStyle(element);
+      if (style.display === "none" || style.visibility === "hidden") return;
+      const zIndex = Number.parseInt(style.zIndex, 10);
+      if (!Number.isFinite(zIndex) || zIndex <= maxZIndex) return;
+      maxZIndex = zIndex;
+      maxElement = element;
+    });
+    return {
+      maxZIndex,
+      maxElement: maxElement ? `${maxElement.tagName.toLowerCase()}${maxElement.id ? `#${maxElement.id}` : ""}${maxElement.classList.length ? `.${Array.from(maxElement.classList).join(".")}` : ""}` : ""
+    };
+  }
+
+  function ensureAnnotationLayer(reorderTopLayer = false) {
+    const supportsPopover = typeof root.showPopover === "function" && typeof root.hidePopover === "function";
+    if (supportsPopover) {
+      try {
+        if (reorderTopLayer && isPopoverOpen()) root.hidePopover();
+        if (!isPopoverOpen()) root.showPopover();
+        root.dataset.protoWebLayerMode = "top-layer";
+        if (root.style.zIndex !== String(rootFallbackMaxZIndex)) root.style.zIndex = String(rootFallbackMaxZIndex);
+        return;
+      } catch (error) {
+        console.warn("标注层进入浏览器 top layer 失败，已切换到 z-index 兜底", error);
+      }
+    }
+
+    root.removeAttribute("popover");
+    const audit = inspectHostLayers();
+    const nextZIndex = Math.min(rootFallbackMaxZIndex, Math.max(rootFallbackBaseZIndex, audit.maxZIndex + 100));
+    if (root.style.zIndex !== String(nextZIndex)) root.style.zIndex = String(nextZIndex);
+    root.dataset.protoWebLayerMode = "z-index";
+    if (audit.maxZIndex >= rootFallbackMaxZIndex) {
+      console.error("业务界面已占用浏览器最大 z-index，无法保证标注层始终位于最上层", audit);
+    }
+  }
+
+  function getLauncherHitAudit() {
+    const rect = launcher.getBoundingClientRect();
+    const x = Math.min(window.innerWidth - 1, Math.max(0, rect.left + rect.width / 2));
+    const y = Math.min(window.innerHeight - 1, Math.max(0, rect.top + rect.height / 2));
+    const hit = document.elementFromPoint(x, y);
+    return {
+      clickable: Boolean(hit && (hit === launcher || launcher.contains(hit))),
+      hitElement: hit ? `${hit.tagName.toLowerCase()}${hit.id ? `#${hit.id}` : ""}` : "",
+      point: { x, y }
+    };
+  }
+
+  function scheduleAnnotationAudit() {
+    window.clearTimeout(annotationAuditTimer);
+    annotationAuditTimer = window.setTimeout(() => {
+      ensureAnnotationLayer(false);
+      const hitAudit = getLauncherHitAudit();
+      root.dataset.protoWebLauncherClickable = String(hitAudit.clickable);
+      if (!hitAudit.clickable) {
+        ensureAnnotationLayer(true);
+        requestAnimationFrame(() => {
+          const repairedAudit = getLauncherHitAudit();
+          root.dataset.protoWebLauncherClickable = String(repairedAudit.clickable);
+          if (!repairedAudit.clickable) console.error("原型标注入口被业务界面遮挡", repairedAudit);
+        });
+      }
+    }, 40);
+  }
+
+  function getScopeContext() {
+    const candidates = Array.from(document.querySelectorAll("[data-proto-scope]"))
+      .map((node, index) => ({
+        node,
+        index,
+        scope: node.dataset.protoScope,
+        layer: Number(node.dataset.protoLayer) || 0
+      }))
+      .filter(item => item.scope && isScopeCandidateVisible(item));
+
+    const explicitOverlays = candidates.filter(item => item.layer > 0 || !item.scope.startsWith("page:"));
+    if (explicitOverlays.length) {
+      explicitOverlays.sort((a, b) => a.layer - b.layer || a.index - b.index);
+      return explicitOverlays[explicitOverlays.length - 1];
+    }
+
+    const implicitOverlay = getImplicitOverlayContext();
+    if (implicitOverlay) return implicitOverlay;
+
+    if (candidates.length) {
+      candidates.sort((a, b) => a.layer - b.layer || a.index - b.index);
+      return candidates[candidates.length - 1];
+    }
+
+    const activePage = document.querySelector(".page.active[id]");
+    if (activePage) {
+      return { node: activePage, scope: `page:${activePage.id.replace(/^page-/, "")}`, layer: 0 };
+    }
+
+    return { node: document.body, scope: document.body.dataset.protoScope || "page:default", layer: 0 };
+  }
+
+  function getScopeNotes(scope = getScopeContext().scope) {
+    return annotations.filter(note => note.scope === scope || (scope.startsWith("page:") && note.scope === "page:*"));
+  }
+
+  function findTarget(note, scopeNode) {
+    if (!note.target) return null;
+    try {
+      if (scopeNode?.matches?.(note.target)) return scopeNode;
+      return scopeNode?.querySelector?.(note.target) || document.querySelector(note.target);
+    } catch (error) {
+      console.warn(`标注 ${note.id || note.title || "未命名"} 的 target 选择器无效`, error);
+      return null;
+    }
+  }
+
+  function getRenderableScopeNotes(context = getScopeContext()) {
+    return getScopeNotes(context.scope).filter(note => isElementRenderable(findTarget(note, context.node), context.node));
+  }
+
+  function renderMarkers() {
+    const context = getScopeContext();
+    const notes = getRenderableScopeNotes(context);
+    const existingMarkers = new Map(Array.from(markerLayer.querySelectorAll(".protoWeb-marker"))
+      .map(marker => [marker.dataset.annotationId, marker]));
+    const desiredIds = new Set();
+    launcherCount.textContent = String(notes.length);
+    menuCount.textContent = `当前页面 ${notes.length} 条`;
+    launcher.title = `打开原型标注菜单（当前页面 ${notes.length} 条）`;
+    pageToggle.setAttribute("aria-checked", String(enabled));
+    pageToggle.setAttribute("aria-label", enabled ? "隐藏页面标注" : "显示页面标注");
+    if (!enabled || docsBackdrop.classList.contains("is-open")) {
+      existingMarkers.forEach(marker => marker.remove());
+      return;
+    }
+
+    notes.forEach((note, index) => {
+      const target = findTarget(note, context.node);
+      if (!isElementVisible(target, true)) return;
+      const clipped = getClippedTargetRect(target);
+      if (!clipped) return;
+      const xValue = Number(note.x);
+      const yValue = Number(note.y);
+      const x = Number.isFinite(xValue) ? Math.min(1, Math.max(0, xValue)) : 0.5;
+      const y = Number.isFinite(yValue) ? Math.min(1, Math.max(0, yValue)) : 0.5;
+      const left = Math.max(clipped.visible.left, Math.min(clipped.visible.right, clipped.original.left + clipped.original.width * x));
+      const top = Math.max(clipped.visible.top, Math.min(clipped.visible.bottom, clipped.original.top + clipped.original.height * y));
+      desiredIds.add(note.id);
+      let marker = existingMarkers.get(note.id);
+      if (!marker) {
+        marker = document.createElement("button");
+        marker.type = "button";
+        marker.className = "protoWeb-marker";
+        marker.dataset.annotationId = note.id;
+        marker.addEventListener("click", event => {
+          event.stopPropagation();
+          const boundNote = marker.__protoWebNote;
+          if (!boundNote) return;
+          if (isReviewMode()) {
+            setReviewActiveNote(boundNote.id);
+            scrollReviewCardIntoView(boundNote.id);
+          } else {
+            openNote(boundNote, marker.__protoWebScopeNotes, marker.__protoWebScope);
+          }
+        });
+      }
+      marker.__protoWebNote = note;
+      marker.__protoWebScopeNotes = notes;
+      marker.__protoWebScope = context.scope;
+      marker.classList.toggle("is-active", note.id === currentNoteId);
+      marker.textContent = String(index + 1);
+      marker.style.left = `${left}px`;
+      marker.style.top = `${top}px`;
+      marker.title = note.title;
+      marker.setAttribute("aria-label", `标注 ${index + 1}：${note.title}`);
+      const currentAtIndex = markerLayer.children[index];
+      if (currentAtIndex !== marker) markerLayer.insertBefore(marker, currentAtIndex || null);
+    });
+    existingMarkers.forEach((marker, id) => {
+      if (!desiredIds.has(id)) marker.remove();
+    });
+  }
+
+  function scheduleMarkerLayout() {
+    if (layoutFrame) return;
+    layoutFrame = requestAnimationFrame(() => {
+      layoutFrame = 0;
+      renderMarkers();
+    });
+  }
+
+  function clampPanel() {
+    if (!panel.classList.contains("is-open")) return;
+    const rect = panel.getBoundingClientRect();
+    const margin = 12;
+    const left = Math.min(Math.max(margin, rect.left), Math.max(margin, window.innerWidth - rect.width - margin));
+    const top = Math.min(Math.max(margin, rect.top), Math.max(margin, window.innerHeight - rect.height - margin));
+    panel.style.left = `${left}px`;
+    panel.style.top = `${top}px`;
+  }
+
+  function clampLauncher() {
+    if (isReviewMode() || !isElementVisible(launcher)) return;
+    const rect = launcher.getBoundingClientRect();
+    if (!launcher.style.left) return;
+    launcher.style.left = `${Math.min(Math.max(8, rect.left), window.innerWidth - rect.width - 8)}px`;
+    launcher.style.top = `${Math.min(Math.max(8, rect.top), window.innerHeight - rect.height - 8)}px`;
+  }
+
+  function positionMenu() {
+    if (!menu.classList.contains("is-open")) return;
+    const launcherRect = launcher.getBoundingClientRect();
+    const menuRect = menu.getBoundingClientRect();
+    const margin = 8;
+    const left = Math.min(Math.max(margin, launcherRect.right - menuRect.width), window.innerWidth - menuRect.width - margin);
+    let top = launcherRect.top - menuRect.height - 10;
+    if (top < margin) top = launcherRect.bottom + 10;
+    top = Math.min(top, window.innerHeight - menuRect.height - margin);
+    menu.style.left = `${left}px`;
+    menu.style.top = `${top}px`;
+  }
+
+  function closeMenu() {
+    menu.classList.remove("is-open");
+    launcher.setAttribute("aria-expanded", "false");
+  }
+
+  function toggleMenu() {
+    const willOpen = !menu.classList.contains("is-open");
+    menu.classList.toggle("is-open", willOpen);
+    launcher.setAttribute("aria-expanded", String(willOpen));
+    if (willOpen) positionMenu();
+  }
+
+  async function renderMermaidBlocks(renderRoot) {
+    if (!window.mermaid) return;
+    const blocks = Array.from(renderRoot.querySelectorAll("pre code.language-mermaid"));
+    for (const block of blocks) {
+      const pre = block.closest("pre");
+      const container = document.createElement("div");
+      container.className = "protoWeb-mermaid";
+      try {
+        const result = await window.mermaid.render(`protoWeb-mermaid-${++mermaidRenderCounter}`, block.textContent.trim());
+        container.innerHTML = result.svg;
+        if (result.bindFunctions) result.bindFunctions(container);
+        pre.replaceWith(container);
+      } catch (error) {
+        pre.classList.add("protoWeb-mermaid-error");
+        console.error("标注流程图渲染失败", error);
+      }
+    }
+  }
+
+  async function renderRichContent(renderRoot, item) {
+    if (item.format === "html" || !window.marked) {
+      renderRoot.innerHTML = item.content || "";
+    } else {
+      renderRoot.innerHTML = window.marked.parse(item.content || "", { gfm: true, breaks: true });
+    }
+    await renderMermaidBlocks(renderRoot);
+  }
+
+  async function renderPanel(note, notes = currentPanelNotes) {
+    const index = notes.findIndex(item => item.id === note.id);
+    panelHeading.textContent = note.title;
+    await renderRichContent(content, note);
+    pageCount.textContent = `${index + 1} / ${notes.length}`;
+    prevButton.disabled = index <= 0;
+    nextButton.disabled = index < 0 || index >= notes.length - 1;
+  }
+
+  function openNote(noteOrId, scopeNotes = null, scope = "") {
+    const note = typeof noteOrId === "object"
+      ? noteOrId
+      : annotations.find(item => item.id === noteOrId);
+    if (!note) {
+      console.warn("未找到要打开的标注", noteOrId);
+      return;
+    }
+    const context = getScopeContext();
+    const fallbackNotes = getRenderableScopeNotes(context);
+    const candidateNotes = Array.isArray(scopeNotes) && scopeNotes.some(item => item.id === note.id)
+      ? scopeNotes
+      : fallbackNotes;
+    currentPanelNotes = candidateNotes.some(item => item.id === note.id) ? candidateNotes : [note];
+    currentPanelScope = scope || context.scope;
+    panelScopeMismatchSince = 0;
+    currentNoteId = note.id;
+    panel.classList.add("is-open");
+    panel.classList.remove("is-collapsed");
+    collapseButton.textContent = "−";
+    collapseButton.title = "收起标注窗口";
+    renderPanel(note, currentPanelNotes).catch(error => {
+      console.error("标注内容渲染失败", error);
+      content.innerHTML = "<p>标注内容暂时无法显示。</p>";
+    });
+    requestAnimationFrame(() => {
+      clampPanel();
+      renderMarkers();
+    });
+  }
+
+  function closePanel() {
+    currentNoteId = "";
+    currentPanelNotes = [];
+    currentPanelScope = "";
+    panelScopeMismatchSince = 0;
+    panel.classList.remove("is-open", "is-collapsed");
+    collapseButton.textContent = "−";
+    renderMarkers();
+  }
+
+  function movePanel(step) {
+    const notes = currentPanelNotes.length ? currentPanelNotes : getRenderableScopeNotes();
+    const index = notes.findIndex(note => note.id === currentNoteId);
+    const targetIndex = index + step;
+    if (targetIndex >= 0 && targetIndex < notes.length) openNote(notes[targetIndex], notes, currentPanelScope);
+  }
+
+  function toggleAnnotations() {
+    enabled = !enabled;
+    launcher.classList.toggle("is-active", enabled);
+    pageToggle.setAttribute("aria-checked", String(enabled));
+    syncReviewToggle();
+    if (!enabled) closePanel();
+    else renderMarkers();
+  }
+
+  function renderGlobalNav() {
+    docsNav.replaceChildren();
+    globalSections.forEach(section => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = section.title;
+      button.classList.toggle("is-active", section.id === currentGlobalSectionId);
+      button.addEventListener("click", () => renderGlobalSection(section.id));
+      docsNav.appendChild(button);
+    });
+  }
+
+  async function renderGlobalSection(id) {
+    const section = globalSections.find(item => item.id === id) || globalSections[0];
+    if (!section) return;
+    currentGlobalSectionId = section.id;
+    renderGlobalNav();
+    docsBody.scrollTop = 0;
+    try {
+      await renderRichContent(docsContent, section);
+    } catch (error) {
+      console.error("全局原型说明渲染失败", error);
+      docsContent.innerHTML = "<p>原型说明暂时无法显示。</p>";
+    }
+  }
+
+  function openGlobalDocs() {
+    if (!globalSections.length) return;
+    closeMenu();
+    docsBackdrop.classList.add("is-open");
+    closePanel();
+    markerLayer.replaceChildren();
+    const meta = annotationData.globalMeta || {};
+    docsMeta.textContent = `${meta.version || "V0.1"} · 更新于 ${meta.updatedAt || "未记录"}`;
+    renderGlobalSection(currentGlobalSectionId || globalSections[0].id);
+    requestAnimationFrame(() => docsCloseButton.focus());
+  }
+
+  function closeGlobalDocs() {
+    docsBackdrop.classList.remove("is-open");
+    renderMarkers();
+    launcher.focus();
+  }
+
+  function isReviewMode() {
+    return document.body.classList.contains("protoWeb-review-mode");
+  }
+
+  function readReviewPreferences() {
+    try {
+      return JSON.parse(localStorage.getItem(reviewStorageKey) || "{}") || {};
+    } catch (error) {
+      return {};
+    }
+  }
+
+  function getDefaultReviewSideWidth(side) {
+    if (window.innerWidth <= 1440) return side === "left" ? 300 : 340;
+    return side === "left" ? 360 : 380;
+  }
+
+  function getReviewSideWidth(side) {
+    const property = side === "left" ? "--protoWeb-review-left-width" : "--protoWeb-review-right-width";
+    return Number.parseFloat(getComputedStyle(reviewWorkspace).getPropertyValue(property)) || getDefaultReviewSideWidth(side);
+  }
+
+  function setReviewSideWidth(side, requestedWidth) {
+    const minimum = side === "left" ? 260 : 300;
+    const hardMaximum = side === "left" ? 760 : 640;
+    const otherSide = side === "left" ? "right" : "left";
+    const ownCollapsed = reviewWorkspace.classList.contains(side === "left" ? "is-left-collapsed" : "is-right-collapsed");
+    const otherCollapsed = reviewWorkspace.classList.contains(otherSide === "left" ? "is-left-collapsed" : "is-right-collapsed");
+    const otherTrack = otherCollapsed ? 44 : getReviewSideWidth(otherSide);
+    const splitterWidth = (ownCollapsed ? 0 : 8) + (otherCollapsed ? 0 : 8);
+    const availableMaximum = window.innerWidth - otherTrack - splitterWidth - 420;
+    const maximum = Math.max(minimum, Math.min(hardMaximum, availableMaximum));
+    const width = Math.round(Math.min(maximum, Math.max(minimum, Number(requestedWidth) || getDefaultReviewSideWidth(side))));
+    const property = side === "left" ? "--protoWeb-review-left-width" : "--protoWeb-review-right-width";
+    if (Math.abs(getReviewSideWidth(side) - width) > 0.5) reviewWorkspace.style.setProperty(property, `${width}px`);
+    const splitter = side === "left" ? reviewLeftSplitter : reviewRightSplitter;
+    splitter?.setAttribute("aria-valuemin", String(minimum));
+    splitter?.setAttribute("aria-valuemax", String(maximum));
+    splitter?.setAttribute("aria-valuenow", String(width));
+    return width;
+  }
+
+  function normalizeReviewSideWidths() {
+    setReviewSideWidth("left", getReviewSideWidth("left"));
+    setReviewSideWidth("right", getReviewSideWidth("right"));
+  }
+
+  function saveReviewPreferences() {
+    try {
+      localStorage.setItem(reviewStorageKey, JSON.stringify({
+        leftCollapsed: reviewWorkspace.classList.contains("is-left-collapsed"),
+        rightCollapsed: reviewWorkspace.classList.contains("is-right-collapsed"),
+        leftWidth: getReviewSideWidth("left"),
+        rightWidth: getReviewSideWidth("right")
+      }));
+    } catch (error) {}
+  }
+
+  function applyReviewPreferences() {
+    const preferences = readReviewPreferences();
+    reviewWorkspace.classList.toggle("is-left-collapsed", Boolean(preferences.leftCollapsed));
+    reviewWorkspace.classList.toggle("is-right-collapsed", Boolean(preferences.rightCollapsed));
+    setReviewSideWidth("left", Number(preferences.leftWidth) || getDefaultReviewSideWidth("left"));
+    setReviewSideWidth("right", Number(preferences.rightWidth) || getDefaultReviewSideWidth("right"));
+  }
+
+  function setReviewSideCollapsed(side, collapsed) {
+    reviewWorkspace.classList.toggle(side === "left" ? "is-left-collapsed" : "is-right-collapsed", collapsed);
+    normalizeReviewSideWidths();
+    saveReviewPreferences();
+    scheduleReviewLayout();
+  }
+
+  function getReviewBusinessNodes() {
+    const phone = document.querySelector(".phone-container");
+    if (phone) return [phone];
+    const explicitNodes = Array.from(document.querySelectorAll("[data-proto-app], [data-proto-portal]"))
+      .filter(node => !root.contains(node) && node !== document.body);
+    if (explicitNodes.length) return explicitNodes;
+    return Array.from(document.body.children).filter(node => {
+      if (node === root || node === dataNode) return false;
+      return !["SCRIPT", "STYLE", "LINK", "TEMPLATE"].includes(node.tagName);
+    });
+  }
+
+  function moveBusinessIntoReviewFrame() {
+    getReviewBusinessNodes().forEach(node => {
+      if (!reviewPlacementAnchors.has(node)) {
+        const anchor = document.createComment(`protoWeb-review-anchor:${node.id || node.className || node.tagName}`);
+        node.parentNode.insertBefore(anchor, node);
+        reviewPlacementAnchors.set(node, anchor);
+      }
+      reviewPrototypeFrame.appendChild(node);
+    });
+  }
+
+  function restoreBusinessFromReviewFrame() {
+    reviewPlacementAnchors.forEach((anchor, node) => {
+      if (anchor.parentNode) anchor.parentNode.insertBefore(node, anchor.nextSibling);
+    });
+  }
+
+  function captureLauncherPlacement() {
+    launcherPlacementBeforeReview = {
+      left: launcher.style.left,
+      top: launcher.style.top,
+      right: launcher.style.right,
+      bottom: launcher.style.bottom
+    };
+  }
+
+  function restoreLauncherPlacement() {
+    if (!launcherPlacementBeforeReview) return;
+    Object.assign(launcher.style, launcherPlacementBeforeReview);
+    launcherPlacementBeforeReview = null;
+  }
+
+  function layoutReviewPrototype() {
+    reviewLayoutFrame = 0;
+    if (!isReviewMode()) return;
+    normalizeReviewSideWidths();
+    reviewPrototypeFrame.style.width = `${reviewDesignWidth}px`;
+    reviewPrototypeFrame.style.height = `${reviewDesignHeight}px`;
+    const availableWidth = Math.max(1, reviewCanvas.clientWidth - reviewCanvasMargin * 2);
+    const availableHeight = Math.max(1, reviewCanvas.clientHeight - reviewCanvasMargin * 2);
+    const scale = Math.min(availableWidth / reviewDesignWidth, availableHeight / reviewDesignHeight);
+    const left = Math.round((reviewCanvas.clientWidth - reviewDesignWidth * scale) / 2);
+    const top = Math.round((reviewCanvas.clientHeight - reviewDesignHeight * scale) / 2);
+    reviewPrototypeFrame.style.transform = `translate(${left}px, ${top}px) scale(${scale})`;
+    reviewPrototypeFrame.dataset.scale = scale.toFixed(4);
+    scheduleMarkerLayout();
+    scheduleAnnotationAudit();
+  }
+
+  function scheduleReviewLayout() {
+    if (!isReviewMode() || reviewLayoutFrame) return;
+    reviewLayoutFrame = requestAnimationFrame(layoutReviewPrototype);
+  }
+
+  function makeReviewSplitterDraggable(splitter, side) {
+    if (!splitter) return;
+    let dragState = null;
+    splitter.addEventListener("pointerdown", event => {
+      if (event.button !== 0) return;
+      dragState = { pointerId: event.pointerId, startX: event.clientX, startWidth: getReviewSideWidth(side) };
+      splitter.setPointerCapture(event.pointerId);
+      splitter.classList.add("is-dragging");
+      reviewWorkspace.classList.add("is-resizing");
+      event.preventDefault();
+    });
+    splitter.addEventListener("pointermove", event => {
+      if (!dragState || event.pointerId !== dragState.pointerId) return;
+      const delta = event.clientX - dragState.startX;
+      setReviewSideWidth(side, dragState.startWidth + (side === "left" ? delta : -delta));
+      scheduleReviewLayout();
+    });
+    const endDrag = event => {
+      if (!dragState || event.pointerId !== dragState.pointerId) return;
+      dragState = null;
+      splitter.classList.remove("is-dragging");
+      reviewWorkspace.classList.remove("is-resizing");
+      saveReviewPreferences();
+      scheduleReviewLayout();
+    };
+    splitter.addEventListener("pointerup", endDrag);
+    splitter.addEventListener("pointercancel", endDrag);
+  }
+
+  function renderReviewDocsNav() {
+    reviewDocsNav.replaceChildren();
+    globalSections.forEach(section => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = section.title;
+      button.classList.toggle("is-active", section.id === currentGlobalSectionId);
+      button.addEventListener("click", () => renderReviewSection(section.id));
+      reviewDocsNav.appendChild(button);
+    });
+  }
+
+  async function renderReviewSection(id) {
+    const section = globalSections.find(item => item.id === id) || globalSections[0];
+    if (!section) {
+      reviewDocsNav.replaceChildren();
+      reviewDocsBody.innerHTML = '<div class="protoWeb-review-empty">暂无原型说明</div>';
+      return;
+    }
+    currentGlobalSectionId = section.id;
+    renderReviewDocsNav();
+    reviewDocsBody.scrollTop = 0;
+    await renderRichContent(reviewDocsBody, section);
+  }
+
+  function getReviewScopeLabel(context) {
+    const scopeNode = context.node;
+    const activeNav = document.querySelector("[data-proto-page].active, [data-page-link].active, .nav-leaf.active, .menu-item.active");
+    return scopeNode?.dataset?.protoWebTitle || activeNav?.textContent?.trim() || context.scope.replace(/^(page|drawer|modal):/, "");
+  }
+
+  function syncReviewToggle() {
+    if (!reviewNoteToggle) return;
+    reviewNoteToggle.setAttribute("aria-checked", String(enabled));
+    reviewNoteToggle.setAttribute("aria-label", enabled ? "隐藏页面标注" : "显示页面标注");
+  }
+
+  function setReviewActiveNote(noteId) {
+    reviewActiveNoteId = noteId;
+    reviewNoteList.querySelectorAll(".protoWeb-review-note-card").forEach(card => card.classList.toggle("is-active", card.dataset.noteId === noteId));
+    markerLayer.querySelectorAll(".protoWeb-marker").forEach(marker => marker.classList.toggle("is-active", marker.dataset.annotationId === noteId));
+  }
+
+  function scrollReviewCardIntoView(noteId) {
+    const card = Array.from(reviewNoteList.querySelectorAll(".protoWeb-review-note-card")).find(item => item.dataset.noteId === noteId);
+    if (!card) return;
+    const listRect = reviewNoteList.getBoundingClientRect();
+    const cardRect = card.getBoundingClientRect();
+    const top = cardRect.top - listRect.top + reviewNoteList.scrollTop - (reviewNoteList.clientHeight - cardRect.height) / 2;
+    reviewNoteList.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+    card.focus({ preventScroll: true });
+  }
+
+  function highlightReviewTarget(target) {
+    document.querySelectorAll(".protoWeb-review-target-highlight").forEach(node => node.classList.remove("protoWeb-review-target-highlight"));
+    target.classList.add("protoWeb-review-target-highlight");
+    window.setTimeout(() => target.classList.remove("protoWeb-review-target-highlight"), 1200);
+  }
+
+  function findReviewScrollParent(target) {
+    let parent = target.parentElement;
+    while (parent && parent !== reviewPrototypeFrame) {
+      const style = getComputedStyle(parent);
+      if ((parent.hasAttribute("data-proto-scroll-container") || /(auto|scroll)/.test(style.overflowY)) && parent.scrollHeight > parent.clientHeight + 1) return parent;
+      parent = parent.parentElement;
+    }
+    return null;
+  }
+
+  function locateReviewTarget(note) {
+    const context = getScopeContext();
+    const target = findTarget(note, context.node);
+    if (!isElementRenderable(target, context.node)) return;
+    setReviewActiveNote(note.id);
+    if (note.scroll === false || target.getAttribute("data-proto-scroll") === "none") {
+      highlightReviewTarget(target);
+      return;
+    }
+    const scroller = findReviewScrollParent(target);
+    if (!scroller) {
+      highlightReviewTarget(target);
+      return;
+    }
+    const scrollerRect = scroller.getBoundingClientRect();
+    const targetRect = target.getBoundingClientRect();
+    if (targetRect.top >= scrollerRect.top && targetRect.bottom <= scrollerRect.bottom) {
+      highlightReviewTarget(target);
+      return;
+    }
+    const scale = Number(reviewPrototypeFrame.dataset.scale) || 1;
+    const targetTop = (targetRect.top - scrollerRect.top) / scale + scroller.scrollTop;
+    const targetHeight = targetRect.height / scale;
+    const maxTop = Math.max(0, scroller.scrollHeight - scroller.clientHeight);
+    const nextTop = Math.min(maxTop, Math.max(0, targetTop - (scroller.clientHeight - targetHeight) / 2));
+    scroller.scrollTo({ top: nextTop, behavior: "smooth" });
+    window.setTimeout(() => highlightReviewTarget(target), 360);
+  }
+
+  async function renderReviewNoteList(context = getScopeContext(), notes = getRenderableScopeNotes(context), signature = "") {
+    const renderVersion = ++reviewRenderVersion;
+    reviewScopeLabel.textContent = getReviewScopeLabel(context);
+    reviewNoteCount.textContent = `${notes.length} 条`;
+    syncReviewToggle();
+    if (!notes.length) {
+      if (renderVersion === reviewRenderVersion) {
+        reviewNoteList.innerHTML = '<div class="protoWeb-review-empty">当前页面暂无标注</div>';
+        reviewContextSignature = signature;
+      }
+      return;
+    }
+    const listRoot = document.createElement("div");
+    reviewNoteList.replaceChildren(listRoot);
+    for (const [index, note] of notes.entries()) {
+      if (renderVersion !== reviewRenderVersion) return;
+      const card = document.createElement("article");
+      card.className = "protoWeb-review-note-card";
+      card.dataset.noteId = note.id;
+      card.tabIndex = 0;
+      card.setAttribute("role", "button");
+      card.setAttribute("aria-label", `定位标注 ${index + 1}：${note.title}`);
+      const number = document.createElement("span");
+      number.className = "protoWeb-review-note-index";
+      number.textContent = String(index + 1);
+      const heading = document.createElement("h3");
+      heading.textContent = note.title;
+      const body = document.createElement("div");
+      body.className = "protoWeb-content";
+      card.append(number, heading, body);
+      const locate = () => locateReviewTarget(note);
+      card.addEventListener("click", locate);
+      card.addEventListener("keydown", event => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          locate();
+        }
+      });
+      listRoot.appendChild(card);
+      await renderRichContent(body, note);
+    }
+    if (renderVersion !== reviewRenderVersion) return;
+    reviewContextSignature = signature;
+    setReviewActiveNote(notes.some(note => note.id === reviewActiveNoteId) ? reviewActiveNoteId : "");
+  }
+
+  function syncReviewContext() {
+    if (!isReviewMode()) return;
+    const context = getScopeContext();
+    const notes = getRenderableScopeNotes(context);
+    if (!notes.some(note => note.id === reviewActiveNoteId)) reviewActiveNoteId = "";
+    const signature = `${context.scope}|${enabled ? 1 : 0}|${notes.map(note => note.id).join(",")}`;
+    if (signature !== reviewContextSignature && signature !== reviewPendingSignature) {
+      reviewPendingSignature = signature;
+      renderReviewNoteList(context, notes, signature)
+        .catch(error => console.error("三栏审阅标注列表渲染失败", error))
+        .finally(() => {
+          if (reviewPendingSignature === signature) reviewPendingSignature = "";
+        });
+    } else {
+      setReviewActiveNote(reviewActiveNoteId);
+    }
+    scheduleReviewLayout();
+  }
+
+  function scheduleReviewSync() {
+    if (!isReviewMode() || reviewSyncFrame) return;
+    reviewSyncFrame = requestAnimationFrame(() => {
+      reviewSyncFrame = 0;
+      syncReviewContext();
+    });
+  }
+
+  function enterReviewMode() {
+    if (isReviewMode() && reviewPrototypeFrame && reviewPrototypeFrame.children.length > 0) return;
+    reviewContextSignature = "";
+    reviewPendingSignature = "";
+    captureLauncherPlacement();
+    moveBusinessIntoReviewFrame();
+    applyReviewPreferences();
+    reviewWorkspace.hidden = false;
+    document.body.classList.add("protoWeb-review-mode");
+    closeMenu();
+    closePanel();
+    docsBackdrop.classList.remove("is-open");
+    enabled = true;
+    launcher.classList.add("is-active");
+    pageToggle.setAttribute("aria-checked", "true");
+    syncReviewToggle();
+    renderReviewSection(currentGlobalSectionId).catch(error => console.error("三栏审阅原型说明渲染失败", error));
+    requestAnimationFrame(() => {
+      layoutReviewPrototype();
+      syncReviewContext();
+    });
+  }
+
+  function exitReviewMode() {
+    if (!isReviewMode()) return;
+    reviewRenderVersion += 1;
+    reviewContextSignature = "";
+    reviewPendingSignature = "";
+    document.body.classList.remove("protoWeb-review-mode");
+    restoreBusinessFromReviewFrame();
+    restoreLauncherPlacement();
+    reviewWorkspace.hidden = true;
+    document.querySelectorAll(".protoWeb-review-target-highlight").forEach(node => node.classList.remove("protoWeb-review-target-highlight"));
+    ensureAnnotationLayer(true);
+    requestAnimationFrame(() => {
+      clampLauncher();
+      renderMarkers();
+      scheduleAnnotationAudit();
+    });
+  }
+
+  function syncContext() {
+    ensureAnnotationLayer(false);
+    const context = getScopeContext();
+    const contextNotes = getRenderableScopeNotes(context);
+    if (currentNoteId) {
+      if (contextNotes.some(note => note.id === currentNoteId)) {
+        currentPanelNotes = contextNotes;
+        currentPanelScope = context.scope;
+        panelScopeMismatchSince = 0;
+      } else if (!panelScopeMismatchSince) {
+        panelScopeMismatchSince = performance.now();
+      } else if (performance.now() - panelScopeMismatchSince >= 280) {
+        closePanel();
+      }
+    }
+    scheduleMarkerLayout();
+    scheduleReviewSync();
+    scheduleAnnotationAudit();
+  }
+
+  function runContextRefresh() {
+    contextRefreshFrame = 0;
+    syncContext();
+    if (performance.now() < contextRefreshUntil) {
+      contextRefreshFrame = requestAnimationFrame(runContextRefresh);
+    }
+  }
+
+  function scheduleContextRefresh(settle = false) {
+    if (settle === true) {
+      contextRefreshUntil = Math.max(contextRefreshUntil, performance.now() + 900);
+    }
+    if (!contextRefreshFrame) contextRefreshFrame = requestAnimationFrame(runContextRefresh);
+  }
+
+  function makeDraggable(handle, target, onEnd) {
+    let dragState = null;
+    handle.addEventListener("pointerdown", event => {
+      if (event.button !== 0 || event.target.closest("button")) return;
+      const rect = target.getBoundingClientRect();
+      dragState = {
+        pointerId: event.pointerId,
+        startX: event.clientX,
+        startY: event.clientY,
+        left: rect.left,
+        top: rect.top,
+        width: rect.width,
+        height: rect.height
+      };
+      target.style.left = `${rect.left}px`;
+      target.style.top = `${rect.top}px`;
+      handle.setPointerCapture(event.pointerId);
+      event.preventDefault();
+    });
+    handle.addEventListener("pointermove", event => {
+      if (!dragState || event.pointerId !== dragState.pointerId) return;
+      const margin = 12;
+      const left = Math.min(Math.max(margin, dragState.left + event.clientX - dragState.startX), window.innerWidth - dragState.width - margin);
+      const top = Math.min(Math.max(margin, dragState.top + event.clientY - dragState.startY), window.innerHeight - dragState.height - margin);
+      target.style.left = `${left}px`;
+      target.style.top = `${top}px`;
+    });
+    const endDrag = event => {
+      if (!dragState || event.pointerId !== dragState.pointerId) return;
+      dragState = null;
+      onEnd?.();
+    };
+    handle.addEventListener("pointerup", endDrag);
+    handle.addEventListener("pointercancel", endDrag);
+  }
+
+  function makeResizable() {
+    document.querySelectorAll(".protoWeb-resize-handle").forEach(handle => {
+      let resizeState = null;
+      handle.addEventListener("pointerdown", event => {
+        if (event.button !== 0 || panel.classList.contains("is-collapsed")) return;
+        const rect = panel.getBoundingClientRect();
+        resizeState = {
+          pointerId: event.pointerId,
+          direction: handle.dataset.direction,
+          startX: event.clientX,
+          startY: event.clientY,
+          left: rect.left,
+          top: rect.top,
+          right: rect.right,
+          bottom: rect.bottom,
+          width: rect.width,
+          height: rect.height
+        };
+        handle.setPointerCapture(event.pointerId);
+        event.preventDefault();
+        event.stopPropagation();
+      });
+      handle.addEventListener("pointermove", event => {
+        if (!resizeState || event.pointerId !== resizeState.pointerId) return;
+        const margin = 12;
+        const minWidth = 320;
+        const minHeight = 220;
+        const dx = event.clientX - resizeState.startX;
+        const dy = event.clientY - resizeState.startY;
+        let left = resizeState.left;
+        let top = resizeState.top;
+        let width = resizeState.width;
+        let height = resizeState.height;
+        const direction = resizeState.direction;
+
+        if (direction.includes("e")) width = Math.min(Math.max(minWidth, resizeState.width + dx), window.innerWidth - margin - resizeState.left);
+        if (direction.includes("w")) {
+          width = Math.min(Math.max(minWidth, resizeState.width - dx), resizeState.right - margin);
+          left = resizeState.right - width;
+        }
+        if (direction.includes("s")) height = Math.min(Math.max(minHeight, resizeState.height + dy), window.innerHeight - margin - resizeState.top);
+        if (direction.includes("n")) {
+          height = Math.min(Math.max(minHeight, resizeState.height - dy), resizeState.bottom - margin);
+          top = resizeState.bottom - height;
+        }
+
+        panel.style.left = `${left}px`;
+        panel.style.top = `${top}px`;
+        panel.style.width = `${width}px`;
+        panel.style.height = `${height}px`;
+        restoredPanelSize = { width, height };
+      });
+      const endResize = event => {
+        if (!resizeState || event.pointerId !== resizeState.pointerId) return;
+        resizeState = null;
+        clampPanel();
+        savePreferences();
+      };
+      handle.addEventListener("pointerup", endResize);
+      handle.addEventListener("pointercancel", endResize);
+    });
+  }
+
+  let launcherDrag = null;
+  let suppressLauncherClick = false;
+  launcher.addEventListener("pointerdown", event => {
+    if (event.button !== 0) return;
+    const rect = launcher.getBoundingClientRect();
+    launcherDrag = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      left: rect.left,
+      top: rect.top,
+      moved: false
+    };
+    launcher.style.left = `${rect.left}px`;
+    launcher.style.top = `${rect.top}px`;
+    launcher.style.right = "auto";
+    launcher.style.bottom = "auto";
+    launcher.setPointerCapture(event.pointerId);
+  });
+  launcher.addEventListener("pointermove", event => {
+    if (!launcherDrag || event.pointerId !== launcherDrag.pointerId) return;
+    const dx = event.clientX - launcherDrag.startX;
+    const dy = event.clientY - launcherDrag.startY;
+    if (Math.hypot(dx, dy) > 5) launcherDrag.moved = true;
+    launcher.style.left = `${Math.min(Math.max(8, launcherDrag.left + dx), window.innerWidth - launcher.offsetWidth - 8)}px`;
+    launcher.style.top = `${Math.min(Math.max(8, launcherDrag.top + dy), window.innerHeight - launcher.offsetHeight - 8)}px`;
+    positionMenu();
+  });
+  launcher.addEventListener("pointerup", event => {
+    if (!launcherDrag || event.pointerId !== launcherDrag.pointerId) return;
+    suppressLauncherClick = launcherDrag.moved;
+    launcherDrag = null;
+    savePreferences();
+  });
+  launcher.addEventListener("click", event => {
+    if (suppressLauncherClick) {
+      suppressLauncherClick = false;
+      event.preventDefault();
+      return;
+    }
+    toggleMenu();
+  });
+
+  makeDraggable(panelHeader, panel, () => {
+    clampPanel();
+    savePreferences();
+  });
+  makeResizable();
+
+  pageToggle.addEventListener("click", event => {
+    event.stopPropagation();
+    toggleAnnotations();
+  });
+  menuFloatModeButton.addEventListener("click", closeMenu);
+  openReviewButton.addEventListener("click", enterReviewMode);
+  reviewFloatModeButton.addEventListener("click", exitReviewMode);
+  reviewColumnsModeButton.addEventListener("click", () => {});
+  reviewCollapseLeftButton.addEventListener("click", () => setReviewSideCollapsed("left", true));
+  reviewExpandLeftButton.addEventListener("click", () => setReviewSideCollapsed("left", false));
+  reviewCollapseRightButton.addEventListener("click", () => setReviewSideCollapsed("right", true));
+  reviewExpandRightButton.addEventListener("click", () => setReviewSideCollapsed("right", false));
+  reviewNoteToggle.addEventListener("click", event => {
+    event.stopPropagation();
+    toggleAnnotations();
+    scheduleReviewSync();
+  });
+  openDocsButton.addEventListener("click", openGlobalDocs);
+  closeButton.addEventListener("click", closePanel);
+  docsCloseButton.addEventListener("click", closeGlobalDocs);
+  docsBackdrop.addEventListener("click", event => {
+    if (event.target === docsBackdrop) closeGlobalDocs();
+  });
+  collapseButton.addEventListener("click", () => {
+    const willCollapse = !panel.classList.contains("is-collapsed");
+    if (willCollapse) {
+      const rect = panel.getBoundingClientRect();
+      restoredPanelSize = { width: Math.max(320, rect.width), height: Math.max(220, rect.height) };
+      panel.classList.add("is-collapsed");
+      panel.style.width = `${Math.min(360, restoredPanelSize.width)}px`;
+      collapseButton.textContent = "+";
+      collapseButton.title = "展开标注窗口";
+    } else {
+      panel.classList.remove("is-collapsed");
+      panel.style.width = `${restoredPanelSize.width}px`;
+      panel.style.height = `${restoredPanelSize.height}px`;
+      collapseButton.textContent = "−";
+      collapseButton.title = "收起标注窗口";
+      requestAnimationFrame(clampPanel);
+    }
+    savePreferences();
+  });
+  prevButton.addEventListener("click", () => movePanel(-1));
+  nextButton.addEventListener("click", () => movePanel(1));
+
+  document.addEventListener("click", event => {
+    rememberImplicitOverlayScope(event.target);
+    if (!menu.contains(event.target) && !launcher.contains(event.target)) closeMenu();
+  });
+  document.addEventListener("keydown", event => {
+    if (event.key !== "Escape") return;
+    if (docsBackdrop.classList.contains("is-open")) closeGlobalDocs();
+    else if (menu.classList.contains("is-open")) closeMenu();
+    else if (panel.classList.contains("is-open")) closePanel();
+  });
+  document.addEventListener("scroll", scheduleMarkerLayout, true);
+  document.addEventListener("prototype-annotation:scopechange", () => scheduleContextRefresh(true));
+  const handleHostMotion = event => {
+    if (root.contains(event.target)) return;
+    scheduleContextRefresh(true);
+  };
+  document.addEventListener("animationstart", handleHostMotion, true);
+  document.addEventListener("animationend", handleHostMotion, true);
+  document.addEventListener("animationcancel", handleHostMotion, true);
+  document.addEventListener("transitionrun", handleHostMotion, true);
+  document.addEventListener("transitionend", handleHostMotion, true);
+  document.addEventListener("transitioncancel", handleHostMotion, true);
+  window.addEventListener("resize", () => {
+    clampLauncher();
+    clampPanel();
+    positionMenu();
+    scheduleContextRefresh(true);
+    scheduleReviewLayout();
+    scheduleAnnotationAudit();
+  });
+
+  const scopeObserver = new MutationObserver(records => {
+    if (records.every(record => (record.target === root || root.contains(record.target)) && !reviewPrototypeFrame.contains(record.target))) return;
+    scheduleContextRefresh(true);
+  });
+  scopeObserver.observe(document.body, {
+    subtree: true,
+    attributes: true,
+    attributeFilter: ["class", "hidden", "style", "aria-hidden", "data-proto-scope", "data-proto-layer"]
+  });
+
+  function inspectCurrentScopeAnnotations() {
+    const context = getScopeContext();
+    const configured = getScopeNotes(context.scope);
+    const invalidTargetIds = [];
+    const hiddenTargetIds = [];
+    const undersizedTargetIds = [];
+    const clippedTargetIds = [];
+    const points = [];
+    configured.forEach(note => {
+      const target = findTarget(note, context.node);
+      if (!target) {
+        invalidTargetIds.push(note.id);
+        return;
+      }
+      if (!isElementRenderable(target, context.node)) {
+        hiddenTargetIds.push(note.id);
+        return;
+      }
+      if (isElementUndersized(target)) undersizedTargetIds.push(note.id);
+      const clipped = getClippedTargetRect(target);
+      if (!clipped) {
+        clippedTargetIds.push(note.id);
+        return;
+      }
+      const x = Math.min(1, Math.max(0, Number(note.x)));
+      const y = Math.min(1, Math.max(0, Number(note.y)));
+      points.push({
+        id: note.id,
+        x: Math.max(clipped.visible.left, Math.min(clipped.visible.right, clipped.original.left + clipped.original.width * x)),
+        y: Math.max(clipped.visible.top, Math.min(clipped.visible.bottom, clipped.original.top + clipped.original.height * y))
+      });
+    });
+    const overlaps = [];
+    for (let index = 0; index < points.length; index += 1) {
+      for (let next = index + 1; next < points.length; next += 1) {
+        if (Math.hypot(points[index].x - points[next].x, points[index].y - points[next].y) < 28) {
+          overlaps.push([points[index].id, points[next].id]);
+        }
+      }
+    }
+    return {
+      scope: context.scope,
+      configuredCount: configured.length,
+      renderableCount: configured.length - invalidTargetIds.length - hiddenTargetIds.length,
+      visibleMarkerCount: points.length,
+      invalidTargetIds,
+      hiddenTargetIds,
+      undersizedTargetIds,
+      clippedTargetIds,
+      overlapPairs: overlaps,
+      outOfViewportIds: points.filter(point => point.x < 0 || point.y < 0 || point.x > window.innerWidth || point.y > window.innerHeight).map(point => point.id)
+    };
+  }
+
+  window.__prototypeWebDiagnostics = {
+    inspect() {
+      return {
+        layerMode: root.dataset.protoWebLayerMode || "unknown",
+        rootZIndex: getComputedStyle(root).zIndex,
+        host: inspectHostLayers(),
+        launcher: getLauncherHitAudit(),
+        scope: getScopeContext().scope,
+        annotationCount: getRenderableScopeNotes().length,
+        annotationIds: getRenderableScopeNotes().map(note => note.id),
+        annotationAudit: inspectCurrentScopeAnnotations(),
+        review: {
+          active: isReviewMode(),
+          designWidth: reviewDesignWidth,
+          designHeight: reviewDesignHeight,
+          scale: Number(reviewPrototypeFrame.dataset.scale || 0),
+          leftWidth: getReviewSideWidth("left"),
+          rightWidth: getReviewSideWidth("right"),
+          leftCollapsed: reviewWorkspace.classList.contains("is-left-collapsed"),
+          rightCollapsed: reviewWorkspace.classList.contains("is-right-collapsed")
+        }
+      };
+    },
+    repair() {
+      ensureAnnotationLayer(true);
+      clampLauncher();
+      scheduleMarkerLayout();
+      scheduleAnnotationAudit();
+    }
+  };
+
+  makeReviewSplitterDraggable(reviewLeftSplitter, "left");
+  makeReviewSplitterDraggable(reviewRightSplitter, "right");
+  if (window.ResizeObserver) new ResizeObserver(scheduleReviewLayout).observe(reviewCanvas);
+
+  ensureAnnotationLayer(false);
+  restorePreferences();
+  enterReviewMode();
+  requestAnimationFrame(() => {
+    scheduleReviewLayout();
+    renderMarkers();
+    scheduleAnnotationAudit();
+  });
+})();
+
+</script>
+
+    <script>
+  // 页面加载完成时主动同步给外层工作台导航栏
+  (function() {
+    if (window.parent && window.parent !== window) {
+      try {
+        var p = (window.location.pathname.split('/').pop() || '').split('?')[0].split('#')[0];
+        window.parent.postMessage({ type: 'PRD_PAGE_CHANGED', path: p }, '*');
+      } catch(e) {}
+    }
+  })();
+  </script>
+</body>
+</html>

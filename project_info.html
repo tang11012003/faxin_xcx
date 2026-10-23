@@ -1,0 +1,2926 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>项目详情</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background-color: #F8F9FB;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      color: #202536;
+    }
+    .phone-container {
+      width: 375px;
+      min-height: 100vh;
+      background: #F8F9FB;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
+      padding-bottom: 84px;
+    }
+
+    /* 顶部导航栏 (小程序风格) */
+    .nav-bar {
+      height: 48px;
+      background: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid #F0F0F2;
+    }
+    .nav-back {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      cursor: pointer;
+    }
+    .nav-back svg {
+      width: 20px;
+      height: 20px;
+      stroke: #202536;
+    }
+    .nav-title {
+      font-size: 17px;
+      font-weight: 600;
+      color: #202536;
+      text-align: center;
+      flex: 1;
+      margin-left: 20px;
+    }
+    .capsule-menu {
+      width: 86px;
+      height: 32px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0 6px;
+      background: rgba(255, 255, 255, 0.9);
+    }
+    .capsule-dots {
+      display: flex;
+      gap: 3px;
+    }
+    .capsule-dots span {
+      width: 3.5px;
+      height: 3.5px;
+      background: #000;
+      border-radius: 50%;
+    }
+    .capsule-divider {
+      width: 1px;
+      height: 14px;
+      background: rgba(0, 0, 0, 0.1);
+    }
+    .capsule-circle {
+      width: 15px;
+      height: 15px;
+      border: 1.8px solid #000;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .capsule-circle-inner {
+      width: 5px;
+      height: 5px;
+      background: #000;
+      border-radius: 50%;
+    }
+
+    /* 顶部人员网格与名单整理区 */
+    .top-members-section {
+      background: #FFFFFF;
+      padding: 20px 16px 14px 16px;
+      margin-bottom: 10px;
+    }
+    .member-avatars-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+    .member-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .avatar-green {
+      width: 52px;
+      height: 52px;
+      background: #009944;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      box-shadow: 0 2px 6px rgba(0, 153, 68, 0.2);
+    }
+    .member-name {
+      font-size: 12px;
+      color: #565868;
+    }
+    .avatar-remove-btn {
+      width: 52px;
+      height: 52px;
+      background: #F7F8FA;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: 1px dashed #E0E2E8;
+    }
+    .avatar-remove-btn svg {
+      width: 16px;
+      height: 16px;
+      stroke: #A6AAB8;
+      stroke-width: 2.5;
+    }
+    .tidy-list-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      font-size: 14px;
+      color: #565868;
+      cursor: pointer;
+      padding-top: 4px;
+    }
+    .tidy-list-link svg {
+      width: 14px;
+      height: 14px;
+      stroke: #A6AAB8;
+      stroke-width: 2;
+    }
+
+    /* 管理人员卡片区 */
+    .manager-section {
+      background: #FFFFFF;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .manager-left {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .manager-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #202536;
+    }
+    .manager-sub {
+      font-size: 12px;
+      color: #9497B1;
+    }
+    .manager-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .creator-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+    .creator-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: #F0F2F5;
+    }
+    .creator-tag {
+      position: absolute;
+      bottom: 16px;
+      background: #E8F8F0;
+      color: #00B96B;
+      font-size: 9px;
+      font-weight: 600;
+      padding: 1px 4px;
+      border-radius: 3px;
+      border: 1px solid #C6EED8;
+      white-space: nowrap;
+    }
+    .creator-name {
+      font-size: 11px;
+      color: #565868;
+      margin-top: 4px;
+    }
+    .add-manager-btn {
+      width: 48px;
+      height: 48px;
+      background: #F7F8FA;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: 1px dashed #D5D8E2;
+    }
+    .add-manager-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: #A6AAB8;
+      stroke-width: 2;
+    }
+    .arrow-icon svg {
+      width: 16px;
+      height: 16px;
+      stroke: #C2C5D6;
+      stroke-width: 2;
+    }
+
+    /* 通用列表卡片 */
+    .card-box {
+      background: #FFFFFF;
+      padding: 0 16px;
+      margin-bottom: 10px;
+    }
+    .row-item {
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #F0F0F2;
+    }
+    .row-item:last-child {
+      border-bottom: none;
+    }
+    .row-label {
+      font-size: 15px;
+      color: #202536;
+      font-weight: 500;
+    }
+    .row-value {
+      font-size: 14px;
+      color: #202536;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .row-value.muted {
+      color: #565868;
+    }
+    .row-value svg {
+      width: 14px;
+      height: 14px;
+      stroke: #C2C5D6;
+      stroke-width: 2;
+    }
+
+    /* 白夜班单选组 */
+    .shift-radios {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .radio-unit {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .radio-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 1.5px solid #D1D5DF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .radio-unit.checked .radio-dot {
+      background: #00D679;
+      border-color: #00D679;
+    }
+    .radio-dot svg {
+      width: 10px;
+      height: 10px;
+      stroke: #FFFFFF;
+      stroke-width: 2.5;
+      display: none;
+    }
+    .radio-unit.checked .radio-dot svg {
+      display: block;
+    }
+    .radio-label {
+      font-size: 14px;
+      color: #202536;
+    }
+
+    /* 需求人数卡片 */
+    .demand-section {
+      background: #FFFFFF;
+      padding: 16px;
+      margin-bottom: 10px;
+    }
+    .demand-title {
+      font-size: 14px;
+      color: #202536;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+    .demand-input-row {
+      height: 48px;
+      background: #F5F6F8;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+    }
+    .demand-input {
+      border: none;
+      background: transparent;
+      outline: none;
+      font-size: 15px;
+      color: #202536;
+      font-weight: 500;
+      width: 80%;
+    }
+    .demand-unit {
+      font-size: 14px;
+      color: #6B6B86;
+    }
+    .checkbox-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      cursor: pointer;
+    }
+    .check-circle {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 1.5px solid #C4C8D4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .checkbox-line.checked .check-circle {
+      background: #00D679;
+      border-color: #00D679;
+    }
+    .check-circle svg {
+      width: 9px;
+      height: 9px;
+      stroke: #FFFFFF;
+      stroke-width: 2.5;
+      display: none;
+    }
+    .checkbox-line.checked .check-circle svg {
+      display: block;
+    }
+    .check-text {
+      font-size: 13.5px;
+      color: #565868;
+    }
+
+    /* 底部保存修改按钮 */
+    .footer-bar {
+      position: fixed;
+      bottom: 0;
+      width: 375px;
+      height: 72px;
+      background: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 16px;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.04);
+      z-index: 30;
+    }
+    .btn-save {
+      width: 100%;
+      height: 46px;
+      background: #00D679;
+      border: none;
+      border-radius: 23px;
+      color: #FFFFFF;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-save:active {
+      transform: scale(0.99);
+      background: #00BF6C;
+    }
+
+    </style>
+
+<style id="protoWebAnnotationCss">
+.protoWeb-root {
+  --protoWeb-layer-root: 2147483000;
+  --protoWeb-accent: #3388FF;
+  --protoWeb-accent-dark: #2167D9;
+  --protoWeb-accent-soft: #F0F9FF;
+  --protoWeb-ink: #223355;
+  --protoWeb-muted: #6B7A99;
+  position: fixed;
+  inset: 0;
+  z-index: var(--protoWeb-layer-root);
+  width: auto;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: visible;
+  background: transparent;
+  pointer-events: none;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+  font-size: 14px;
+  letter-spacing: 0;
+}
+.protoWeb-root::backdrop { background: transparent; pointer-events: none; }
+.protoWeb-marker-layer { position: fixed; inset: 0; pointer-events: none; z-index: 15; }
+.protoWeb-marker {
+  position: fixed;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 2px solid #FFFFFF;
+  border-radius: 50%;
+  background: var(--protoWeb-accent);
+  color: #FFFFFF;
+  box-shadow: 0 0 0 2px rgba(33,103,217,.72), 0 5px 14px rgba(33,103,217,.32);
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+  z-index: 2;
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.protoWeb-marker:hover,
+.protoWeb-marker.is-active {
+  background: var(--protoWeb-accent-dark);
+  box-shadow: 0 0 0 3px rgba(255,255,255,.95), 0 0 0 6px rgba(51,136,255,.28), 0 7px 18px rgba(33,103,217,.36);
+  transform: translate(-50%, -50%) scale(1.08);
+}
+.protoWeb-launcher,
+.protoWeb-menu,
+.protoWeb-panel,
+.protoWeb-review-mode-group {
+  display: none !important;
+}
+.protoWeb-launcher {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border: 2px solid var(--protoWeb-accent);
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--protoWeb-accent), var(--protoWeb-accent-dark));
+  color: #FFFFFF;
+  box-shadow: 0 8px 24px rgba(33,103,217,.34), 0 0 0 3px rgba(255,255,255,.92);
+  display: grid;
+  place-items: center;
+  pointer-events: auto;
+  touch-action: none;
+  user-select: none;
+  z-index: 30;
+  cursor: grab;
+}
+.protoWeb-launcher:active { cursor: grabbing; }
+.protoWeb-launcher:hover { background: linear-gradient(135deg, #4795FF, #1B58C0); }
+.protoWeb-launcher.is-active {
+  background: var(--protoWeb-accent);
+  border-color: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(51,136,255,.24), 0 9px 26px rgba(33,103,217,.38);
+}
+.protoWeb-launcher-symbol { font-size: 17px; font-weight: 700; line-height: 1; }
+.protoWeb-launcher-count {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 5px;
+  border: 2px solid #FFFFFF;
+  border-radius: 11px;
+  background: var(--protoWeb-accent);
+  color: #FFFFFF;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  font-weight: 700;
+}
+.protoWeb-menu {
+  position: fixed;
+  width: 264px;
+  padding: 6px;
+  border: 1px solid rgba(51,136,255,.28);
+  border-radius: 6px;
+  background: #FFFFFF;
+  box-shadow: 0 16px 40px rgba(33,103,217,.22), 0 4px 12px rgba(8,17,38,.12);
+  display: none;
+  pointer-events: auto;
+  z-index: 40;
+}
+.protoWeb-menu.is-open { display: block; }
+.protoWeb-menu-row,
+.protoWeb-menu-link {
+  min-height: 54px;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 4px;
+  background: #FFFFFF;
+  color: var(--protoWeb-ink);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+}
+.protoWeb-menu-row { justify-content: space-between; }
+.protoWeb-menu-link { width: 100%; cursor: pointer; }
+.protoWeb-menu-link:hover { background: var(--protoWeb-accent-soft); }
+.protoWeb-menu-mode { padding: 8px 10px 10px; border-bottom: 1px solid #E9ECF2; }
+.protoWeb-menu-mode-label { display: block; margin-bottom: 7px; color: var(--protoWeb-muted); font-size: 12px; line-height: 1.4; }
+.protoWeb-menu-mode-group {
+  height: 34px;
+  padding: 2px;
+  border: 1px solid #DDE1EB;
+  border-radius: 4px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: #F5F7FA;
+}
+.protoWeb-menu-mode-group button {
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: var(--protoWeb-muted);
+  font-size: 13px;
+}
+.protoWeb-menu-mode-group button.is-active {
+  background: #FFFFFF;
+  color: var(--protoWeb-accent-dark);
+  box-shadow: 0 1px 4px rgba(8,17,38,.12);
+  font-weight: 600;
+}
+.protoWeb-menu-copy { min-width: 0; flex: 1; }
+.protoWeb-menu-copy strong { display: block; font-size: 14px; font-weight: 600; line-height: 1.5; }
+.protoWeb-menu-copy small { display: block; margin-top: 2px; color: var(--protoWeb-muted); font-size: 12px; line-height: 1.4; }
+.protoWeb-menu-arrow { color: var(--protoWeb-accent); font-size: 22px; line-height: 1; }
+.protoWeb-toggle {
+  position: relative;
+  width: 38px;
+  height: 22px;
+  padding: 0;
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: 11px;
+  background: #C9CFDA;
+  transition: background .18s ease;
+}
+.protoWeb-toggle::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  box-shadow: 0 1px 4px rgba(8,17,38,.2);
+  transition: transform .18s ease;
+}
+.protoWeb-toggle[aria-checked="true"] { background: var(--protoWeb-accent); }
+.protoWeb-toggle[aria-checked="true"]::after { transform: translateX(16px); }
+.protoWeb-panel {
+  position: fixed;
+  left: max(24px, calc(100vw - 530px));
+  top: 92px;
+  width: 440px;
+  height: 460px;
+  min-width: 320px;
+  min-height: 220px;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 32px);
+  border: 1px solid rgba(51,136,255,.36);
+  border-top: 3px solid var(--protoWeb-accent);
+  border-radius: 6px;
+  background: #FFFFFF;
+  box-shadow: 0 20px 58px rgba(33,103,217,.24), 0 5px 16px rgba(8,17,38,.14);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  pointer-events: auto;
+  z-index: 20;
+}
+.protoWeb-panel.is-open { display: flex; }
+.protoWeb-panel.is-collapsed { width: 360px; height: 50px !important; min-height: 50px; }
+.protoWeb-panel.is-collapsed .protoWeb-panel-body,
+.protoWeb-panel.is-collapsed .protoWeb-panel-footer,
+.protoWeb-panel.is-collapsed .protoWeb-resize-handle { display: none; }
+.protoWeb-panel-header,
+.protoWeb-docs-header {
+  height: 48px;
+  min-height: 48px;
+  padding: 0 10px 0 14px;
+  background: linear-gradient(90deg, var(--protoWeb-accent-dark), var(--protoWeb-accent));
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  user-select: none;
+}
+.protoWeb-panel-header { cursor: move; touch-action: none; }
+.protoWeb-panel-heading,
+.protoWeb-docs-title {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 600;
+}
+.protoWeb-panel-tools { display: flex; align-items: center; gap: 2px; }
+.protoWeb-icon-button {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: rgba(255,255,255,.82);
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  line-height: 1;
+}
+.protoWeb-icon-button:hover { background: rgba(255,255,255,.12); color: #FFFFFF; }
+.protoWeb-panel-body {
+  flex: 1;
+  min-height: 0;
+  padding: 18px 20px 20px;
+  overflow: auto;
+  color: #353B47;
+  background: #FFFFFF;
+}
+.protoWeb-content h1,
+.protoWeb-content h2,
+.protoWeb-content h3 {
+  margin: 20px 0 10px;
+  color: var(--protoWeb-ink);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.protoWeb-content > :first-child { margin-top: 0; }
+.protoWeb-content h4 { margin: 16px 0 8px; color: var(--protoWeb-ink); font-size: 14px; }
+.protoWeb-content p { margin: 0 0 10px; line-height: 1.75; }
+.protoWeb-content ul,
+.protoWeb-content ol { margin: 8px 0 12px; padding-left: 22px; line-height: 1.75; }
+.protoWeb-content strong { color: var(--protoWeb-ink); }
+.protoWeb-content em { color: var(--protoWeb-muted); }
+.protoWeb-content a { color: var(--protoWeb-accent); text-decoration: none; }
+.protoWeb-content a:hover { text-decoration: underline; }
+.protoWeb-content blockquote {
+  margin: 12px 0;
+  padding: 10px 12px;
+  border-left: 3px solid var(--protoWeb-accent);
+  background: var(--protoWeb-accent-soft);
+  color: #52617A;
+}
+.protoWeb-content blockquote p:last-child { margin-bottom: 0; }
+.protoWeb-content hr { margin: 18px 0; border: 0; border-top: 1px solid #DDE1EB; }
+.protoWeb-content code {
+  padding: 2px 5px;
+  border-radius: 3px;
+  background: #F1F3F6;
+  color: #A34800;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 12px;
+}
+.protoWeb-content pre {
+  margin: 12px 0 16px;
+  padding: 14px 16px;
+  overflow: auto;
+  border: 1px solid #253552;
+  border-radius: 4px;
+  background: #172033;
+  color: #E8EEF8;
+  line-height: 1.65;
+  tab-size: 2;
+}
+.protoWeb-content pre code { padding: 0; background: transparent; color: inherit; white-space: pre; }
+.protoWeb-content img {
+  display: block;
+  max-width: 100%;
+  max-height: 560px;
+  height: auto;
+  margin: 12px auto 8px;
+  border: 1px solid #DDE1EB;
+  border-radius: 4px;
+  background: #F5F7FA;
+  object-fit: contain;
+}
+.protoWeb-content table {
+  width: 100%;
+  margin: 12px 0;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 13px;
+}
+.protoWeb-content th,
+.protoWeb-content td {
+  padding: 8px 10px;
+  border: 1px solid #DDE1EB;
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.55;
+  word-break: break-word;
+}
+.protoWeb-content th { background: #F5F7FA; color: var(--protoWeb-ink); font-weight: 600; }
+.protoWeb-mermaid {
+  margin: 12px 0 16px;
+  padding: 14px;
+  overflow: auto;
+  border: 1px solid #C9DDF8;
+  border-radius: 4px;
+  background: #F8FBFF;
+  text-align: center;
+}
+.protoWeb-mermaid svg { display: inline-block; max-width: 100%; height: auto; }
+.protoWeb-mermaid-error { border-color: #F5A3A3 !important; background: #FFF2F0 !important; color: #B42318 !important; }
+.protoWeb-panel-footer {
+  height: 48px;
+  min-height: 48px;
+  padding: 0 12px;
+  border-top: 1px solid #E1E5EC;
+  background: #FAFBFC;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.protoWeb-nav-button {
+  height: 30px;
+  padding: 0 10px;
+  border: 1px solid #C9CFDA;
+  border-radius: 4px;
+  background: #FFFFFF;
+  color: #353B47;
+  font-size: 13px;
+}
+.protoWeb-nav-button:hover:not(:disabled) { border-color: var(--protoWeb-accent); color: var(--protoWeb-accent-dark); }
+.protoWeb-nav-button:disabled { cursor: not-allowed; color: #A8B0BE; background: #F5F7FA; }
+.protoWeb-page-count { color: var(--protoWeb-muted); font-size: 12px; }
+.protoWeb-resize-handle { position: absolute; z-index: 5; pointer-events: auto; }
+.protoWeb-resize-handle[data-direction="n"] { top: -4px; left: 14px; right: 14px; height: 9px; cursor: ns-resize; }
+.protoWeb-resize-handle[data-direction="s"] { bottom: -4px; left: 14px; right: 14px; height: 9px; cursor: ns-resize; }
+.protoWeb-resize-handle[data-direction="e"] { top: 14px; right: -4px; bottom: 14px; width: 9px; cursor: ew-resize; }
+.protoWeb-resize-handle[data-direction="w"] { top: 14px; left: -4px; bottom: 14px; width: 9px; cursor: ew-resize; }
+.protoWeb-resize-handle[data-direction="ne"],
+.protoWeb-resize-handle[data-direction="nw"],
+.protoWeb-resize-handle[data-direction="se"],
+.protoWeb-resize-handle[data-direction="sw"] { width: 18px; height: 18px; }
+.protoWeb-resize-handle[data-direction="ne"] { top: -4px; right: -4px; cursor: nesw-resize; }
+.protoWeb-resize-handle[data-direction="nw"] { top: -4px; left: -4px; cursor: nwse-resize; }
+.protoWeb-resize-handle[data-direction="se"] { right: 0; bottom: 0; cursor: nwse-resize; }
+.protoWeb-resize-handle[data-direction="sw"] { left: -4px; bottom: -4px; cursor: nesw-resize; }
+.protoWeb-resize-handle[data-direction="se"]::after {
+  content: "";
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 12px;
+  height: 12px;
+  border-right: 2px solid var(--protoWeb-accent);
+  border-bottom: 2px solid var(--protoWeb-accent);
+  background: repeating-linear-gradient(135deg, transparent 0 3px, rgba(51,136,255,.62) 3px 4px);
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+}
+.protoWeb-docs-backdrop {
+  position: fixed;
+  inset: 0;
+  padding: 32px;
+  background: rgba(8,17,38,.42);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  z-index: 50;
+}
+.protoWeb-docs-backdrop.is-open { display: flex; }
+.protoWeb-docs {
+  width: min(1180px, calc(100vw - 64px));
+  height: min(820px, calc(100vh - 64px));
+  min-width: 760px;
+  min-height: 520px;
+  border: 1px solid rgba(51,136,255,.4);
+  border-top: 3px solid var(--protoWeb-accent);
+  border-radius: 6px;
+  background: #FFFFFF;
+  box-shadow: 0 28px 80px rgba(8,17,38,.3), 0 0 0 3px rgba(255,255,255,.92);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.protoWeb-docs-header { height: 52px; min-height: 52px; padding-left: 18px; }
+.protoWeb-docs-meta { color: rgba(255,255,255,.76); font-size: 12px; }
+.protoWeb-docs-main { min-height: 0; flex: 1; display: flex; }
+.protoWeb-docs-nav {
+  width: 220px;
+  min-width: 220px;
+  padding: 14px 10px;
+  overflow: auto;
+  border-right: 1px solid #DDE1EB;
+  background: #F8FAFD;
+}
+.protoWeb-docs-nav button {
+  width: 100%;
+  height: 42px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #52617A;
+  text-align: left;
+  font-size: 14px;
+}
+.protoWeb-docs-nav button:hover { background: #EDF4FF; color: var(--protoWeb-accent-dark); }
+.protoWeb-docs-nav button.is-active {
+  background: #E8F2FF;
+  color: var(--protoWeb-accent-dark);
+  font-weight: 600;
+  box-shadow: inset 3px 0 0 var(--protoWeb-accent);
+}
+.protoWeb-docs-body {
+  min-width: 0;
+  flex: 1;
+  padding: 24px 28px 32px;
+  overflow: auto;
+  background: #FFFFFF;
+}
+.protoWeb-docs-content { max-width: 900px; margin: 0 auto; }
+.protoWeb-docs-content h1 { font-size: 20px; }
+.protoWeb-docs-content h2 { font-size: 16px; }
+.protoWeb-docs-content table { table-layout: auto; }
+
+/* Web 三栏审阅：说明与标注可调宽，业务原型按固定设计画布等比缩放。 */
+.protoWeb-review-workspace[hidden] { display: none !important; }
+.protoWeb-review-workspace {
+  --protoWeb-review-left-width: 360px;
+  --protoWeb-review-right-width: 380px;
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: var(--protoWeb-review-left-width) 8px minmax(0, 1fr) 8px var(--protoWeb-review-right-width);
+  background: #EEF1F5;
+  color: #223355;
+  pointer-events: auto;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+  font-size: 14px;
+  letter-spacing: 0;
+}
+.protoWeb-review-workspace.is-left-collapsed { grid-template-columns: 44px 0 minmax(0, 1fr) 8px var(--protoWeb-review-right-width); }
+.protoWeb-review-workspace.is-right-collapsed { grid-template-columns: var(--protoWeb-review-left-width) 8px minmax(0, 1fr) 0 44px; }
+.protoWeb-review-workspace.is-left-collapsed.is-right-collapsed { grid-template-columns: 44px 0 minmax(0, 1fr) 0 44px; }
+.protoWeb-review-side {
+  min-width: 0;
+  min-height: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #FFFFFF;
+  box-shadow: 0 0 22px rgba(8,17,38,.08);
+}
+.protoWeb-review-left { grid-column: 1; grid-row: 1; border-right: 1px solid #DDE1EB; }
+.protoWeb-review-splitter-left { grid-column: 2; grid-row: 1; }
+.protoWeb-review-center { grid-column: 3; grid-row: 1; }
+.protoWeb-review-splitter-right { grid-column: 4; grid-row: 1; }
+.protoWeb-review-right { grid-column: 5; grid-row: 1; border-left: 1px solid #DDE1EB; }
+.protoWeb-review-splitter {
+  position: relative;
+  min-width: 0;
+  cursor: col-resize;
+  touch-action: none;
+  background: #EEF1F5;
+  z-index: 2;
+}
+.protoWeb-review-splitter::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 3px;
+  height: 48px;
+  border-radius: 2px;
+  background: #B8C2D3;
+  transform: translate(-50%, -50%);
+  transition: height .15s ease, background .15s ease;
+}
+.protoWeb-review-splitter:hover::after,
+.protoWeb-review-splitter.is-dragging::after { height: 72px; background: #3388FF; }
+.is-left-collapsed .protoWeb-review-splitter-left,
+.is-right-collapsed .protoWeb-review-splitter-right { display: none; }
+.protoWeb-review-workspace.is-resizing { cursor: col-resize; user-select: none; }
+.protoWeb-review-side-header {
+  height: 52px;
+  min-height: 52px;
+  padding: 0 10px 0 16px;
+  border-bottom: 1px solid #E9ECF2;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #FFFFFF;
+}
+.protoWeb-review-side-title { min-width: 0; flex: 1; font-size: 15px; font-weight: 600; color: #223355; }
+.protoWeb-review-icon-button {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: #6B7A99;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  line-height: 1;
+}
+.protoWeb-review-icon-button:hover { border-color: #C9DDF8; background: #F0F9FF; color: #2167D9; }
+.protoWeb-review-rail {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 10px;
+  background: #FFFFFF;
+  pointer-events: auto;
+  z-index: 4;
+}
+.is-left-collapsed .protoWeb-review-left > :not(.protoWeb-review-rail),
+.is-right-collapsed .protoWeb-review-right > :not(.protoWeb-review-rail) { display: none; }
+.is-left-collapsed .protoWeb-review-left .protoWeb-review-rail,
+.is-right-collapsed .protoWeb-review-right .protoWeb-review-rail { display: flex !important; }
+.protoWeb-review-docs-main { min-height: 0; flex: 1; display: grid; grid-template-columns: 112px minmax(0, 1fr); }
+.protoWeb-review-docs-nav {
+  min-width: 0;
+  padding: 12px 8px;
+  overflow-y: auto;
+  border-right: 1px solid #E9ECF2;
+  background: #F8FAFD;
+}
+.protoWeb-review-docs-nav button {
+  width: 100%;
+  min-height: 38px;
+  padding: 8px 9px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #52617A;
+  text-align: left;
+  font-size: 13px;
+  line-height: 1.45;
+}
+.protoWeb-review-docs-nav button:hover { background: #EDF4FF; color: #2167D9; }
+.protoWeb-review-docs-nav button.is-active { background: #E8F2FF; color: #2167D9; font-weight: 600; box-shadow: inset 3px 0 0 #3388FF; }
+.protoWeb-review-docs-body { min-width: 0; padding: 18px 16px 28px; overflow: auto; }
+.protoWeb-review-center { min-width: 0; min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
+.protoWeb-review-toolbar {
+  height: 52px;
+  min-height: 52px;
+  padding: 0 14px;
+  border-bottom: 1px solid #DDE1EB;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #F8FAFD;
+}
+.protoWeb-review-mode-group {
+  height: 34px;
+  padding: 2px;
+  border: 1px solid #DDE1EB;
+  border-radius: 4px;
+  display: inline-flex;
+  background: #FFFFFF;
+}
+.protoWeb-review-mode-group button {
+  height: 28px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: #6B7A99;
+  font-size: 13px;
+}
+.protoWeb-review-mode-group button.is-active { background: #3388FF; color: #FFFFFF; }
+.protoWeb-review-scope { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #6B7A99; font-size: 12px; }
+.protoWeb-review-canvas { min-width: 0; min-height: 0; flex: 1; position: relative; overflow: hidden; background: #DDE3EC; }
+.protoWeb-review-prototype-frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 375px;
+  height: 812px;
+  overflow: hidden;
+  background: #FFFFFF;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.16);
+  border-radius: 36px;
+  border: 8px solid #1F2329;
+  overflow: hidden;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 1px rgba(34,51,85,.12), 0 12px 32px rgba(8,17,38,.18);
+  transform-origin: 0 0;
+  will-change: transform;
+  pointer-events: auto;
+}
+.protoWeb-review-prototype-frame > [data-proto-app] { width: 100% !important; height: 100% !important; min-width: 100%; min-height: 100%; }
+body.protoWeb-review-mode .protoWeb-launcher,
+body.protoWeb-review-mode .protoWeb-menu,
+body.protoWeb-review-mode .protoWeb-panel,
+body.protoWeb-review-mode .protoWeb-docs-backdrop { display: none !important; }
+.protoWeb-review-note-tools {
+  min-height: 46px;
+  padding: 8px 12px;
+  border-bottom: 1px solid #E9ECF2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: #FAFBFC;
+}
+.protoWeb-review-note-tools span { color: #6B7A99; font-size: 12px; }
+.protoWeb-review-toggle-wrap { display: inline-flex; align-items: center; gap: 8px; color: #52617A; font-size: 13px; }
+.protoWeb-review-toggle {
+  position: relative;
+  width: 38px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: 11px;
+  background: #C9CFDA;
+}
+.protoWeb-review-toggle::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  box-shadow: 0 1px 4px rgba(8,17,38,.2);
+  transition: transform .18s ease;
+}
+.protoWeb-review-toggle[aria-checked="true"] { background: #3388FF; }
+.protoWeb-review-toggle[aria-checked="true"]::after { transform: translateX(16px); }
+.protoWeb-review-note-list { min-height: 0; flex: 1; padding: 12px; overflow: auto; background: #F8FAFD; }
+.protoWeb-review-empty { padding: 32px 12px; color: #A8B4C8; text-align: center; }
+.protoWeb-review-note-card {
+  position: relative;
+  padding: 14px 14px 14px 50px;
+  border: 1px solid #DDE1EB;
+  border-left: 3px solid #7FB0FF;
+  border-radius: 6px;
+  background: #FFFFFF;
+  box-shadow: 0 3px 10px rgba(8,17,38,.05);
+  cursor: pointer;
+}
+.protoWeb-review-note-card + .protoWeb-review-note-card { margin-top: 10px; }
+.protoWeb-review-note-card:hover { border-color: #9FC5FF; }
+.protoWeb-review-note-card.is-active { border-color: #3388FF; border-left-color: #2167D9; box-shadow: 0 0 0 2px rgba(51,136,255,.12), 0 6px 16px rgba(33,103,217,.12); }
+.protoWeb-review-note-index {
+  position: absolute;
+  top: 13px;
+  left: 13px;
+  width: 26px;
+  height: 26px;
+  border: 2px solid #FFFFFF;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #3388FF;
+  color: #FFFFFF;
+  box-shadow: 0 0 0 2px rgba(33,103,217,.45), 0 4px 10px rgba(33,103,217,.22);
+  font-size: 12px;
+  font-weight: 700;
+}
+.protoWeb-review-note-card h3 { margin: 1px 0 8px; color: #223355; font-size: 14px; font-weight: 600; line-height: 1.55; }
+.protoWeb-review-note-card .protoWeb-content { color: #6B7A99; font-size: 13px; line-height: 1.65; }
+.protoWeb-review-note-card .protoWeb-content h1,
+.protoWeb-review-note-card .protoWeb-content h2,
+.protoWeb-review-note-card .protoWeb-content h3 { font-size: 14px; }
+.protoWeb-review-note-card .protoWeb-content img { max-height: 280px; }
+.protoWeb-review-note-card .protoWeb-content table { table-layout: auto; font-size: 12px; }
+.protoWeb-review-target-highlight { outline: 2px solid #3388FF !important; outline-offset: 3px; box-shadow: 0 0 0 6px rgba(51,136,255,.12) !important; }
+
+@media (max-width: 1440px) {
+  .protoWeb-review-workspace { --protoWeb-review-left-width: 300px; --protoWeb-review-right-width: 340px; }
+  .protoWeb-review-docs-main { grid-template-columns: 96px minmax(0, 1fr); }
+}
+@media (max-width: 900px) {
+  .protoWeb-docs-backdrop { padding: 12px; }
+  .protoWeb-docs { width: calc(100vw - 24px); height: calc(100vh - 24px); min-width: 0; min-height: 0; }
+  .protoWeb-docs-nav { width: 168px; min-width: 168px; }
+  .protoWeb-docs-body { padding: 20px; }
+  .protoWeb-docs-meta { display: none; }
+}
+
+</style>
+</head>
+<body data-proto-platform="web">
+  <div class="phone-container" data-proto-app data-proto-platform="web" data-proto-scope="page:project_info">
+    <!-- 顶部导航栏 -->
+    <div class="nav-bar">
+      <div class="nav-back" onclick="window.location.href='project_detail.html'">
+        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </div>
+      <div class="nav-title">项目详情</div>
+      <div class="capsule-menu">
+        <div class="capsule-dots">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="capsule-divider"></div>
+        <div class="capsule-circle">
+          <div class="capsule-circle-inner"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 顶部人员头像卡片与名单整理 (图 1) -->
+    <div class="top-members-section">
+      <div class="member-avatars-row">
+        <!-- 成员头像卡片 -->
+        <div class="member-item">
+          <div class="avatar-green">宛丽</div>
+          <span class="member-name">唐宛丽</span>
+        </div>
+        <!-- 移除/减号按钮 -->
+        <div class="member-item" onclick="removeMember()">
+          <div class="avatar-remove-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- 名单整理链接 -->
+      <div class="tidy-list-link" onclick="openTidyList()">
+        <span>名单整理（1）</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </div>
+    </div>
+
+    <!-- 管理人员卡片 (图 1 / 图 2) -->
+    <div class="manager-section">
+      <div class="manager-left">
+        <span class="manager-title">管理人员</span>
+        <span class="manager-sub">邀请项目管理员</span>
+      </div>
+      <div class="manager-right">
+        <!-- 创建人头像 -->
+        <div class="creator-box">
+          <img class="creator-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" alt="创建人">
+          <span class="creator-tag">创建人</span>
+          <span class="creator-name">唐宛丽</span>
+        </div>
+        <!-- 添加管理员按钮 -->
+        <div class="add-manager-btn" onclick="addManager()">
+          <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+        </div>
+        <div class="arrow-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- 项目基本信息卡片 (图 2) -->
+    <div class="card-box">
+      <div class="row-item" onclick="modifyProjectName()">
+        <span class="row-label">项目名</span>
+        <span class="row-value" id="val-pname">发薪-01</span>
+      </div>
+      <div class="row-item">
+        <span class="row-label">派遣企业</span>
+        <span class="row-value muted">苏州蓝豚跃动信息科技有限公司</span>
+      </div>
+      <div class="row-item">
+        <span class="row-label">创建时间</span>
+        <span class="row-value muted">2026-10-19 16:27:04</span>
+      </div>
+    </div>
+
+    <!-- 班次与年龄设置卡片 -->
+    <div class="card-box">
+      <div class="row-item">
+        <span class="row-label">白夜班</span>
+        <div class="shift-radios">
+          <div class="radio-unit checked" id="shift-day" onclick="toggleShift('day')">
+            <div class="radio-dot">
+              <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <span class="radio-label">白班</span>
+          </div>
+          <div class="radio-unit" id="shift-night" onclick="toggleShift('night')">
+            <div class="radio-dot">
+              <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <span class="radio-label">夜班</span>
+          </div>
+        </div>
+      </div>
+      <div class="row-item" onclick="modifyAge()">
+        <span class="row-label">年龄设置</span>
+        <div class="row-value">
+          <span id="val-age">18-65</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- 需求人数卡片 -->
+    <div class="demand-section">
+      <div class="demand-title">需求人数</div>
+      <div class="demand-input-row">
+        <input type="number" class="demand-input" id="demandCount" value="10">
+        <span class="demand-unit">人</span>
+      </div>
+      <div class="checkbox-line checked" id="limitBox" onclick="toggleDemandLimit()">
+        <div class="check-circle">
+          <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <span class="check-text">实际报名人数不超过需求人数</span>
+      </div>
+    </div>
+
+    <!-- 底部固定保存修改按钮 -->
+    <div class="footer-bar">
+      <button class="btn-save" onclick="saveProjectChanges()">保存修改</button>
+    </div>
+
+
+    
+  </div>
+
+  <script>
+    function toggleShift(type) {
+      const day = document.getElementById('shift-day');
+      const night = document.getElementById('shift-night');
+      if (type === 'day') {
+        day.classList.add('checked');
+        night.classList.remove('checked');
+      } else {
+        day.classList.remove('checked');
+        night.classList.add('checked');
+      }
+    }
+
+    function toggleDemandLimit() {
+      const box = document.getElementById('limitBox');
+      box.classList.toggle('checked');
+    }
+
+    function removeMember() {
+      if (confirm('确认将 唐宛丽 从本项目名单中移除吗？')) {
+        document.querySelector('.member-avatars-row').style.display = 'none';
+        document.querySelector('.tidy-list-link span').innerText = '名单整理（0）';
+        
+      }
+    }
+
+    function openTidyList() {
+      alert('【名单整理】\\n当前名单（1人）：唐宛丽\\n支持批量备注、删除人员、加入黑名单等操作。');
+    }
+
+    function addManager() {
+      const name = prompt('请输入要邀请的项目管理员姓名：', '李经理');
+      if (name) {
+        
+      }
+    }
+
+    function modifyProjectName() {
+      const name = prompt('修改项目名称：', document.getElementById('val-pname').innerText);
+      if (name) {
+        document.getElementById('val-pname').innerText = name;
+      }
+    }
+
+    function modifyAge() {
+      const age = prompt('修改年龄限制：', document.getElementById('val-age').innerText);
+      if (age) {
+        document.getElementById('val-age').innerText = age;
+      }
+    }
+
+    function saveProjectChanges() {
+      window.location.href = "project_detail.html";
+    }, 1000);
+    }
+
+    function  {
+
+
+
+
+    }
+  </script>
+
+<script id="prototypeAnnotationData" type="application/json">
+{
+  "prototypeId": "project_info",
+  "version": 1,
+    "review": {
+      "designWidth": 375,
+      "designHeight": 812
+    },
+  "globalMeta": {
+    "name": "原型说明",
+    "version": "V1.0",
+    "updatedAt": "2026-10-21"
+  },
+  "globalSections": [
+    {
+      "id": "sec_overview",
+      "title": "1. 业务背景与概述",
+      "content": "请在此处填写该页面的产品背景与功能目标说明。"
+    }
+  ],
+  "annotations": []
+}
+</script>
+
+<div class="protoWeb-root" id="prototypeAnnotationRoot" popover="manual" aria-label="原型标注层">
+  <div class="protoWeb-review-workspace" id="protoWebReviewWorkspace" aria-label="三栏审阅模式" hidden>
+    <aside class="protoWeb-review-side protoWeb-review-left" aria-label="原型说明">
+      <header class="protoWeb-review-side-header">
+        <span class="protoWeb-review-side-title">原型说明</span>
+        <button class="protoWeb-review-icon-button" id="protoWebReviewCollapseLeft" type="button" title="收起原型说明" aria-label="收起原型说明">‹</button>
+      </header>
+      <div class="protoWeb-review-docs-main">
+        <nav class="protoWeb-review-docs-nav" id="protoWebReviewDocsNav" aria-label="原型说明目录"></nav>
+        <article class="protoWeb-review-docs-body protoWeb-content" id="protoWebReviewDocsBody"></article>
+      </div>
+      <div class="protoWeb-review-rail">
+        <button class="protoWeb-review-icon-button" id="protoWebReviewExpandLeft" type="button" title="展开原型说明" aria-label="展开原型说明">›</button>
+      </div>
+    </aside>
+    <div class="protoWeb-review-splitter protoWeb-review-splitter-left" id="protoWebReviewSplitterLeft" role="separator" aria-label="调整原型说明宽度" aria-orientation="vertical" title="拖拽调整原型说明宽度"></div>
+    <section class="protoWeb-review-center">
+      <header class="protoWeb-review-toolbar">
+        <span class="protoWeb-review-scope" id="protoWebReviewScope">当前页面</span>
+        <div class="protoWeb-review-mode-group" aria-label="标注浏览模式">
+          <button id="protoWebReviewModeFloat" type="button">浮动标注</button>
+          <button class="is-active" id="protoWebReviewModeColumns" type="button" aria-current="true">三栏审阅</button>
+        </div>
+      </header>
+      <div class="protoWeb-review-canvas" id="protoWebReviewCanvas">
+        <div class="protoWeb-review-prototype-frame" id="protoWebReviewPrototypeFrame"></div>
+      </div>
+    </section>
+    <div class="protoWeb-review-splitter protoWeb-review-splitter-right" id="protoWebReviewSplitterRight" role="separator" aria-label="调整当前标注宽度" aria-orientation="vertical" title="拖拽调整当前标注宽度"></div>
+    <aside class="protoWeb-review-side protoWeb-review-right" aria-label="当前标注">
+      <header class="protoWeb-review-side-header">
+        <button class="protoWeb-review-icon-button" id="protoWebReviewCollapseRight" type="button" title="收起当前标注" aria-label="收起当前标注">›</button>
+        <span class="protoWeb-review-side-title">当前标注</span>
+      </header>
+      <div class="protoWeb-review-note-tools">
+        <span id="protoWebReviewNoteCount">0 条</span>
+        <label class="protoWeb-review-toggle-wrap">显示圆点
+          <button class="protoWeb-review-toggle" id="protoWebReviewNoteToggle" type="button" role="switch" aria-checked="false" aria-label="显示页面标注"></button>
+        </label>
+      </div>
+      <div class="protoWeb-review-note-list" id="protoWebReviewNoteList"></div>
+      <div class="protoWeb-review-rail">
+        <button class="protoWeb-review-icon-button" id="protoWebReviewExpandRight" type="button" title="展开当前标注" aria-label="展开当前标注">‹</button>
+      </div>
+    </aside>
+  </div>
+  <div class="protoWeb-marker-layer" id="protoWebMarkerLayer"></div>
+  <section class="protoWeb-panel" id="protoWebPanel" role="dialog" aria-label="原型标注详情">
+    <header class="protoWeb-panel-header" id="protoWebPanelHeader">
+      <span class="protoWeb-panel-heading" id="protoWebPanelHeading">标注详情</span>
+      <span class="protoWeb-panel-tools">
+        <button class="protoWeb-icon-button" id="protoWebCollapse" type="button" title="收起标注窗口" aria-label="收起标注窗口">−</button>
+        <button class="protoWeb-icon-button" id="protoWebClose" type="button" title="关闭标注详情" aria-label="关闭标注详情">×</button>
+      </span>
+    </header>
+    <div class="protoWeb-panel-body">
+      <article class="protoWeb-content" id="protoWebContent"></article>
+    </div>
+    <footer class="protoWeb-panel-footer">
+      <button class="protoWeb-nav-button" id="protoWebPrev" type="button">上一条</button>
+      <span class="protoWeb-page-count" id="protoWebPageCount">1 / 1</span>
+      <button class="protoWeb-nav-button" id="protoWebNext" type="button">下一条</button>
+    </footer>
+    <span class="protoWeb-resize-handle" data-direction="n" aria-hidden="true"></span>
+    <span class="protoWeb-resize-handle" data-direction="ne" aria-hidden="true"></span>
+    <span class="protoWeb-resize-handle" data-direction="e" aria-hidden="true"></span>
+    <span class="protoWeb-resize-handle" data-direction="se" aria-hidden="true"></span>
+    <span class="protoWeb-resize-handle" data-direction="s" aria-hidden="true"></span>
+    <span class="protoWeb-resize-handle" data-direction="sw" aria-hidden="true"></span>
+    <span class="protoWeb-resize-handle" data-direction="w" aria-hidden="true"></span>
+    <span class="protoWeb-resize-handle" data-direction="nw" aria-hidden="true"></span>
+  </section>
+  <div class="protoWeb-menu" id="protoWebMenu" role="menu" aria-label="原型标注菜单">
+    <div class="protoWeb-menu-mode">
+      <span class="protoWeb-menu-mode-label">浏览模式</span>
+      <div class="protoWeb-menu-mode-group" aria-label="选择标注浏览模式">
+        <button class="is-active" id="protoWebMenuModeFloat" type="button" aria-current="true">浮动标注</button>
+        <button id="protoWebOpenReview" type="button">三栏审阅</button>
+      </div>
+    </div>
+    <div class="protoWeb-menu-row">
+      <span class="protoWeb-menu-copy"><strong>显示标注</strong><small id="protoWebMenuCount">当前页面 0 条</small></span>
+      <button class="protoWeb-toggle" id="protoWebPageToggle" type="button" role="switch" aria-checked="false" aria-label="显示页面标注"></button>
+    </div>
+    <button class="protoWeb-menu-link" id="protoWebOpenDocs" type="button" role="menuitem">
+      <span class="protoWeb-menu-copy"><strong>原型说明</strong><small>查看跨页面需求与整体说明</small></span>
+      <span class="protoWeb-menu-arrow" aria-hidden="true">›</span>
+    </button>
+  </div>
+  <div class="protoWeb-docs-backdrop" id="protoWebDocsBackdrop">
+    <section class="protoWeb-docs" id="protoWebDocs" role="dialog" aria-modal="true" aria-labelledby="protoWebDocsTitle">
+      <header class="protoWeb-docs-header">
+        <span class="protoWeb-docs-title" id="protoWebDocsTitle">原型说明</span>
+        <span class="protoWeb-docs-meta" id="protoWebDocsMeta"></span>
+        <button class="protoWeb-icon-button" id="protoWebDocsClose" type="button" title="关闭原型说明" aria-label="关闭原型说明">×</button>
+      </header>
+      <div class="protoWeb-docs-main">
+        <nav class="protoWeb-docs-nav" id="protoWebDocsNav" aria-label="原型说明目录"></nav>
+        <div class="protoWeb-docs-body" id="protoWebDocsBody">
+          <article class="protoWeb-content protoWeb-docs-content" id="protoWebDocsContent"></article>
+        </div>
+      </div>
+    </section>
+  </div>
+  <button class="protoWeb-launcher" id="protoWebLauncher" type="button" aria-haspopup="menu" aria-expanded="false" title="打开原型标注菜单">
+    <span class="protoWeb-launcher-symbol">注</span>
+    <span class="protoWeb-launcher-count" id="protoWebLauncherCount">0</span>
+  </button>
+</div>
+
+<script id="protoWebWebAnnotationRuntime">
+(() => {
+  const dataNode = document.getElementById("prototypeAnnotationData");
+  const root = document.getElementById("prototypeAnnotationRoot");
+  const markerLayer = document.getElementById("protoWebMarkerLayer");
+  const launcher = document.getElementById("protoWebLauncher");
+  const launcherCount = document.getElementById("protoWebLauncherCount");
+  const menu = document.getElementById("protoWebMenu");
+  const menuCount = document.getElementById("protoWebMenuCount");
+  const pageToggle = document.getElementById("protoWebPageToggle");
+  const openDocsButton = document.getElementById("protoWebOpenDocs");
+  const panel = document.getElementById("protoWebPanel");
+  const panelHeader = document.getElementById("protoWebPanelHeader");
+  const panelHeading = document.getElementById("protoWebPanelHeading");
+  const content = document.getElementById("protoWebContent");
+  const pageCount = document.getElementById("protoWebPageCount");
+  const prevButton = document.getElementById("protoWebPrev");
+  const nextButton = document.getElementById("protoWebNext");
+  const collapseButton = document.getElementById("protoWebCollapse");
+  const closeButton = document.getElementById("protoWebClose");
+  const docsBackdrop = document.getElementById("protoWebDocsBackdrop");
+  const docsNav = document.getElementById("protoWebDocsNav");
+  const docsBody = document.getElementById("protoWebDocsBody");
+  const docsContent = document.getElementById("protoWebDocsContent");
+  const docsMeta = document.getElementById("protoWebDocsMeta");
+  const docsCloseButton = document.getElementById("protoWebDocsClose");
+  const menuFloatModeButton = document.getElementById("protoWebMenuModeFloat");
+  const openReviewButton = document.getElementById("protoWebOpenReview");
+  const reviewWorkspace = document.getElementById("protoWebReviewWorkspace");
+  const reviewCanvas = document.getElementById("protoWebReviewCanvas");
+  const reviewPrototypeFrame = document.getElementById("protoWebReviewPrototypeFrame");
+  const reviewLeftSplitter = document.getElementById("protoWebReviewSplitterLeft");
+  const reviewRightSplitter = document.getElementById("protoWebReviewSplitterRight");
+  const reviewFloatModeButton = document.getElementById("protoWebReviewModeFloat");
+  const reviewColumnsModeButton = document.getElementById("protoWebReviewModeColumns");
+  const reviewCollapseLeftButton = document.getElementById("protoWebReviewCollapseLeft");
+  const reviewExpandLeftButton = document.getElementById("protoWebReviewExpandLeft");
+  const reviewCollapseRightButton = document.getElementById("protoWebReviewCollapseRight");
+  const reviewExpandRightButton = document.getElementById("protoWebReviewExpandRight");
+  const reviewDocsNav = document.getElementById("protoWebReviewDocsNav");
+  const reviewDocsBody = document.getElementById("protoWebReviewDocsBody");
+  const reviewNoteList = document.getElementById("protoWebReviewNoteList");
+  const reviewNoteCount = document.getElementById("protoWebReviewNoteCount");
+  const reviewNoteToggle = document.getElementById("protoWebReviewNoteToggle");
+  const reviewScopeLabel = document.getElementById("protoWebReviewScope");
+
+  if (!dataNode || !root) return;
+
+  let annotationData;
+  try {
+    annotationData = JSON.parse(dataNode.textContent);
+  } catch (error) {
+    console.error("原型标注数据解析失败", error);
+    root.hidden = true;
+    return;
+  }
+
+  const annotations = Array.isArray(annotationData.annotations) ? annotationData.annotations : [];
+  const globalSections = Array.isArray(annotationData.globalSections) ? annotationData.globalSections : [];
+  const storageKey = `protoWeb-ui:${annotationData.prototypeId || "prototype"}`;
+  const reviewStorageKey = `protoWeb-review:${annotationData.prototypeId || "prototype"}`;
+  const reviewOptions = annotationData.review && typeof annotationData.review === "object" ? annotationData.review : {};
+  const reviewDesignWidth = Number(reviewOptions.designWidth) > 0 ? Number(reviewOptions.designWidth) : 375;
+    const reviewDesignHeight = Number(reviewOptions.designHeight) > 0 ? Number(reviewOptions.designHeight) : 812;
+  const reviewCanvasMargin = 16;
+  const reviewPlacementAnchors = new Map();
+  let enabled = false;
+  let currentNoteId = "";
+  let currentPanelNotes = [];
+  let currentPanelScope = "";
+  let panelScopeMismatchSince = 0;
+  let currentGlobalSectionId = globalSections[0]?.id || "";
+  let layoutFrame = 0;
+  let contextRefreshFrame = 0;
+  let contextRefreshUntil = 0;
+  let saveTimer = 0;
+  let mermaidRenderCounter = 0;
+  let restoredPanelSize = { width: 440, height: 460 };
+  let annotationAuditTimer = 0;
+  let reviewLayoutFrame = 0;
+  let reviewSyncFrame = 0;
+  let reviewRenderVersion = 0;
+  let reviewActiveNoteId = "";
+  let reviewContextSignature = "";
+  let reviewPendingSignature = "";
+  let launcherPlacementBeforeReview = null;
+  let implicitOverlayContext = null;
+  const rootFallbackBaseZIndex = 2147483000;
+  const rootFallbackMaxZIndex = 2147483646;
+
+  openDocsButton.hidden = globalSections.length === 0;
+
+  if (window.mermaid) {
+    window.mermaid.initialize({
+      startOnLoad: false,
+      securityLevel: "strict",
+      theme: "base",
+      themeVariables: {
+        primaryColor: "#F0F9FF",
+        primaryTextColor: "#223355",
+        primaryBorderColor: "#3388FF",
+        lineColor: "#6B7A99",
+        secondaryColor: "#E8F4FF",
+        tertiaryColor: "#F5F7FA",
+        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif',
+        fontSize: "14px"
+      },
+      flowchart: { curve: "basis", htmlLabels: true }
+    });
+  }
+
+  function readPreferences() {
+    try {
+      return JSON.parse(localStorage.getItem(storageKey) || "{}") || {};
+    } catch (error) {
+      return {};
+    }
+  }
+
+  function savePreferences() {
+    if (isReviewMode() && reviewPrototypeFrame && reviewPrototypeFrame.children.length > 0) return;
+    clearTimeout(saveTimer);
+    saveTimer = window.setTimeout(() => {
+      const launcherRect = launcher.getBoundingClientRect();
+      const panelRect = panel.getBoundingClientRect();
+      const preferences = {
+        launcher: { left: launcherRect.left, top: launcherRect.top },
+        panel: {
+          left: panelRect.left,
+          top: panelRect.top,
+          width: panel.classList.contains("is-collapsed") ? restoredPanelSize.width : panelRect.width,
+          height: panel.classList.contains("is-collapsed") ? restoredPanelSize.height : panelRect.height
+        }
+      };
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(preferences));
+      } catch (error) {}
+    }, 120);
+  }
+
+  function restorePreferences() {
+    const preferences = readPreferences();
+    if (preferences.launcher) {
+      launcher.style.left = `${preferences.launcher.left}px`;
+      launcher.style.top = `${preferences.launcher.top}px`;
+      launcher.style.right = "auto";
+      launcher.style.bottom = "auto";
+    }
+    if (preferences.panel) {
+      const width = Math.max(320, Number(preferences.panel.width) || 440);
+      const height = Math.max(220, Number(preferences.panel.height) || 460);
+      restoredPanelSize = { width, height };
+      panel.style.left = `${Number(preferences.panel.left) || Math.max(24, window.innerWidth - width - 88)}px`;
+      panel.style.top = `${Number(preferences.panel.top) || 92}px`;
+      panel.style.width = `${width}px`;
+      panel.style.height = `${height}px`;
+    } else {
+      panel.style.left = `${Math.max(24, window.innerWidth - 528)}px`;
+      panel.style.top = "92px";
+    }
+  }
+
+  function isElementVisible(element, requireViewport = false) {
+    if (!element) return false;
+    const style = getComputedStyle(element);
+    if (style.display === "none" || style.visibility === "hidden" || Number(style.opacity) === 0) return false;
+    if (element.hidden || element.getAttribute("aria-hidden") === "true") return false;
+    const rect = element.getBoundingClientRect();
+    if (rect.width <= 0 || rect.height <= 0) return false;
+    if (!requireViewport) return true;
+    return rect.right > 0 && rect.bottom > 0 && rect.left < window.innerWidth && rect.top < window.innerHeight;
+  }
+
+  function isScopeCandidateVisible(item) {
+    if (!item?.node || !isElementVisible(item.node, true)) return false;
+    if (item.layer > 0 || !item.scope.startsWith("page:")) {
+      const style = getComputedStyle(item.node);
+      if (style.pointerEvents === "none") return false;
+    }
+    return true;
+  }
+
+  function rememberImplicitOverlayScope(target) {
+    const trigger = target?.closest?.("[data-proto-route],[data-drawer],[data-modal],[data-dialog]");
+    if (!trigger) return;
+    let scope = trigger.dataset.protoRoute || "";
+    let kind = "";
+    if (scope.includes(":")) {
+      kind = scope.split(":", 1)[0];
+    } else if (trigger.dataset.drawer) {
+      kind = "drawer";
+      scope = `drawer:${trigger.dataset.drawer}`;
+    } else if (trigger.dataset.modal) {
+      kind = "modal";
+      scope = `modal:${trigger.dataset.modal}`;
+    } else if (trigger.dataset.dialog) {
+      kind = "modal";
+      scope = `modal:${trigger.dataset.dialog}`;
+    }
+    if (!scope || !kind) return;
+    implicitOverlayContext = { scope, kind };
+    scheduleContextRefresh(true);
+  }
+
+  function getImplicitOverlayContext() {
+    if (!implicitOverlayContext) return null;
+    const selectors = implicitOverlayContext.kind === "drawer"
+      ? ".drawer-overlay.open,.drawer.open,[data-drawer-overlay].open,[data-drawer-overlay][aria-hidden='false']"
+      : ".modal-overlay.open,.dialog-overlay.open,.modal.open,.dialog.open,[role='dialog'][aria-modal='true']";
+    const overlays = Array.from(document.querySelectorAll(selectors))
+      .filter(node => isElementVisible(node, true));
+    if (!overlays.length) return null;
+    overlays.sort((a, b) => {
+      const zA = Number.parseInt(getComputedStyle(a).zIndex, 10) || 0;
+      const zB = Number.parseInt(getComputedStyle(b).zIndex, 10) || 0;
+      return zA - zB || (a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1);
+    });
+    const overlay = overlays[overlays.length - 1];
+    const panelSelector = implicitOverlayContext.kind === "drawer"
+      ? ".drawer,[role='dialog'],aside"
+      : "[role='dialog'],.modal,.dialog";
+    const panel = Array.from(overlay.querySelectorAll(panelSelector)).find(node => isElementVisible(node, true));
+    return {
+      node: panel || overlay,
+      scope: implicitOverlayContext.scope,
+      layer: implicitOverlayContext.kind === "drawer" ? 20 : 30,
+      implicit: true
+    };
+  }
+
+  function isElementRenderable(element, scopeNode) {
+    if (!element || !element.isConnected) return false;
+    let current = element;
+    while (current && current.nodeType === 1) {
+      const style = getComputedStyle(current);
+      if (current.hidden || current.getAttribute("aria-hidden") === "true") return false;
+      if (style.display === "none" || style.visibility === "hidden" || Number(style.opacity) === 0) return false;
+      if (current === scopeNode || current === document.body) break;
+      current = current.parentElement;
+    }
+    const rect = element.getBoundingClientRect();
+    return rect.width > 0 && rect.height > 0;
+  }
+
+  function isElementUndersized(element) {
+    const rect = element.getBoundingClientRect();
+    return rect.width < 4 || rect.height < 4;
+  }
+
+  function getClippedTargetRect(target) {
+    if (!target) return null;
+    const original = target.getBoundingClientRect();
+    let left = Math.max(0, original.left);
+    let top = Math.max(0, original.top);
+    let right = Math.min(window.innerWidth, original.right);
+    let bottom = Math.min(window.innerHeight, original.bottom);
+    let parent = target.parentElement;
+
+    while (parent && parent !== document.body) {
+      const style = getComputedStyle(parent);
+      if (parent === reviewPrototypeFrame || /(auto|scroll|hidden|clip)/.test(`${style.overflow}${style.overflowX}${style.overflowY}`)) {
+        const rect = parent.getBoundingClientRect();
+        left = Math.max(left, rect.left);
+        top = Math.max(top, rect.top);
+        right = Math.min(right, rect.right);
+        bottom = Math.min(bottom, rect.bottom);
+      }
+      parent = parent.parentElement;
+    }
+
+    if (right <= left || bottom <= top) return null;
+    return { original, visible: { left, top, right, bottom } };
+  }
+
+  function isPopoverOpen() {
+    try {
+      return root.matches(":popover-open");
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function inspectHostLayers() {
+    let maxZIndex = 0;
+    let maxElement = null;
+    document.body.querySelectorAll("*").forEach(element => {
+      if (element === root || root.contains(element)) return;
+      const style = getComputedStyle(element);
+      if (style.display === "none" || style.visibility === "hidden") return;
+      const zIndex = Number.parseInt(style.zIndex, 10);
+      if (!Number.isFinite(zIndex) || zIndex <= maxZIndex) return;
+      maxZIndex = zIndex;
+      maxElement = element;
+    });
+    return {
+      maxZIndex,
+      maxElement: maxElement ? `${maxElement.tagName.toLowerCase()}${maxElement.id ? `#${maxElement.id}` : ""}${maxElement.classList.length ? `.${Array.from(maxElement.classList).join(".")}` : ""}` : ""
+    };
+  }
+
+  function ensureAnnotationLayer(reorderTopLayer = false) {
+    const supportsPopover = typeof root.showPopover === "function" && typeof root.hidePopover === "function";
+    if (supportsPopover) {
+      try {
+        if (reorderTopLayer && isPopoverOpen()) root.hidePopover();
+        if (!isPopoverOpen()) root.showPopover();
+        root.dataset.protoWebLayerMode = "top-layer";
+        if (root.style.zIndex !== String(rootFallbackMaxZIndex)) root.style.zIndex = String(rootFallbackMaxZIndex);
+        return;
+      } catch (error) {
+        console.warn("标注层进入浏览器 top layer 失败，已切换到 z-index 兜底", error);
+      }
+    }
+
+    root.removeAttribute("popover");
+    const audit = inspectHostLayers();
+    const nextZIndex = Math.min(rootFallbackMaxZIndex, Math.max(rootFallbackBaseZIndex, audit.maxZIndex + 100));
+    if (root.style.zIndex !== String(nextZIndex)) root.style.zIndex = String(nextZIndex);
+    root.dataset.protoWebLayerMode = "z-index";
+    if (audit.maxZIndex >= rootFallbackMaxZIndex) {
+      console.error("业务界面已占用浏览器最大 z-index，无法保证标注层始终位于最上层", audit);
+    }
+  }
+
+  function getLauncherHitAudit() {
+    const rect = launcher.getBoundingClientRect();
+    const x = Math.min(window.innerWidth - 1, Math.max(0, rect.left + rect.width / 2));
+    const y = Math.min(window.innerHeight - 1, Math.max(0, rect.top + rect.height / 2));
+    const hit = document.elementFromPoint(x, y);
+    return {
+      clickable: Boolean(hit && (hit === launcher || launcher.contains(hit))),
+      hitElement: hit ? `${hit.tagName.toLowerCase()}${hit.id ? `#${hit.id}` : ""}` : "",
+      point: { x, y }
+    };
+  }
+
+  function scheduleAnnotationAudit() {
+    window.clearTimeout(annotationAuditTimer);
+    annotationAuditTimer = window.setTimeout(() => {
+      ensureAnnotationLayer(false);
+      const hitAudit = getLauncherHitAudit();
+      root.dataset.protoWebLauncherClickable = String(hitAudit.clickable);
+      if (!hitAudit.clickable) {
+        ensureAnnotationLayer(true);
+        requestAnimationFrame(() => {
+          const repairedAudit = getLauncherHitAudit();
+          root.dataset.protoWebLauncherClickable = String(repairedAudit.clickable);
+          if (!repairedAudit.clickable) console.error("原型标注入口被业务界面遮挡", repairedAudit);
+        });
+      }
+    }, 40);
+  }
+
+  function getScopeContext() {
+    const candidates = Array.from(document.querySelectorAll("[data-proto-scope]"))
+      .map((node, index) => ({
+        node,
+        index,
+        scope: node.dataset.protoScope,
+        layer: Number(node.dataset.protoLayer) || 0
+      }))
+      .filter(item => item.scope && isScopeCandidateVisible(item));
+
+    const explicitOverlays = candidates.filter(item => item.layer > 0 || !item.scope.startsWith("page:"));
+    if (explicitOverlays.length) {
+      explicitOverlays.sort((a, b) => a.layer - b.layer || a.index - b.index);
+      return explicitOverlays[explicitOverlays.length - 1];
+    }
+
+    const implicitOverlay = getImplicitOverlayContext();
+    if (implicitOverlay) return implicitOverlay;
+
+    if (candidates.length) {
+      candidates.sort((a, b) => a.layer - b.layer || a.index - b.index);
+      return candidates[candidates.length - 1];
+    }
+
+    const activePage = document.querySelector(".page.active[id]");
+    if (activePage) {
+      return { node: activePage, scope: `page:${activePage.id.replace(/^page-/, "")}`, layer: 0 };
+    }
+
+    return { node: document.body, scope: document.body.dataset.protoScope || "page:default", layer: 0 };
+  }
+
+  function getScopeNotes(scope = getScopeContext().scope) {
+    return annotations.filter(note => note.scope === scope || (scope.startsWith("page:") && note.scope === "page:*"));
+  }
+
+  function findTarget(note, scopeNode) {
+    if (!note.target) return null;
+    try {
+      if (scopeNode?.matches?.(note.target)) return scopeNode;
+      return scopeNode?.querySelector?.(note.target) || document.querySelector(note.target);
+    } catch (error) {
+      console.warn(`标注 ${note.id || note.title || "未命名"} 的 target 选择器无效`, error);
+      return null;
+    }
+  }
+
+  function getRenderableScopeNotes(context = getScopeContext()) {
+    return getScopeNotes(context.scope).filter(note => isElementRenderable(findTarget(note, context.node), context.node));
+  }
+
+  function renderMarkers() {
+    const context = getScopeContext();
+    const notes = getRenderableScopeNotes(context);
+    const existingMarkers = new Map(Array.from(markerLayer.querySelectorAll(".protoWeb-marker"))
+      .map(marker => [marker.dataset.annotationId, marker]));
+    const desiredIds = new Set();
+    launcherCount.textContent = String(notes.length);
+    menuCount.textContent = `当前页面 ${notes.length} 条`;
+    launcher.title = `打开原型标注菜单（当前页面 ${notes.length} 条）`;
+    pageToggle.setAttribute("aria-checked", String(enabled));
+    pageToggle.setAttribute("aria-label", enabled ? "隐藏页面标注" : "显示页面标注");
+    if (!enabled || docsBackdrop.classList.contains("is-open")) {
+      existingMarkers.forEach(marker => marker.remove());
+      return;
+    }
+
+    notes.forEach((note, index) => {
+      const target = findTarget(note, context.node);
+      if (!isElementVisible(target, true)) return;
+      const clipped = getClippedTargetRect(target);
+      if (!clipped) return;
+      const xValue = Number(note.x);
+      const yValue = Number(note.y);
+      const x = Number.isFinite(xValue) ? Math.min(1, Math.max(0, xValue)) : 0.5;
+      const y = Number.isFinite(yValue) ? Math.min(1, Math.max(0, yValue)) : 0.5;
+      const left = Math.max(clipped.visible.left, Math.min(clipped.visible.right, clipped.original.left + clipped.original.width * x));
+      const top = Math.max(clipped.visible.top, Math.min(clipped.visible.bottom, clipped.original.top + clipped.original.height * y));
+      desiredIds.add(note.id);
+      let marker = existingMarkers.get(note.id);
+      if (!marker) {
+        marker = document.createElement("button");
+        marker.type = "button";
+        marker.className = "protoWeb-marker";
+        marker.dataset.annotationId = note.id;
+        marker.addEventListener("click", event => {
+          event.stopPropagation();
+          const boundNote = marker.__protoWebNote;
+          if (!boundNote) return;
+          if (isReviewMode()) {
+            setReviewActiveNote(boundNote.id);
+            scrollReviewCardIntoView(boundNote.id);
+          } else {
+            openNote(boundNote, marker.__protoWebScopeNotes, marker.__protoWebScope);
+          }
+        });
+      }
+      marker.__protoWebNote = note;
+      marker.__protoWebScopeNotes = notes;
+      marker.__protoWebScope = context.scope;
+      marker.classList.toggle("is-active", note.id === currentNoteId);
+      marker.textContent = String(index + 1);
+      marker.style.left = `${left}px`;
+      marker.style.top = `${top}px`;
+      marker.title = note.title;
+      marker.setAttribute("aria-label", `标注 ${index + 1}：${note.title}`);
+      const currentAtIndex = markerLayer.children[index];
+      if (currentAtIndex !== marker) markerLayer.insertBefore(marker, currentAtIndex || null);
+    });
+    existingMarkers.forEach((marker, id) => {
+      if (!desiredIds.has(id)) marker.remove();
+    });
+  }
+
+  function scheduleMarkerLayout() {
+    if (layoutFrame) return;
+    layoutFrame = requestAnimationFrame(() => {
+      layoutFrame = 0;
+      renderMarkers();
+    });
+  }
+
+  function clampPanel() {
+    if (!panel.classList.contains("is-open")) return;
+    const rect = panel.getBoundingClientRect();
+    const margin = 12;
+    const left = Math.min(Math.max(margin, rect.left), Math.max(margin, window.innerWidth - rect.width - margin));
+    const top = Math.min(Math.max(margin, rect.top), Math.max(margin, window.innerHeight - rect.height - margin));
+    panel.style.left = `${left}px`;
+    panel.style.top = `${top}px`;
+  }
+
+  function clampLauncher() {
+    if (isReviewMode() || !isElementVisible(launcher)) return;
+    const rect = launcher.getBoundingClientRect();
+    if (!launcher.style.left) return;
+    launcher.style.left = `${Math.min(Math.max(8, rect.left), window.innerWidth - rect.width - 8)}px`;
+    launcher.style.top = `${Math.min(Math.max(8, rect.top), window.innerHeight - rect.height - 8)}px`;
+  }
+
+  function positionMenu() {
+    if (!menu.classList.contains("is-open")) return;
+    const launcherRect = launcher.getBoundingClientRect();
+    const menuRect = menu.getBoundingClientRect();
+    const margin = 8;
+    const left = Math.min(Math.max(margin, launcherRect.right - menuRect.width), window.innerWidth - menuRect.width - margin);
+    let top = launcherRect.top - menuRect.height - 10;
+    if (top < margin) top = launcherRect.bottom + 10;
+    top = Math.min(top, window.innerHeight - menuRect.height - margin);
+    menu.style.left = `${left}px`;
+    menu.style.top = `${top}px`;
+  }
+
+  function closeMenu() {
+    menu.classList.remove("is-open");
+    launcher.setAttribute("aria-expanded", "false");
+  }
+
+  function toggleMenu() {
+    const willOpen = !menu.classList.contains("is-open");
+    menu.classList.toggle("is-open", willOpen);
+    launcher.setAttribute("aria-expanded", String(willOpen));
+    if (willOpen) positionMenu();
+  }
+
+  async function renderMermaidBlocks(renderRoot) {
+    if (!window.mermaid) return;
+    const blocks = Array.from(renderRoot.querySelectorAll("pre code.language-mermaid"));
+    for (const block of blocks) {
+      const pre = block.closest("pre");
+      const container = document.createElement("div");
+      container.className = "protoWeb-mermaid";
+      try {
+        const result = await window.mermaid.render(`protoWeb-mermaid-${++mermaidRenderCounter}`, block.textContent.trim());
+        container.innerHTML = result.svg;
+        if (result.bindFunctions) result.bindFunctions(container);
+        pre.replaceWith(container);
+      } catch (error) {
+        pre.classList.add("protoWeb-mermaid-error");
+        console.error("标注流程图渲染失败", error);
+      }
+    }
+  }
+
+  async function renderRichContent(renderRoot, item) {
+    if (item.format === "html" || !window.marked) {
+      renderRoot.innerHTML = item.content || "";
+    } else {
+      renderRoot.innerHTML = window.marked.parse(item.content || "", { gfm: true, breaks: true });
+    }
+    await renderMermaidBlocks(renderRoot);
+  }
+
+  async function renderPanel(note, notes = currentPanelNotes) {
+    const index = notes.findIndex(item => item.id === note.id);
+    panelHeading.textContent = note.title;
+    await renderRichContent(content, note);
+    pageCount.textContent = `${index + 1} / ${notes.length}`;
+    prevButton.disabled = index <= 0;
+    nextButton.disabled = index < 0 || index >= notes.length - 1;
+  }
+
+  function openNote(noteOrId, scopeNotes = null, scope = "") {
+    const note = typeof noteOrId === "object"
+      ? noteOrId
+      : annotations.find(item => item.id === noteOrId);
+    if (!note) {
+      console.warn("未找到要打开的标注", noteOrId);
+      return;
+    }
+    const context = getScopeContext();
+    const fallbackNotes = getRenderableScopeNotes(context);
+    const candidateNotes = Array.isArray(scopeNotes) && scopeNotes.some(item => item.id === note.id)
+      ? scopeNotes
+      : fallbackNotes;
+    currentPanelNotes = candidateNotes.some(item => item.id === note.id) ? candidateNotes : [note];
+    currentPanelScope = scope || context.scope;
+    panelScopeMismatchSince = 0;
+    currentNoteId = note.id;
+    panel.classList.add("is-open");
+    panel.classList.remove("is-collapsed");
+    collapseButton.textContent = "−";
+    collapseButton.title = "收起标注窗口";
+    renderPanel(note, currentPanelNotes).catch(error => {
+      console.error("标注内容渲染失败", error);
+      content.innerHTML = "<p>标注内容暂时无法显示。</p>";
+    });
+    requestAnimationFrame(() => {
+      clampPanel();
+      renderMarkers();
+    });
+  }
+
+  function closePanel() {
+    currentNoteId = "";
+    currentPanelNotes = [];
+    currentPanelScope = "";
+    panelScopeMismatchSince = 0;
+    panel.classList.remove("is-open", "is-collapsed");
+    collapseButton.textContent = "−";
+    renderMarkers();
+  }
+
+  function movePanel(step) {
+    const notes = currentPanelNotes.length ? currentPanelNotes : getRenderableScopeNotes();
+    const index = notes.findIndex(note => note.id === currentNoteId);
+    const targetIndex = index + step;
+    if (targetIndex >= 0 && targetIndex < notes.length) openNote(notes[targetIndex], notes, currentPanelScope);
+  }
+
+  function toggleAnnotations() {
+    enabled = !enabled;
+    launcher.classList.toggle("is-active", enabled);
+    pageToggle.setAttribute("aria-checked", String(enabled));
+    syncReviewToggle();
+    if (!enabled) closePanel();
+    else renderMarkers();
+  }
+
+  function renderGlobalNav() {
+    docsNav.replaceChildren();
+    globalSections.forEach(section => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = section.title;
+      button.classList.toggle("is-active", section.id === currentGlobalSectionId);
+      button.addEventListener("click", () => renderGlobalSection(section.id));
+      docsNav.appendChild(button);
+    });
+  }
+
+  async function renderGlobalSection(id) {
+    const section = globalSections.find(item => item.id === id) || globalSections[0];
+    if (!section) return;
+    currentGlobalSectionId = section.id;
+    renderGlobalNav();
+    docsBody.scrollTop = 0;
+    try {
+      await renderRichContent(docsContent, section);
+    } catch (error) {
+      console.error("全局原型说明渲染失败", error);
+      docsContent.innerHTML = "<p>原型说明暂时无法显示。</p>";
+    }
+  }
+
+  function openGlobalDocs() {
+    if (!globalSections.length) return;
+    closeMenu();
+    docsBackdrop.classList.add("is-open");
+    closePanel();
+    markerLayer.replaceChildren();
+    const meta = annotationData.globalMeta || {};
+    docsMeta.textContent = `${meta.version || "V0.1"} · 更新于 ${meta.updatedAt || "未记录"}`;
+    renderGlobalSection(currentGlobalSectionId || globalSections[0].id);
+    requestAnimationFrame(() => docsCloseButton.focus());
+  }
+
+  function closeGlobalDocs() {
+    docsBackdrop.classList.remove("is-open");
+    renderMarkers();
+    launcher.focus();
+  }
+
+  function isReviewMode() {
+    return document.body.classList.contains("protoWeb-review-mode");
+  }
+
+  function readReviewPreferences() {
+    try {
+      return JSON.parse(localStorage.getItem(reviewStorageKey) || "{}") || {};
+    } catch (error) {
+      return {};
+    }
+  }
+
+  function getDefaultReviewSideWidth(side) {
+    if (window.innerWidth <= 1440) return side === "left" ? 300 : 340;
+    return side === "left" ? 360 : 380;
+  }
+
+  function getReviewSideWidth(side) {
+    const property = side === "left" ? "--protoWeb-review-left-width" : "--protoWeb-review-right-width";
+    return Number.parseFloat(getComputedStyle(reviewWorkspace).getPropertyValue(property)) || getDefaultReviewSideWidth(side);
+  }
+
+  function setReviewSideWidth(side, requestedWidth) {
+    const minimum = side === "left" ? 260 : 300;
+    const hardMaximum = side === "left" ? 760 : 640;
+    const otherSide = side === "left" ? "right" : "left";
+    const ownCollapsed = reviewWorkspace.classList.contains(side === "left" ? "is-left-collapsed" : "is-right-collapsed");
+    const otherCollapsed = reviewWorkspace.classList.contains(otherSide === "left" ? "is-left-collapsed" : "is-right-collapsed");
+    const otherTrack = otherCollapsed ? 44 : getReviewSideWidth(otherSide);
+    const splitterWidth = (ownCollapsed ? 0 : 8) + (otherCollapsed ? 0 : 8);
+    const availableMaximum = window.innerWidth - otherTrack - splitterWidth - 420;
+    const maximum = Math.max(minimum, Math.min(hardMaximum, availableMaximum));
+    const width = Math.round(Math.min(maximum, Math.max(minimum, Number(requestedWidth) || getDefaultReviewSideWidth(side))));
+    const property = side === "left" ? "--protoWeb-review-left-width" : "--protoWeb-review-right-width";
+    if (Math.abs(getReviewSideWidth(side) - width) > 0.5) reviewWorkspace.style.setProperty(property, `${width}px`);
+    const splitter = side === "left" ? reviewLeftSplitter : reviewRightSplitter;
+    splitter?.setAttribute("aria-valuemin", String(minimum));
+    splitter?.setAttribute("aria-valuemax", String(maximum));
+    splitter?.setAttribute("aria-valuenow", String(width));
+    return width;
+  }
+
+  function normalizeReviewSideWidths() {
+    setReviewSideWidth("left", getReviewSideWidth("left"));
+    setReviewSideWidth("right", getReviewSideWidth("right"));
+  }
+
+  function saveReviewPreferences() {
+    try {
+      localStorage.setItem(reviewStorageKey, JSON.stringify({
+        leftCollapsed: reviewWorkspace.classList.contains("is-left-collapsed"),
+        rightCollapsed: reviewWorkspace.classList.contains("is-right-collapsed"),
+        leftWidth: getReviewSideWidth("left"),
+        rightWidth: getReviewSideWidth("right")
+      }));
+    } catch (error) {}
+  }
+
+  function applyReviewPreferences() {
+    const preferences = readReviewPreferences();
+    reviewWorkspace.classList.toggle("is-left-collapsed", Boolean(preferences.leftCollapsed));
+    reviewWorkspace.classList.toggle("is-right-collapsed", Boolean(preferences.rightCollapsed));
+    setReviewSideWidth("left", Number(preferences.leftWidth) || getDefaultReviewSideWidth("left"));
+    setReviewSideWidth("right", Number(preferences.rightWidth) || getDefaultReviewSideWidth("right"));
+  }
+
+  function setReviewSideCollapsed(side, collapsed) {
+    reviewWorkspace.classList.toggle(side === "left" ? "is-left-collapsed" : "is-right-collapsed", collapsed);
+    normalizeReviewSideWidths();
+    saveReviewPreferences();
+    scheduleReviewLayout();
+  }
+
+  function getReviewBusinessNodes() {
+    const phone = document.querySelector(".phone-container");
+    if (phone) return [phone];
+    const explicitNodes = Array.from(document.querySelectorAll("[data-proto-app], [data-proto-portal]"))
+      .filter(node => !root.contains(node) && node !== document.body);
+    if (explicitNodes.length) return explicitNodes;
+    return Array.from(document.body.children).filter(node => {
+      if (node === root || node === dataNode) return false;
+      return !["SCRIPT", "STYLE", "LINK", "TEMPLATE"].includes(node.tagName);
+    });
+  }
+
+  function moveBusinessIntoReviewFrame() {
+    getReviewBusinessNodes().forEach(node => {
+      if (!reviewPlacementAnchors.has(node)) {
+        const anchor = document.createComment(`protoWeb-review-anchor:${node.id || node.className || node.tagName}`);
+        node.parentNode.insertBefore(anchor, node);
+        reviewPlacementAnchors.set(node, anchor);
+      }
+      reviewPrototypeFrame.appendChild(node);
+    });
+  }
+
+  function restoreBusinessFromReviewFrame() {
+    reviewPlacementAnchors.forEach((anchor, node) => {
+      if (anchor.parentNode) anchor.parentNode.insertBefore(node, anchor.nextSibling);
+    });
+  }
+
+  function captureLauncherPlacement() {
+    launcherPlacementBeforeReview = {
+      left: launcher.style.left,
+      top: launcher.style.top,
+      right: launcher.style.right,
+      bottom: launcher.style.bottom
+    };
+  }
+
+  function restoreLauncherPlacement() {
+    if (!launcherPlacementBeforeReview) return;
+    Object.assign(launcher.style, launcherPlacementBeforeReview);
+    launcherPlacementBeforeReview = null;
+  }
+
+  function layoutReviewPrototype() {
+    reviewLayoutFrame = 0;
+    if (!isReviewMode()) return;
+    normalizeReviewSideWidths();
+    reviewPrototypeFrame.style.width = `${reviewDesignWidth}px`;
+    reviewPrototypeFrame.style.height = `${reviewDesignHeight}px`;
+    const availableWidth = Math.max(1, reviewCanvas.clientWidth - reviewCanvasMargin * 2);
+    const availableHeight = Math.max(1, reviewCanvas.clientHeight - reviewCanvasMargin * 2);
+    const scale = Math.min(availableWidth / reviewDesignWidth, availableHeight / reviewDesignHeight);
+    const left = Math.round((reviewCanvas.clientWidth - reviewDesignWidth * scale) / 2);
+    const top = Math.round((reviewCanvas.clientHeight - reviewDesignHeight * scale) / 2);
+    reviewPrototypeFrame.style.transform = `translate(${left}px, ${top}px) scale(${scale})`;
+    reviewPrototypeFrame.dataset.scale = scale.toFixed(4);
+    scheduleMarkerLayout();
+    scheduleAnnotationAudit();
+  }
+
+  function scheduleReviewLayout() {
+    if (!isReviewMode() || reviewLayoutFrame) return;
+    reviewLayoutFrame = requestAnimationFrame(layoutReviewPrototype);
+  }
+
+  function makeReviewSplitterDraggable(splitter, side) {
+    if (!splitter) return;
+    let dragState = null;
+    splitter.addEventListener("pointerdown", event => {
+      if (event.button !== 0) return;
+      dragState = { pointerId: event.pointerId, startX: event.clientX, startWidth: getReviewSideWidth(side) };
+      splitter.setPointerCapture(event.pointerId);
+      splitter.classList.add("is-dragging");
+      reviewWorkspace.classList.add("is-resizing");
+      event.preventDefault();
+    });
+    splitter.addEventListener("pointermove", event => {
+      if (!dragState || event.pointerId !== dragState.pointerId) return;
+      const delta = event.clientX - dragState.startX;
+      setReviewSideWidth(side, dragState.startWidth + (side === "left" ? delta : -delta));
+      scheduleReviewLayout();
+    });
+    const endDrag = event => {
+      if (!dragState || event.pointerId !== dragState.pointerId) return;
+      dragState = null;
+      splitter.classList.remove("is-dragging");
+      reviewWorkspace.classList.remove("is-resizing");
+      saveReviewPreferences();
+      scheduleReviewLayout();
+    };
+    splitter.addEventListener("pointerup", endDrag);
+    splitter.addEventListener("pointercancel", endDrag);
+  }
+
+  function renderReviewDocsNav() {
+    reviewDocsNav.replaceChildren();
+    globalSections.forEach(section => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = section.title;
+      button.classList.toggle("is-active", section.id === currentGlobalSectionId);
+      button.addEventListener("click", () => renderReviewSection(section.id));
+      reviewDocsNav.appendChild(button);
+    });
+  }
+
+  async function renderReviewSection(id) {
+    const section = globalSections.find(item => item.id === id) || globalSections[0];
+    if (!section) {
+      reviewDocsNav.replaceChildren();
+      reviewDocsBody.innerHTML = '<div class="protoWeb-review-empty">暂无原型说明</div>';
+      return;
+    }
+    currentGlobalSectionId = section.id;
+    renderReviewDocsNav();
+    reviewDocsBody.scrollTop = 0;
+    await renderRichContent(reviewDocsBody, section);
+  }
+
+  function getReviewScopeLabel(context) {
+    const scopeNode = context.node;
+    const activeNav = document.querySelector("[data-proto-page].active, [data-page-link].active, .nav-leaf.active, .menu-item.active");
+    return scopeNode?.dataset?.protoWebTitle || activeNav?.textContent?.trim() || context.scope.replace(/^(page|drawer|modal):/, "");
+  }
+
+  function syncReviewToggle() {
+    if (!reviewNoteToggle) return;
+    reviewNoteToggle.setAttribute("aria-checked", String(enabled));
+    reviewNoteToggle.setAttribute("aria-label", enabled ? "隐藏页面标注" : "显示页面标注");
+  }
+
+  function setReviewActiveNote(noteId) {
+    reviewActiveNoteId = noteId;
+    reviewNoteList.querySelectorAll(".protoWeb-review-note-card").forEach(card => card.classList.toggle("is-active", card.dataset.noteId === noteId));
+    markerLayer.querySelectorAll(".protoWeb-marker").forEach(marker => marker.classList.toggle("is-active", marker.dataset.annotationId === noteId));
+  }
+
+  function scrollReviewCardIntoView(noteId) {
+    const card = Array.from(reviewNoteList.querySelectorAll(".protoWeb-review-note-card")).find(item => item.dataset.noteId === noteId);
+    if (!card) return;
+    const listRect = reviewNoteList.getBoundingClientRect();
+    const cardRect = card.getBoundingClientRect();
+    const top = cardRect.top - listRect.top + reviewNoteList.scrollTop - (reviewNoteList.clientHeight - cardRect.height) / 2;
+    reviewNoteList.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+    card.focus({ preventScroll: true });
+  }
+
+  function highlightReviewTarget(target) {
+    document.querySelectorAll(".protoWeb-review-target-highlight").forEach(node => node.classList.remove("protoWeb-review-target-highlight"));
+    target.classList.add("protoWeb-review-target-highlight");
+    window.setTimeout(() => target.classList.remove("protoWeb-review-target-highlight"), 1200);
+  }
+
+  function findReviewScrollParent(target) {
+    let parent = target.parentElement;
+    while (parent && parent !== reviewPrototypeFrame) {
+      const style = getComputedStyle(parent);
+      if ((parent.hasAttribute("data-proto-scroll-container") || /(auto|scroll)/.test(style.overflowY)) && parent.scrollHeight > parent.clientHeight + 1) return parent;
+      parent = parent.parentElement;
+    }
+    return null;
+  }
+
+  function locateReviewTarget(note) {
+    const context = getScopeContext();
+    const target = findTarget(note, context.node);
+    if (!isElementRenderable(target, context.node)) return;
+    setReviewActiveNote(note.id);
+    if (note.scroll === false || target.getAttribute("data-proto-scroll") === "none") {
+      highlightReviewTarget(target);
+      return;
+    }
+    const scroller = findReviewScrollParent(target);
+    if (!scroller) {
+      highlightReviewTarget(target);
+      return;
+    }
+    const scrollerRect = scroller.getBoundingClientRect();
+    const targetRect = target.getBoundingClientRect();
+    if (targetRect.top >= scrollerRect.top && targetRect.bottom <= scrollerRect.bottom) {
+      highlightReviewTarget(target);
+      return;
+    }
+    const scale = Number(reviewPrototypeFrame.dataset.scale) || 1;
+    const targetTop = (targetRect.top - scrollerRect.top) / scale + scroller.scrollTop;
+    const targetHeight = targetRect.height / scale;
+    const maxTop = Math.max(0, scroller.scrollHeight - scroller.clientHeight);
+    const nextTop = Math.min(maxTop, Math.max(0, targetTop - (scroller.clientHeight - targetHeight) / 2));
+    scroller.scrollTo({ top: nextTop, behavior: "smooth" });
+    window.setTimeout(() => highlightReviewTarget(target), 360);
+  }
+
+  async function renderReviewNoteList(context = getScopeContext(), notes = getRenderableScopeNotes(context), signature = "") {
+    const renderVersion = ++reviewRenderVersion;
+    reviewScopeLabel.textContent = getReviewScopeLabel(context);
+    reviewNoteCount.textContent = `${notes.length} 条`;
+    syncReviewToggle();
+    if (!notes.length) {
+      if (renderVersion === reviewRenderVersion) {
+        reviewNoteList.innerHTML = '<div class="protoWeb-review-empty">当前页面暂无标注</div>';
+        reviewContextSignature = signature;
+      }
+      return;
+    }
+    const listRoot = document.createElement("div");
+    reviewNoteList.replaceChildren(listRoot);
+    for (const [index, note] of notes.entries()) {
+      if (renderVersion !== reviewRenderVersion) return;
+      const card = document.createElement("article");
+      card.className = "protoWeb-review-note-card";
+      card.dataset.noteId = note.id;
+      card.tabIndex = 0;
+      card.setAttribute("role", "button");
+      card.setAttribute("aria-label", `定位标注 ${index + 1}：${note.title}`);
+      const number = document.createElement("span");
+      number.className = "protoWeb-review-note-index";
+      number.textContent = String(index + 1);
+      const heading = document.createElement("h3");
+      heading.textContent = note.title;
+      const body = document.createElement("div");
+      body.className = "protoWeb-content";
+      card.append(number, heading, body);
+      const locate = () => locateReviewTarget(note);
+      card.addEventListener("click", locate);
+      card.addEventListener("keydown", event => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          locate();
+        }
+      });
+      listRoot.appendChild(card);
+      await renderRichContent(body, note);
+    }
+    if (renderVersion !== reviewRenderVersion) return;
+    reviewContextSignature = signature;
+    setReviewActiveNote(notes.some(note => note.id === reviewActiveNoteId) ? reviewActiveNoteId : "");
+  }
+
+  function syncReviewContext() {
+    if (!isReviewMode()) return;
+    const context = getScopeContext();
+    const notes = getRenderableScopeNotes(context);
+    if (!notes.some(note => note.id === reviewActiveNoteId)) reviewActiveNoteId = "";
+    const signature = `${context.scope}|${enabled ? 1 : 0}|${notes.map(note => note.id).join(",")}`;
+    if (signature !== reviewContextSignature && signature !== reviewPendingSignature) {
+      reviewPendingSignature = signature;
+      renderReviewNoteList(context, notes, signature)
+        .catch(error => console.error("三栏审阅标注列表渲染失败", error))
+        .finally(() => {
+          if (reviewPendingSignature === signature) reviewPendingSignature = "";
+        });
+    } else {
+      setReviewActiveNote(reviewActiveNoteId);
+    }
+    scheduleReviewLayout();
+  }
+
+  function scheduleReviewSync() {
+    if (!isReviewMode() || reviewSyncFrame) return;
+    reviewSyncFrame = requestAnimationFrame(() => {
+      reviewSyncFrame = 0;
+      syncReviewContext();
+    });
+  }
+
+  function enterReviewMode() {
+    if (isReviewMode() && reviewPrototypeFrame && reviewPrototypeFrame.children.length > 0) return;
+    reviewContextSignature = "";
+    reviewPendingSignature = "";
+    captureLauncherPlacement();
+    moveBusinessIntoReviewFrame();
+    applyReviewPreferences();
+    reviewWorkspace.hidden = false;
+    document.body.classList.add("protoWeb-review-mode");
+    closeMenu();
+    closePanel();
+    docsBackdrop.classList.remove("is-open");
+    enabled = true;
+    launcher.classList.add("is-active");
+    pageToggle.setAttribute("aria-checked", "true");
+    syncReviewToggle();
+    renderReviewSection(currentGlobalSectionId).catch(error => console.error("三栏审阅原型说明渲染失败", error));
+    requestAnimationFrame(() => {
+      layoutReviewPrototype();
+      syncReviewContext();
+    });
+  }
+
+  function exitReviewMode() {
+    if (!isReviewMode()) return;
+    reviewRenderVersion += 1;
+    reviewContextSignature = "";
+    reviewPendingSignature = "";
+    document.body.classList.remove("protoWeb-review-mode");
+    restoreBusinessFromReviewFrame();
+    restoreLauncherPlacement();
+    reviewWorkspace.hidden = true;
+    document.querySelectorAll(".protoWeb-review-target-highlight").forEach(node => node.classList.remove("protoWeb-review-target-highlight"));
+    ensureAnnotationLayer(true);
+    requestAnimationFrame(() => {
+      clampLauncher();
+      renderMarkers();
+      scheduleAnnotationAudit();
+    });
+  }
+
+  function syncContext() {
+    ensureAnnotationLayer(false);
+    const context = getScopeContext();
+    const contextNotes = getRenderableScopeNotes(context);
+    if (currentNoteId) {
+      if (contextNotes.some(note => note.id === currentNoteId)) {
+        currentPanelNotes = contextNotes;
+        currentPanelScope = context.scope;
+        panelScopeMismatchSince = 0;
+      } else if (!panelScopeMismatchSince) {
+        panelScopeMismatchSince = performance.now();
+      } else if (performance.now() - panelScopeMismatchSince >= 280) {
+        closePanel();
+      }
+    }
+    scheduleMarkerLayout();
+    scheduleReviewSync();
+    scheduleAnnotationAudit();
+  }
+
+  function runContextRefresh() {
+    contextRefreshFrame = 0;
+    syncContext();
+    if (performance.now() < contextRefreshUntil) {
+      contextRefreshFrame = requestAnimationFrame(runContextRefresh);
+    }
+  }
+
+  function scheduleContextRefresh(settle = false) {
+    if (settle === true) {
+      contextRefreshUntil = Math.max(contextRefreshUntil, performance.now() + 900);
+    }
+    if (!contextRefreshFrame) contextRefreshFrame = requestAnimationFrame(runContextRefresh);
+  }
+
+  function makeDraggable(handle, target, onEnd) {
+    let dragState = null;
+    handle.addEventListener("pointerdown", event => {
+      if (event.button !== 0 || event.target.closest("button")) return;
+      const rect = target.getBoundingClientRect();
+      dragState = {
+        pointerId: event.pointerId,
+        startX: event.clientX,
+        startY: event.clientY,
+        left: rect.left,
+        top: rect.top,
+        width: rect.width,
+        height: rect.height
+      };
+      target.style.left = `${rect.left}px`;
+      target.style.top = `${rect.top}px`;
+      handle.setPointerCapture(event.pointerId);
+      event.preventDefault();
+    });
+    handle.addEventListener("pointermove", event => {
+      if (!dragState || event.pointerId !== dragState.pointerId) return;
+      const margin = 12;
+      const left = Math.min(Math.max(margin, dragState.left + event.clientX - dragState.startX), window.innerWidth - dragState.width - margin);
+      const top = Math.min(Math.max(margin, dragState.top + event.clientY - dragState.startY), window.innerHeight - dragState.height - margin);
+      target.style.left = `${left}px`;
+      target.style.top = `${top}px`;
+    });
+    const endDrag = event => {
+      if (!dragState || event.pointerId !== dragState.pointerId) return;
+      dragState = null;
+      onEnd?.();
+    };
+    handle.addEventListener("pointerup", endDrag);
+    handle.addEventListener("pointercancel", endDrag);
+  }
+
+  function makeResizable() {
+    document.querySelectorAll(".protoWeb-resize-handle").forEach(handle => {
+      let resizeState = null;
+      handle.addEventListener("pointerdown", event => {
+        if (event.button !== 0 || panel.classList.contains("is-collapsed")) return;
+        const rect = panel.getBoundingClientRect();
+        resizeState = {
+          pointerId: event.pointerId,
+          direction: handle.dataset.direction,
+          startX: event.clientX,
+          startY: event.clientY,
+          left: rect.left,
+          top: rect.top,
+          right: rect.right,
+          bottom: rect.bottom,
+          width: rect.width,
+          height: rect.height
+        };
+        handle.setPointerCapture(event.pointerId);
+        event.preventDefault();
+        event.stopPropagation();
+      });
+      handle.addEventListener("pointermove", event => {
+        if (!resizeState || event.pointerId !== resizeState.pointerId) return;
+        const margin = 12;
+        const minWidth = 320;
+        const minHeight = 220;
+        const dx = event.clientX - resizeState.startX;
+        const dy = event.clientY - resizeState.startY;
+        let left = resizeState.left;
+        let top = resizeState.top;
+        let width = resizeState.width;
+        let height = resizeState.height;
+        const direction = resizeState.direction;
+
+        if (direction.includes("e")) width = Math.min(Math.max(minWidth, resizeState.width + dx), window.innerWidth - margin - resizeState.left);
+        if (direction.includes("w")) {
+          width = Math.min(Math.max(minWidth, resizeState.width - dx), resizeState.right - margin);
+          left = resizeState.right - width;
+        }
+        if (direction.includes("s")) height = Math.min(Math.max(minHeight, resizeState.height + dy), window.innerHeight - margin - resizeState.top);
+        if (direction.includes("n")) {
+          height = Math.min(Math.max(minHeight, resizeState.height - dy), resizeState.bottom - margin);
+          top = resizeState.bottom - height;
+        }
+
+        panel.style.left = `${left}px`;
+        panel.style.top = `${top}px`;
+        panel.style.width = `${width}px`;
+        panel.style.height = `${height}px`;
+        restoredPanelSize = { width, height };
+      });
+      const endResize = event => {
+        if (!resizeState || event.pointerId !== resizeState.pointerId) return;
+        resizeState = null;
+        clampPanel();
+        savePreferences();
+      };
+      handle.addEventListener("pointerup", endResize);
+      handle.addEventListener("pointercancel", endResize);
+    });
+  }
+
+  let launcherDrag = null;
+  let suppressLauncherClick = false;
+  launcher.addEventListener("pointerdown", event => {
+    if (event.button !== 0) return;
+    const rect = launcher.getBoundingClientRect();
+    launcherDrag = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      left: rect.left,
+      top: rect.top,
+      moved: false
+    };
+    launcher.style.left = `${rect.left}px`;
+    launcher.style.top = `${rect.top}px`;
+    launcher.style.right = "auto";
+    launcher.style.bottom = "auto";
+    launcher.setPointerCapture(event.pointerId);
+  });
+  launcher.addEventListener("pointermove", event => {
+    if (!launcherDrag || event.pointerId !== launcherDrag.pointerId) return;
+    const dx = event.clientX - launcherDrag.startX;
+    const dy = event.clientY - launcherDrag.startY;
+    if (Math.hypot(dx, dy) > 5) launcherDrag.moved = true;
+    launcher.style.left = `${Math.min(Math.max(8, launcherDrag.left + dx), window.innerWidth - launcher.offsetWidth - 8)}px`;
+    launcher.style.top = `${Math.min(Math.max(8, launcherDrag.top + dy), window.innerHeight - launcher.offsetHeight - 8)}px`;
+    positionMenu();
+  });
+  launcher.addEventListener("pointerup", event => {
+    if (!launcherDrag || event.pointerId !== launcherDrag.pointerId) return;
+    suppressLauncherClick = launcherDrag.moved;
+    launcherDrag = null;
+    savePreferences();
+  });
+  launcher.addEventListener("click", event => {
+    if (suppressLauncherClick) {
+      suppressLauncherClick = false;
+      event.preventDefault();
+      return;
+    }
+    toggleMenu();
+  });
+
+  makeDraggable(panelHeader, panel, () => {
+    clampPanel();
+    savePreferences();
+  });
+  makeResizable();
+
+  pageToggle.addEventListener("click", event => {
+    event.stopPropagation();
+    toggleAnnotations();
+  });
+  menuFloatModeButton.addEventListener("click", closeMenu);
+  openReviewButton.addEventListener("click", enterReviewMode);
+  reviewFloatModeButton.addEventListener("click", exitReviewMode);
+  reviewColumnsModeButton.addEventListener("click", () => {});
+  reviewCollapseLeftButton.addEventListener("click", () => setReviewSideCollapsed("left", true));
+  reviewExpandLeftButton.addEventListener("click", () => setReviewSideCollapsed("left", false));
+  reviewCollapseRightButton.addEventListener("click", () => setReviewSideCollapsed("right", true));
+  reviewExpandRightButton.addEventListener("click", () => setReviewSideCollapsed("right", false));
+  reviewNoteToggle.addEventListener("click", event => {
+    event.stopPropagation();
+    toggleAnnotations();
+    scheduleReviewSync();
+  });
+  openDocsButton.addEventListener("click", openGlobalDocs);
+  closeButton.addEventListener("click", closePanel);
+  docsCloseButton.addEventListener("click", closeGlobalDocs);
+  docsBackdrop.addEventListener("click", event => {
+    if (event.target === docsBackdrop) closeGlobalDocs();
+  });
+  collapseButton.addEventListener("click", () => {
+    const willCollapse = !panel.classList.contains("is-collapsed");
+    if (willCollapse) {
+      const rect = panel.getBoundingClientRect();
+      restoredPanelSize = { width: Math.max(320, rect.width), height: Math.max(220, rect.height) };
+      panel.classList.add("is-collapsed");
+      panel.style.width = `${Math.min(360, restoredPanelSize.width)}px`;
+      collapseButton.textContent = "+";
+      collapseButton.title = "展开标注窗口";
+    } else {
+      panel.classList.remove("is-collapsed");
+      panel.style.width = `${restoredPanelSize.width}px`;
+      panel.style.height = `${restoredPanelSize.height}px`;
+      collapseButton.textContent = "−";
+      collapseButton.title = "收起标注窗口";
+      requestAnimationFrame(clampPanel);
+    }
+    savePreferences();
+  });
+  prevButton.addEventListener("click", () => movePanel(-1));
+  nextButton.addEventListener("click", () => movePanel(1));
+
+  document.addEventListener("click", event => {
+    rememberImplicitOverlayScope(event.target);
+    if (!menu.contains(event.target) && !launcher.contains(event.target)) closeMenu();
+  });
+  document.addEventListener("keydown", event => {
+    if (event.key !== "Escape") return;
+    if (docsBackdrop.classList.contains("is-open")) closeGlobalDocs();
+    else if (menu.classList.contains("is-open")) closeMenu();
+    else if (panel.classList.contains("is-open")) closePanel();
+  });
+  document.addEventListener("scroll", scheduleMarkerLayout, true);
+  document.addEventListener("prototype-annotation:scopechange", () => scheduleContextRefresh(true));
+  const handleHostMotion = event => {
+    if (root.contains(event.target)) return;
+    scheduleContextRefresh(true);
+  };
+  document.addEventListener("animationstart", handleHostMotion, true);
+  document.addEventListener("animationend", handleHostMotion, true);
+  document.addEventListener("animationcancel", handleHostMotion, true);
+  document.addEventListener("transitionrun", handleHostMotion, true);
+  document.addEventListener("transitionend", handleHostMotion, true);
+  document.addEventListener("transitioncancel", handleHostMotion, true);
+  window.addEventListener("resize", () => {
+    clampLauncher();
+    clampPanel();
+    positionMenu();
+    scheduleContextRefresh(true);
+    scheduleReviewLayout();
+    scheduleAnnotationAudit();
+  });
+
+  const scopeObserver = new MutationObserver(records => {
+    if (records.every(record => (record.target === root || root.contains(record.target)) && !reviewPrototypeFrame.contains(record.target))) return;
+    scheduleContextRefresh(true);
+  });
+  scopeObserver.observe(document.body, {
+    subtree: true,
+    attributes: true,
+    attributeFilter: ["class", "hidden", "style", "aria-hidden", "data-proto-scope", "data-proto-layer"]
+  });
+
+  function inspectCurrentScopeAnnotations() {
+    const context = getScopeContext();
+    const configured = getScopeNotes(context.scope);
+    const invalidTargetIds = [];
+    const hiddenTargetIds = [];
+    const undersizedTargetIds = [];
+    const clippedTargetIds = [];
+    const points = [];
+    configured.forEach(note => {
+      const target = findTarget(note, context.node);
+      if (!target) {
+        invalidTargetIds.push(note.id);
+        return;
+      }
+      if (!isElementRenderable(target, context.node)) {
+        hiddenTargetIds.push(note.id);
+        return;
+      }
+      if (isElementUndersized(target)) undersizedTargetIds.push(note.id);
+      const clipped = getClippedTargetRect(target);
+      if (!clipped) {
+        clippedTargetIds.push(note.id);
+        return;
+      }
+      const x = Math.min(1, Math.max(0, Number(note.x)));
+      const y = Math.min(1, Math.max(0, Number(note.y)));
+      points.push({
+        id: note.id,
+        x: Math.max(clipped.visible.left, Math.min(clipped.visible.right, clipped.original.left + clipped.original.width * x)),
+        y: Math.max(clipped.visible.top, Math.min(clipped.visible.bottom, clipped.original.top + clipped.original.height * y))
+      });
+    });
+    const overlaps = [];
+    for (let index = 0; index < points.length; index += 1) {
+      for (let next = index + 1; next < points.length; next += 1) {
+        if (Math.hypot(points[index].x - points[next].x, points[index].y - points[next].y) < 28) {
+          overlaps.push([points[index].id, points[next].id]);
+        }
+      }
+    }
+    return {
+      scope: context.scope,
+      configuredCount: configured.length,
+      renderableCount: configured.length - invalidTargetIds.length - hiddenTargetIds.length,
+      visibleMarkerCount: points.length,
+      invalidTargetIds,
+      hiddenTargetIds,
+      undersizedTargetIds,
+      clippedTargetIds,
+      overlapPairs: overlaps,
+      outOfViewportIds: points.filter(point => point.x < 0 || point.y < 0 || point.x > window.innerWidth || point.y > window.innerHeight).map(point => point.id)
+    };
+  }
+
+  window.__prototypeWebDiagnostics = {
+    inspect() {
+      return {
+        layerMode: root.dataset.protoWebLayerMode || "unknown",
+        rootZIndex: getComputedStyle(root).zIndex,
+        host: inspectHostLayers(),
+        launcher: getLauncherHitAudit(),
+        scope: getScopeContext().scope,
+        annotationCount: getRenderableScopeNotes().length,
+        annotationIds: getRenderableScopeNotes().map(note => note.id),
+        annotationAudit: inspectCurrentScopeAnnotations(),
+        review: {
+          active: isReviewMode(),
+          designWidth: reviewDesignWidth,
+          designHeight: reviewDesignHeight,
+          scale: Number(reviewPrototypeFrame.dataset.scale || 0),
+          leftWidth: getReviewSideWidth("left"),
+          rightWidth: getReviewSideWidth("right"),
+          leftCollapsed: reviewWorkspace.classList.contains("is-left-collapsed"),
+          rightCollapsed: reviewWorkspace.classList.contains("is-right-collapsed")
+        }
+      };
+    },
+    repair() {
+      ensureAnnotationLayer(true);
+      clampLauncher();
+      scheduleMarkerLayout();
+      scheduleAnnotationAudit();
+    }
+  };
+
+  makeReviewSplitterDraggable(reviewLeftSplitter, "left");
+  makeReviewSplitterDraggable(reviewRightSplitter, "right");
+  if (window.ResizeObserver) new ResizeObserver(scheduleReviewLayout).observe(reviewCanvas);
+
+  ensureAnnotationLayer(false);
+  restorePreferences();
+  enterReviewMode();
+  requestAnimationFrame(() => {
+    scheduleReviewLayout();
+    renderMarkers();
+    scheduleAnnotationAudit();
+  });
+})();
+
+</script>
+</body>
+</html>
