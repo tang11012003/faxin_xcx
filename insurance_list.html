@@ -1125,7 +1125,7 @@ html.protoMobile-ready body {
             <span class="account-balance-num">815.96</span>
             <div class="account-sub-stats">
               <div class="stat-item-block">
-                <span class="stat-item-num">1</span>
+                <span class="stat-item-num">0</span>
                 <span class="stat-item-label">当前在保</span>
               </div>
               <div class="stat-item-block">
@@ -1223,22 +1223,7 @@ html.protoMobile-ready body {
         </div>
       </div>
 
-      <!-- 项目卡片 2：苏州顺丰建设有限公司 / 0人未投 / 1人在保 -->
-      <div class="project-card-item" onclick="window.location.href='company_project.html'">
-        <div class="project-header-row">
-          <span class="project-title">苏州顺丰建设有限公司</span>
-          <span class="project-insured-stat">1人在保</span>
-        </div>
-        <div class="project-sub-line">苏州顺丰建设有限公司</div>
-        <div class="project-plan-row">
-          <span>FD日保80万【食品厂】</span>
-          <span class="uninsured-stat">0人未投</span>
-        </div>
-        <div class="project-footer-row">
-          <span>创建人：唐宛丽</span>
-          <span>2026-10-23 14:03:19</span>
-        </div>
-      </div>
+      
     </div>
 
     <!-- 底部常驻按钮：创建投保 (直达创建投保/安心日保项目) -->
@@ -1261,27 +1246,22 @@ html.protoMobile-ready body {
 <script id="prototypeAnnotationData" type="application/json">
 {
   "prototypeId": "insurance_list",
-  "version": 6,
+  "version": 7,
   "mobile": {
     "appRoot": "[data-proto-app]",
     "deviceWidth": 390
   },
   "globalMeta": {
-    "name": "原型说明",
+    "name": "发薪管理首页 · 原型说明",
     "version": "V1.0",
-    "updatedAt": "2026-10-23"
+    "updatedAt": "2026-10-22"
   },
   "globalSections": [
     {
       "id": "sec_overview",
-      "title": "1. 业务背景与概述",
-      "content": "<p>让企业在一个项目里一站式完成「签电子合同 → 投保 → 发薪」，打通发薪专户与电子签、保险能力，免去多产品切换。</p><p>跳转至对应产品路径，创建成功后自动同步添加的人员。</p>",
+      "title": "1. 业务背景与产品定位",
+      "content": "<p>让企业在一个项目里一站式完成「签电子合同 → 投保 → 发薪」，打通发薪专户与电子签、保险能力，免去多产品切换。</p><p>开通对应产品，创建成功后自动同步添加的人员。</p>",
       "format": "html"
-    },
-    {
-      "id": "sec_rules",
-      "title": "2. 交互与流转规则",
-      "content": "- **新建项目/去投保**：点击底部【新建项目】按钮立即进入投保录单页面 `insurance_create.html`。\n- **项目卡片详情**：点击任意保单项目卡片可跳转进入详情页 `insurance_detail.html`。\n- **在保与未投保统计**：清晰展示每个企业的日保方案、已在保人数及未投保人数状态。"
     }
   ],
   "annotations": [
