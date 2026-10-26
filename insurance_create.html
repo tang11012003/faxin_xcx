@@ -1352,16 +1352,16 @@ html.protoMobile-ready body {
     let confirmedEnterprise = '';
 
     function goBack() {
-      if (window.__protoHubNavigate) return window.__protoHubNavigate('project_detail.html');
-      if (document.referrer) {
+      if (window.__protoHubNavigate) return window.__protoHubNavigate('insurance_list.html');
+      if (window.history.length > 1) {
         window.history.back();
       } else {
-        window.location.href = 'project_detail.html';
+        window.location.href = 'insurance_list.html';
       }
     }
 
     function goToCompanyProject() {
-      if (window.__protoHubNavigate) window.__protoHubNavigate('company_project.html'); else if (window.__protoHubNavigate) window.__protoHubNavigate('company_project.html'); else window.location.href = 'company_project.html';
+      if (window.__protoHubNavigate) window.__protoHubNavigate('insurance_list.html'); else window.location.href = 'insurance_list.html';
     }
 
     function goToProjectDetail() {
@@ -1449,7 +1449,7 @@ html.protoMobile-ready body {
 <script id="prototypeAnnotationData" type="application/json">
 {
   "prototypeId": "insurance_create",
-  "version": 3,
+  "version": 5,
   "mobile": {
     "appRoot": "[data-proto-app]",
     "deviceWidth": 390
@@ -1463,7 +1463,7 @@ html.protoMobile-ready body {
     {
       "id": "sec_1",
       "title": "1. 业务背景与产品定位",
-      "content": "<p><span>让企业在一个项目里一站式完成「签电子合同 → 投保 → 发薪」，打通发薪专户与电子签、保险能力，免去多产品切换。</span></p>",
+      "content": "<p>让企业在一个项目里一站式完成「签电子合同 → 投保 → 发薪」，打通发薪专户与电子签、保险能力，免去多产品切换。</p><p>跳转至对应产品路径，创建成功后自动同步添加的人员。</p>",
       "format": "html"
     }
   ],
@@ -1472,8 +1472,8 @@ html.protoMobile-ready body {
       "id": "note-mvkjxvco-1-89bc10d011",
       "scope": "page:insurance_create",
       "target": "[data-proto-scope=\"page:insurance_create\"] div.nav-bar",
-      "x": 0.617948717948718,
-      "y": 0.4375,
+      "x": 0.7743589743589744,
+      "y": 1,
       "title": "去投保业务说明",
       "content": "<p>开通投保业务的，首次进入需选择商品和派遣单位。点击确定后同步创建安心日保项目，原安心日保、PC端都可查</p>",
       "format": "html",
