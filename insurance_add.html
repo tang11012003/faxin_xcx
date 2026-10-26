@@ -1587,7 +1587,7 @@ html.protoMobile-ready body {
 <script id="prototypeAnnotationData" type="application/json">
 {
   "prototypeId": "insurance_add",
-  "version": 1,
+  "version": 2,
   "mobile": {
     "appRoot": "[data-proto-app]",
     "deviceWidth": 390
@@ -1611,54 +1611,31 @@ html.protoMobile-ready body {
   ],
   "annotations": [
     {
-      "id": "note_add_01",
-      "scope": "page:insurance_add",
-      "target": "[data-proto-scope=\"page:insurance_add\"] .tips-banner",
-      "title": "投保年龄合规提示",
-      "content": "通栏提示投保年龄红线（15-65周岁），防范未成年工或超龄人员违规投保导致的拒赔风险。",
-      "x": 0.5,
-      "y": 0.5,
-      "scroll": false
-    },
-    {
-      "id": "note_add_02",
-      "scope": "page:insurance_add",
-      "target": "[data-proto-scope=\"page:insurance_add\"] .search-row",
-      "title": "智能检索与添加员工",
-      "content": "为确保与发薪项目人员1:1同构对齐，不开放外部添加散客入口；支持输入姓名或身份证模糊检索当前发薪项目名单。",
-      "x": 0.5,
-      "y": 0.5,
-      "scroll": false
-    },
-    {
-      "id": "note_add_03",
-      "scope": "page:insurance_add",
-      "target": "[data-proto-scope=\"page:insurance_add\"] .date-card",
-      "title": "保单截止日期配置",
-      "content": "展示保障时间，默认保障24小时。点击可快捷切换或延长截止日期以匹配工期。",
-      "x": 0.5,
-      "y": 0.5,
-      "scroll": true
-    },
-    {
       "id": "note_add_04",
       "scope": "page:insurance_add",
       "target": "[data-proto-scope=\"page:insurance_add\"] .employee-list",
-      "title": "员工列表与外呼删除",
-      "content": "清晰展示员工姓名、性别、年龄胶囊及18位身份证号；支持点击【打电话】联系工人，或点击【删除】移出名单。",
+      "title": "员工移出投保",
+      "content": "<p>点击【移出】移出投保</p>",
       "x": 0.5,
       "y": 0.5,
-      "scroll": true
+      "scroll": true,
+      "format": "html",
+      "type": "original",
+      "typeLabel": "原有",
+      "badge": "原有"
     },
     {
-      "id": "note_add_05",
+      "id": "note-mvoxrwcn-1-0bc3a1c36f",
       "scope": "page:insurance_add",
-      "target": "[data-proto-scope=\"page:insurance_add\"] .bottom-bar",
-      "title": "确定加保提交入口",
-      "content": "吸底绿色主按钮。点击后提交投保审核并弹出成功反馈，完成加保全流程。",
-      "x": 0.5,
-      "y": 0.5,
-      "scroll": false
+      "target": "[data-proto-scope=\"page:insurance_add\"] div.employee-card:nth-of-type(3)",
+      "x": 0.8879781420765027,
+      "y": 0.7777777777777778,
+      "title": "加回投保说明",
+      "content": "<p>点击加回投保，员工加回投保名单</p>",
+      "format": "html",
+      "type": "original",
+      "typeLabel": "原有",
+      "badge": "原有"
     }
   ]
 }
