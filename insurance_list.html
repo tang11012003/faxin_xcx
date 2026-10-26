@@ -314,6 +314,32 @@
       font-weight: 700;
       color: #202536;
     }
+    .project-title-wrapper {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .badge-linkage {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 1px 7px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #008837;
+      background: #E8F8EE;
+      border: 1px solid #B7EB8F;
+      border-radius: 4px;
+      line-height: 16px;
+    }
+    .badge-linkage::before {
+      content: "";
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #00BF6C;
+    }
     .project-insured-stat {
       font-size: 13.5px;
       color: #8C90A4;
@@ -1177,16 +1203,19 @@ html.protoMobile-ready body {
         </div>
       </div>
 
-      <!-- 项目卡片 1：发薪 / 申通快递 / FD日保80万【测试新行业】/ 13人未投 / 0人在保 -->
-      <div class="project-card-item" onclick="window.location.href='insurance_detail.html'">
+      <!-- 项目卡片 1：发薪 / 申通快递 / FD日保80万【测试新行业】/ 23人未投 / 0人在保 -->
+      <div class="project-card-item" onclick="window.location.href='company_project.html'">
         <div class="project-header-row">
-          <span class="project-title">发薪</span>
+          <div class="project-title-wrapper">
+            <span class="project-title">发薪</span>
+            <span class="badge-linkage">发薪联动</span>
+          </div>
           <span class="project-insured-stat">0人在保</span>
         </div>
         <div class="project-sub-line">申通快递</div>
         <div class="project-plan-row">
           <span>FD日保80万【测试新行业】</span>
-          <span class="uninsured-stat">13人未投</span>
+          <span class="uninsured-stat">23人未投</span>
         </div>
         <div class="project-footer-row">
           <span>创建人：唐宛丽</span>
@@ -1195,7 +1224,7 @@ html.protoMobile-ready body {
       </div>
 
       <!-- 项目卡片 2：苏州顺丰建设有限公司 / 0人未投 / 1人在保 -->
-      <div class="project-card-item" onclick="window.location.href='insurance_detail.html'">
+      <div class="project-card-item" onclick="window.location.href='company_project.html'">
         <div class="project-header-row">
           <span class="project-title">苏州顺丰建设有限公司</span>
           <span class="project-insured-stat">1人在保</span>
@@ -1212,14 +1241,15 @@ html.protoMobile-ready body {
       </div>
     </div>
 
-    <!-- 底部常驻按钮：创建项目 (直达去投保/创建安心日保项目) -->
+    <!-- 底部常驻按钮：创建投保 (直达创建投保/安心日保项目) -->
     <div class="bottom-bar">
-      <button class="btn-create-project" onclick="window.location.href='insurance_create.html'">创建项目</button>
+      <button class="btn-create-project" onclick="window.location.href='insurance_create.html'">创建投保</button>
     </div>
   </div>
 
   <script>
     function goBack() {
+      if (window.__protoHubNavigate) return window.__protoHubNavigate('shouye.html');
       if (document.referrer) {
         window.history.back();
       } else {
@@ -1231,7 +1261,7 @@ html.protoMobile-ready body {
 <script id="prototypeAnnotationData" type="application/json">
 {
   "prototypeId": "insurance_list",
-  "version": 1,
+  "version": 5,
   "mobile": {
     "appRoot": "[data-proto-app]",
     "deviceWidth": 390
@@ -1255,34 +1285,17 @@ html.protoMobile-ready body {
   ],
   "annotations": [
     {
-      "id": "note_ins_01",
+      "id": "note-mvku53oq-1-45d7ff50ad",
       "scope": "page:insurance_list",
-      "target": "[data-proto-scope=\"page:insurance_list\"] .top-header-area",
-      "title": "安心日保导航栏",
-      "content": "顶部导航与小程序原生胶囊组件，展示【安心日保】页面标题，左侧支持点击返回主页。",
-      "x": 0.5,
-      "y": 0.5,
-      "scroll": false
-    },
-    {
-      "id": "note_ins_02",
-      "scope": "page:insurance_list",
-      "target": "[data-proto-scope=\"page:insurance_list\"] .project-list",
-      "title": "日保项目列表与统计",
-      "content": "卡片式展示日保项目，包含在保人数、未投保人数、投保方案（如 FD日保80万方案）及创建时间，支持点击卡片进入详情。",
-      "x": 0.5,
-      "y": 0.5,
-      "scroll": true
-    },
-    {
-      "id": "note_ins_03",
-      "scope": "page:insurance_list",
-      "target": "[data-proto-scope=\"page:insurance_list\"] .bottom-bar",
-      "title": "新建项目/去投保操作入口",
-      "content": "固定底部操作栏，主按钮【新建项目】。点击后直接路由至安心日保录单与企业选择页 `insurance_create.html`。",
-      "x": 0.5,
-      "y": 0.5,
-      "scroll": false
+      "target": "[data-proto-scope=\"page:insurance_list\"] div.project-card-item:nth-of-type(3) > div.project-header-row",
+      "x": 0.6869914940828402,
+      "y": 0.42857142857142855,
+      "title": "创建日保说明",
+      "content": "<p>创建项目后发薪人员自动同步；<br><span>从统一项目进入则只展示统一项目的安心日保投保项目，打上发薪联动标记</span></p><p>自动创建项目名称，创建多个投保则名称按“【项目名称】_01”类推</p><p><br></p>",
+      "format": "html",
+      "type": "original",
+      "typeLabel": "原有",
+      "badge": "原有"
     }
   ]
 }
@@ -2701,5 +2714,206 @@ html.protoMobile-ready body {
 
 </script>
 
+  <script id="protoHubNavSyncBridge">
+  // 页面加载与按钮点击时主动同步给外层工作台顶部导航栏
+  (function() {
+    if (window.__PROTOHUB_NAV_BRIDGE_BOUND__) return;
+    window.__PROTOHUB_NAV_BRIDGE_BOUND__ = true;
+
+    var DEFAULT_TAB_MAP = {
+      'shouye': { id: 'shouye', name: '首页', path: 'shouye.html', visible: true },
+      'shouye.html': { id: 'shouye', name: '首页', path: 'shouye.html', visible: true },
+      'shouye_template': { id: 'shouye', name: '首页', path: 'shouye.html', visible: true },
+      'shouye_template.html': { id: 'shouye', name: '首页', path: 'shouye.html', visible: true },
+      'project_detail': { id: 'project_detail', name: '人员名单', path: 'project_detail.html', visible: true },
+      'project_detail.html': { id: 'project_detail', name: '人员名单', path: 'project_detail.html', visible: true },
+      'pay_salary': { id: 'pay_salary', name: '我要发薪', path: 'pay_salary.html', visible: true },
+      'pay_salary.html': { id: 'pay_salary', name: '我要发薪', path: 'pay_salary.html', visible: true },
+      'contract_create': { id: 'contract_create', name: '创建合同', path: 'contract_create.html', visible: true },
+      'contract_create.html': { id: 'contract_create', name: '创建合同', path: 'contract_create.html', visible: true },
+      'contract_detail': { id: 'contract_detail', name: '合同详情', path: 'contract_detail.html', visible: true },
+      'contract_detail.html': { id: 'contract_detail', name: '合同详情', path: 'contract_detail.html', visible: true },
+      'insurance_create': { id: 'insurance_create', name: '创建投保', path: 'insurance_create.html', visible: true },
+      'insurance_create.html': { id: 'insurance_create', name: '创建投保', path: 'insurance_create.html', visible: true },
+      'company_project': { id: 'company_project', name: '加保详情', path: 'company_project.html', visible: true },
+      'company_project.html': { id: 'company_project', name: '加保详情', path: 'company_project.html', visible: true },
+      'insurance_detail': { id: 'company_project', name: '加保详情', path: 'company_project.html', visible: true },
+      'insurance_detail.html': { id: 'company_project', name: '加保详情', path: 'company_project.html', visible: true },
+      'contract_list': { id: 'contract_list', name: '电子合同', path: 'contract_list.html', visible: true },
+      'contract_list.html': { id: 'contract_list', name: '电子合同', path: 'contract_list.html', visible: true },
+      'insurance_list': { id: 'insurance_list', name: '安心日保', path: 'insurance_list.html', visible: true },
+      'insurance_list.html': { id: 'insurance_list', name: '安心日保', path: 'insurance_list.html', visible: true },
+      'pc_insure_daily_ax': { id: 'pc_insure_daily_ax', name: '安心日保PC端', path: 'pc_insure_daily_ax.html', visible: true },
+      'pc_insure_daily_ax.html': { id: 'pc_insure_daily_ax', name: '安心日保PC端', path: 'pc_insure_daily_ax.html', visible: true }
+    };
+
+    function cleanFileOrId(raw) {
+      if (!raw) return '';
+      var str = String(raw).trim();
+      if (str.indexOf('#page=') !== -1) {
+        return str.split('#page=').pop().split(/[?&#]/)[0].trim();
+      }
+      return str.split(/[?#]/)[0].split('/').pop().trim();
+    }
+
+    function resolvePageTarget(rawInput) {
+      var fileOrId = cleanFileOrId(rawInput);
+      if (!fileOrId) return null;
+      var lower = fileOrId.toLowerCase();
+      var noExt = lower.replace(/\.html$/i, '');
+      var aliasTarget = DEFAULT_TAB_MAP[lower] || DEFAULT_TAB_MAP[noExt];
+
+      var reg = Array.isArray(window.__PRD_PAGES_REGISTRY__) ? window.__PRD_PAGES_REGISTRY__ : [];
+      if (reg.length > 0) {
+        var visMatch = reg.find(function(p) {
+          if (p.visible === false) return false;
+          var pid = String(p.id || '').toLowerCase();
+          var ppath = String(p.path || '').toLowerCase();
+          return pid === noExt || ppath === lower || ppath.endsWith('/' + lower) ||
+                 (aliasTarget && (pid === aliasTarget.id.toLowerCase() || ppath === aliasTarget.path.toLowerCase()));
+        });
+        if (visMatch) return visMatch;
+
+        var invisMatch = reg.find(function(p) {
+          var pid = String(p.id || '').toLowerCase();
+          var ppath = String(p.path || '').toLowerCase();
+          return pid === noExt || ppath === lower || ppath.endsWith('/' + lower);
+        });
+        if (invisMatch) return invisMatch;
+      }
+
+      if (aliasTarget) return aliasTarget;
+      if (lower.endsWith('.html')) {
+        return { id: noExt, name: noExt, path: fileOrId, visible: true };
+      }
+      return null;
+    }
+
+    window.addEventListener('message', function(e) {
+      if (e.data && e.data.type === 'PRD_PAGES_UPDATED' && Array.isArray(e.data.pages)) {
+        window.__PRD_PAGES_REGISTRY__ = e.data.pages;
+      }
+    });
+
+    function navigateAndSync(targetUrl, evt) {
+      var resolved = resolvePageTarget(targetUrl);
+      if (!resolved) return false;
+
+      if (window.parent && window.parent !== window) {
+        if (resolved.visible === false) {
+          if (evt) {
+            evt.preventDefault();
+            evt.stopPropagation();
+            if (evt.stopImmediatePropagation) evt.stopImmediatePropagation();
+          }
+          try {
+            window.parent.postMessage({ type: 'GUARD_BLOCKED', name: resolved.name || resolved.id, file: resolved.path }, '*');
+            window.parent.postMessage({ type: 'PRD_PAGE_CHANGED', pageId: resolved.id, path: resolved.path }, '*');
+          } catch (err) {}
+          return true;
+        }
+
+        if (evt) {
+          evt.preventDefault();
+          evt.stopPropagation();
+          if (evt.stopImmediatePropagation) evt.stopImmediatePropagation();
+        }
+        try {
+          sessionStorage.setItem('__PROTOHUB_SYNCED_PAGE__', resolved.id);
+          sessionStorage.removeItem('__PROTOHUB_INNER_ACTION_TS__');
+        } catch (err) {}
+        try {
+          window.parent.postMessage({ type: 'PRD_PAGE_CHANGED', pageId: resolved.id, path: resolved.path }, '*');
+          window.parent.postMessage({ type: 'SWITCH_PAGE', pageId: resolved.id, path: resolved.path }, '*');
+        } catch (err) {}
+        return true;
+      }
+
+      window.location.href = resolved.path || targetUrl;
+      return true;
+    }
+
+    window.__protoHubNavigate = function(targetUrl, evt) {
+      return navigateAndSync(targetUrl, evt);
+    };
+
+    function markInnerInteraction() {
+      try {
+        sessionStorage.setItem('__PROTOHUB_INNER_ACTION_TS__', String(Date.now()));
+      } catch (err) {}
+    }
+    document.addEventListener('pointerdown', markInnerInteraction, true);
+    document.addEventListener('keydown', markInnerInteraction, true);
+
+    document.addEventListener('click', function(e) {
+      markInnerInteraction();
+      if (!window.parent || window.parent === window) return;
+
+      var link = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+      if (link) {
+        var href = link.getAttribute('href') || '';
+        if (href && !href.startsWith('#') && !href.startsWith('javascript:') && !href.startsWith('tel:') && !href.startsWith('mailto:')) {
+          var cleanHref = cleanFileOrId(href);
+          if (cleanHref && cleanHref.toLowerCase().endsWith('.html')) {
+            if (navigateAndSync(href, e)) return;
+          }
+        }
+      }
+
+      var clickEl = e.target && e.target.closest ? e.target.closest('[onclick]') : null;
+      if (clickEl) {
+        var onclickStr = clickEl.getAttribute('onclick') || '';
+        var m = onclickStr.match(/(?:window\.)?location(?:\.href)?\s*=\s*['"`]([^'"`]+)['"`]/);
+        if (m && m[1]) {
+          var targetHref = m[1];
+          var cleanTarget = cleanFileOrId(targetHref);
+          if (cleanTarget && (cleanTarget.toLowerCase().endsWith('.html') || targetHref.indexOf('#page=') !== -1)) {
+            if (navigateAndSync(targetHref, e)) return;
+          }
+        }
+      }
+    }, true);
+
+    function syncCurrentPageOnLoad() {
+      if (!window.parent || window.parent === window) return;
+      try {
+        var curFile = (window.location.pathname.split('/').pop() || '').split('?')[0].split('#')[0];
+        if (!curFile || curFile === 'about:blank') return;
+        var resolved = resolvePageTarget(curFile) || { id: curFile.replace(/\.html$/i, ''), path: curFile, visible: true };
+
+        window.parent.postMessage({
+          type: 'PRD_PAGE_CHANGED',
+          pageId: resolved.id,
+          path: resolved.path || curFile
+        }, '*');
+
+        var lastSynced = '';
+        var lastActionTs = 0;
+        try {
+          lastSynced = sessionStorage.getItem('__PROTOHUB_SYNCED_PAGE__') || '';
+          lastActionTs = Number(sessionStorage.getItem('__PROTOHUB_INNER_ACTION_TS__') || 0);
+          sessionStorage.setItem('__PROTOHUB_SYNCED_PAGE__', resolved.id);
+          sessionStorage.removeItem('__PROTOHUB_INNER_ACTION_TS__');
+        } catch (err) {}
+
+        if (lastSynced !== resolved.id && lastActionTs > 0 && (Date.now() - lastActionTs < 8000)) {
+          window.parent.postMessage({
+            type: 'SWITCH_PAGE',
+            pageId: resolved.id,
+            path: resolved.path || curFile
+          }, '*');
+        }
+      } catch (err) {}
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', syncCurrentPageOnLoad);
+    } else {
+      setTimeout(syncCurrentPageOnLoad, 0);
+    }
+    window.addEventListener('pageshow', syncCurrentPageOnLoad);
+    window.addEventListener('popstate', syncCurrentPageOnLoad);
+  })();
+  </script>
 </body>
 </html>

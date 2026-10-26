@@ -513,18 +513,17 @@
     .gender-badge {
       position: absolute;
       bottom: -2px;
-      right: -3px;
-      width: 15px;
-      height: 15px;
-      border-radius: 4px;
+      right: -2px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
       background: #FFE8ED;
       color: #FF4D79;
-      font-size: 11px;
-      font-weight: 700;
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid #FFFFFF;
+      border: 1.5px solid #FFFFFF;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     }
 
     /* 员工详情文字 */
@@ -1879,13 +1878,9 @@ body.protoWeb-review-mode .protoWeb-docs-backdrop { display: none !important; }
         </div>
       </div>
 
-      <!-- 项目标题行 -->
-      <!-- 项目标题行 (需打卡 发薪-02，对照 media_1792551621191_e2bf028a.png) -->
+      <!-- 项目标题行 (1:1 还原真机截图 media_1792807435993_22a2d3d7.png) -->
       <div class="project-title-row">
-        <div style="display:flex; align-items:center;">
-          <h1 class="project-name">发薪-01</h1>
-          <span class="badge-full">满</span>
-        </div>
+        <h1 class="project-name">发薪-01</h1>
         <div class="project-detail-link" onclick="viewProjectDetail()">
           <span>项目详情</span>
           <svg style="width:14px; height:14px; stroke:#9497B1;" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1893,57 +1888,63 @@ body.protoWeb-review-mode .protoWeb-docs-backdrop { display: none !important; }
           </svg>
         </div>
       </div>
-      <div class="created-date">创建日期：2026-10-19</div>
+      <div class="created-date" style="margin-bottom:16px;">创建日期：2026-10-19</div>
 
-      <!-- 三大添加员工快捷卡片 (完全对应真机图四) -->
+      <!-- 三合一添加员工快捷卡片 (横向 3 列，1:1 复刻截图) -->
       <div class="add-action-cards">
         <!-- 扫码添加 -->
-        <div class="action-card scan" onclick="openQrModal()">
-          <div class="card-icon-wrap" style="background:#FFF3E8;">
+        <div class="action-card scan" onclick="handleScanAdd()">
+          <div class="card-icon-wrap" style="background: #FFF2E8;">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-              <rect x="3" y="3" width="7" height="7" rx="1.5" stroke="#FA8C16" stroke-width="2"/>
-              <rect x="14" y="3" width="7" height="7" rx="1.5" stroke="#FA8C16" stroke-width="2"/>
-              <rect x="3" y="14" width="7" height="7" rx="1.5" stroke="#FA8C16" stroke-width="2"/>
-              <rect x="14" y="14" width="3" height="3" fill="#FA8C16"/>
-              <rect x="18" y="18" width="3" height="3" fill="#FA8C16"/>
+              <rect x="2" y="4" width="20" height="16" rx="3" fill="#FFA940"/>
+              <rect x="5" y="7" width="14" height="11" rx="1.5" fill="#FFFFFF"/>
+              <rect x="7" y="9" width="3.5" height="3.5" rx="0.5" fill="#FA541C"/>
+              <rect x="13.5" y="9" width="3.5" height="3.5" rx="0.5" fill="#FA541C"/>
+              <rect x="7" y="13" width="3.5" height="3.5" rx="0.5" fill="#FA541C"/>
+              <rect x="13.5" y="13" width="3.5" height="3.5" rx="0.5" fill="#FA541C"/>
             </svg>
           </div>
-          <span class="card-main-text">扫码添加</span>
-          <span class="card-sub-text">扫码添加项目</span>
+          <div class="card-main-text">扫码添加</div>
+          <div class="card-sub-text">扫码添加项目</div>
         </div>
 
         <!-- 老员工 -->
-        <div class="action-card old" onclick="openOldEmpModal()">
-          <div class="card-icon-wrap" style="background:#E6F4FF;">
+        <div class="action-card old" onclick="handleOldEmployeeAdd()">
+          <div class="card-icon-wrap" style="background: #E6F4FF;">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-              <rect x="4" y="3" width="16" height="18" rx="2" stroke="#1677FF" stroke-width="2"/>
-              <circle cx="12" cy="9" r="2.5" fill="#1677FF"/>
-              <path d="M8 17c0-2.2 1.8-4 4-4s4 1.8 4 4" stroke="#1677FF" stroke-width="2" stroke-linecap="round"/>
+              <rect x="4" y="5" width="16" height="16" rx="2.5" fill="#4096FF"/>
+              <path d="M9 2.5h6v3H9z" fill="#1677FF"/>
+              <circle cx="12" cy="10" r="2.5" fill="#FFFFFF"/>
+              <path d="M7.5 17c0-2.2 2-3.5 4.5-3.5s4.5 1.3 4.5 3.5" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round"/>
             </svg>
           </div>
-          <span class="card-main-text">老员工</span>
-          <span class="card-sub-text">老员工快速发薪</span>
+          <div class="card-main-text">老员工</div>
+          <div class="card-sub-text">老员工快速发薪</div>
         </div>
 
         <!-- 手动添加 -->
-        <div class="action-card manual" onclick="openManualModal()">
-          <div class="card-icon-wrap" style="background:#FFF0F6;">
+        <div class="action-card manual" onclick="handleManualAdd()">
+          <div class="card-icon-wrap" style="background: #FFF0F6;">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-              <rect x="3" y="4" width="18" height="14" rx="2" stroke="#EB2F96" stroke-width="2"/>
-              <circle cx="9" cy="11" r="2" fill="#EB2F96"/>
-              <path d="M14 9h4M14 13h2" stroke="#EB2F96" stroke-width="2" stroke-linecap="round"/>
+              <rect x="3" y="4" width="15" height="11" rx="2" fill="#FF85C0" transform="rotate(-6 10.5 9.5)"/>
+              <rect x="5" y="7" width="16" height="12" rx="2" fill="#F759AB"/>
+              <circle cx="9.5" cy="12" r="2" fill="#FFFFFF"/>
+              <line x1="13.5" y1="11" x2="18.5" y2="11" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round"/>
+              <line x1="13.5" y1="14" x2="17" y2="14" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round"/>
             </svg>
           </div>
-          <span class="card-main-text">手动添加</span>
-          <span class="card-sub-text">一次识别6张身份证</span>
+          <div class="card-main-text">手动添加</div>
+          <div class="card-sub-text">一次识别6张身份证</div>
         </div>
       </div>
+
+
     </div>
 
     <!-- 名单统计与操作栏 -->
     <div class="list-header-row">
       <div class="stat-text">
-        有效报名: <span id="validCount">3</span>人 <span class="stat-needed">(需报名: 10人)</span>
+        有效报名: <span id="validCount">11</span>人 <span class="stat-needed">(需报名: 18人)</span>
       </div>
       <div class="export-btn" onclick="exportList()">
         <span>导出名单</span>
@@ -2007,10 +2008,10 @@ body.protoWeb-review-mode .protoWeb-docs-backdrop { display: none !important; }
     </div>
 
     <div class="bottom-bar" id="projectBottomBar">
-      <button class="btn-bottom-action btn-contract is-disabled-feature" onclick="showFeatureNotEnabledModal('contract')" id="btnBottomContract">
+      <button class="btn-bottom-action btn-contract" onclick="handleContractAction()" id="btnBottomContract">
         <span>签合同</span>
       </button>
-      <button class="btn-bottom-action btn-insurance is-disabled-feature" onclick="showFeatureNotEnabledModal('insurance')" id="btnBottomInsurance">
+      <button class="btn-bottom-action btn-insurance" onclick="handleInsuranceAction()" id="btnBottomInsurance">
         <span>去投保</span>
       </button>
       <button class="btn-bottom-action btn-pay" onclick="handlePayAction()" id="btnBottomPay">
@@ -2028,7 +2029,7 @@ body.protoWeb-review-mode .protoWeb-docs-backdrop { display: none !important; }
         </div>
         <div class="drawer-menu-list">
           <!-- 签合同 (MasterGo 740:125612) -->
-          <div class="drawer-menu-item" onclick="showFeatureNotEnabledModal('contract')">
+          <div class="drawer-menu-item" onclick="handleContractAction()">
             <div class="drawer-item-icon icon-contract">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1677FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -2049,7 +2050,7 @@ body.protoWeb-review-mode .protoWeb-docs-backdrop { display: none !important; }
           </div>
 
           <!-- 去投保 (MasterGo 740:125612) -->
-          <div class="drawer-menu-item" onclick="showFeatureNotEnabledModal('insurance')">
+          <div class="drawer-menu-item" onclick="handleInsuranceAction()">
             <div class="drawer-item-icon icon-insurance">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00D679" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
@@ -2157,33 +2158,7 @@ body.protoWeb-review-mode .protoWeb-docs-backdrop { display: none !important; }
       </div>
     </div>
 
-    <!-- 手动添加员工内联模态框 (替代原生 prompt) -->
-    <div class="modal-overlay" id="manualAddModal">
-      <div class="modal-card" style="width:310px; text-align:left;">
-        <div class="modal-title" style="font-size:16px; font-weight:700; align-self:center; margin-bottom:12px;">手动添加员工</div>
-        <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:16px;">
-          <div>
-            <div style="font-size:12px; color:#7D8099; margin-bottom:4px;">员工姓名</div>
-            <input type="text" id="manualEmpName" value="陈明" style="width:100%; height:36px; border:1px solid #DCDFE6; border-radius:6px; padding:0 10px; font-size:14px; box-sizing:border-box;">
-          </div>
-          <div>
-            <div style="font-size:12px; color:#7D8099; margin-bottom:4px;">员工工号</div>
-            <input type="text" id="manualEmpCode" value="2388" style="width:100%; height:36px; border:1px solid #DCDFE6; border-radius:6px; padding:0 10px; font-size:14px; box-sizing:border-box;">
-          </div>
-          <div>
-            <div style="font-size:12px; color:#7D8099; margin-bottom:4px;">年龄与标签</div>
-            <div style="display:flex; gap:8px;">
-              <input type="text" id="manualEmpAge" value="24岁" style="width:70px; height:36px; border:1px solid #DCDFE6; border-radius:6px; padding:0 8px; font-size:14px; box-sizing:border-box;">
-              <input type="text" id="manualEmpTag" value="日结工" style="flex:1; height:36px; border:1px solid #DCDFE6; border-radius:6px; padding:0 8px; font-size:14px; box-sizing:border-box;">
-            </div>
-          </div>
-        </div>
-        <div style="display:flex; gap:8px;">
-          <button class="modal-btn" style="background:#F0F1F5; color:#565868; flex:1;" onclick="closeManualModal()">取消</button>
-          <button class="modal-btn" style="background:#00D679; flex:1;" onclick="confirmManualAdd()">确认添加</button>
-        </div>
-      </div>
-    </div>
+
 
     <!-- 修改备注标签内联模态框 (替代原生 prompt) -->
     <div class="modal-overlay" id="remarkModal">
@@ -2298,35 +2273,7 @@ body.protoWeb-review-mode .protoWeb-docs-backdrop { display: none !important; }
       </div>
     </div>
 
-    <!-- 扫码弹窗 -->
-    <div class="modal-overlay" id="qrModal">
-      <div class="modal-card">
-        <div class="modal-title">员工扫码加入项目</div>
-        <div class="qr-placeholder">
-          <svg width="120" height="120" viewBox="0 0 24 24" fill="none">
-            <path d="M3 3h6v6H3zM15 3h6v6h-6zM3 15h6v6H3zM15 15h2v2h-2zM19 15h2v2h-2zM15 19h2v2h-2zM19 19h2v2h-2z" fill="#202536"/>
-          </svg>
-        </div>
-        <div class="modal-tip">工人使用微信扫一扫即可快速登记入职</div>
-        <button class="modal-btn" onclick="simulateScanJoin()">模拟1位员工扫码入职</button>
-      </div>
-    </div>
 
-    <!-- 老员工批量调入弹窗 -->
-    <div class="modal-overlay" id="oldEmpModal">
-      <div class="modal-card">
-        <div class="modal-title">从老员工简历库调入</div>
-        <div class="modal-tip" style="text-align:left; width:100%; margin:8px 0;">
-          已为您优选 3 位符合岗位要求的老员工：
-          <ul style="padding-left:16px; margin-top:6px; color:#202536; font-size:13px; line-height:20px;">
-            <li>张伟 (已签合同 / 有发薪卡)</li>
-            <li>李强 (近30天在岗 / 熟练工)</li>
-            <li>王艳 (日结意愿高)</li>
-          </ul>
-        </div>
-        <button class="modal-btn" onclick="simulateOldEmpImport()">一键全选并快速调入 (3人)</button>
-      </div>
-    </div>
 
     <!-- 员工更多操作弹窗 -->
     <div class="modal-overlay" id="empMoreModal">
@@ -2343,7 +2290,26 @@ body.protoWeb-review-mode .protoWeb-docs-backdrop { display: none !important; }
 
   <script>
     // 默认初始化真实数据 (1:1 严格对齐图三设计)
+    // 严格 1:1 还原真机截图 media_1792807435993_22a2d3d7.png
     let employees = [
+      {
+        id: '5525',
+        name: '金新菜',
+        code: '5525',
+        gender: 'female',
+        age: '23岁',
+        avatarBg: '#008837',
+        avatarTextLines: ['新', '莱'],
+        joinTime: '2026-10-22 17:42:27',
+        inviter: '张严',
+        tags: [
+          { text: '日结工' },
+          { text: '熟练工' },
+          { text: '女神', isCrown: true }
+        ],
+        contractStatus: 'pending',
+        insuranceStatus: 'pending'
+      },
       {
         id: '4380',
         name: '郭玉莲',
@@ -2353,6 +2319,7 @@ body.protoWeb-review-mode .protoWeb-docs-backdrop { display: none !important; }
         avatarPhoto: true,
         joinTime: '2026-10-20 17:34:50',
         inviter: '郭郭线上',
+        tags: [],
         contractStatus: 'pending',
         insuranceStatus: 'pending'
       },
@@ -2362,23 +2329,11 @@ body.protoWeb-review-mode .protoWeb-docs-backdrop { display: none !important; }
         code: '5518',
         gender: 'male',
         age: '33岁',
-        avatarBg: '#008837',
-        avatarText: '晒晒',
+        avatarBg: '#FFA928',
+        avatarTextLines: ['晒', '晒'],
         joinTime: '2026-10-20 17:34:24',
         inviter: '郭郭线上',
-        contractStatus: 'pending',
-        insuranceStatus: 'pending'
-      },
-      {
-        id: '0010',
-        name: '田晓辉',
-        code: '0010',
-        gender: 'male',
-        age: '40岁',
-        avatarBg: '#FA8C16',
-        avatarText: '晓辉',
-        joinTime: '2026-10-20 17:34:24',
-        inviter: '郭郭线上',
+        tags: [],
         contractStatus: 'pending',
         insuranceStatus: 'pending'
       }
@@ -2392,7 +2347,7 @@ body.protoWeb-review-mode .protoWeb-docs-backdrop { display: none !important; }
       const validCountElem = document.getElementById('validCount');
       const endTip = document.getElementById('listEndTip');
 
-      validCountElem.innerText = employees.length;
+      validCountElem.innerText = "11";
 
       if (employees.length === 0) {
         emptyState.style.display = 'flex';
@@ -2421,17 +2376,24 @@ body.protoWeb-review-mode .protoWeb-docs-backdrop { display: none !important; }
                     </svg>
                   </div>
                 ` : `
-                  <div class="emp-avatar-green" style="background: ${emp.avatarBg || '#009944'};">${emp.avatarText || (emp.name.length > 2 ? emp.name.slice(-2) : emp.name)}</div>
+                  <div class="emp-avatar-green" style="background: ${emp.avatarBg || '#009944'}; display: flex; flex-direction: column; justify-content: center; align-items: center; line-height: 1.1;">
+                    ${emp.avatarTextLines ? `
+                      <span style="font-size: 13px; font-weight: 700;">${emp.avatarTextLines[0]}</span>
+                      <span style="font-size: 13px; font-weight: 700;">${emp.avatarTextLines[1]}</span>
+                    ` : `
+                      <span>${emp.avatarText || (emp.name.length > 2 ? emp.name.slice(-2) : emp.name)}</span>
+                    `}
+                  </div>
                 `}
-                <div class="gender-badge" style="${emp.gender === 'female' ? 'background:#FFE8ED;' : 'background:#E6F4FF;'}">
+                <div class="gender-badge" style="${emp.gender === 'female' ? 'background:#FFE8ED; border-color:#FFFFFF;' : 'background:#E6F4FF; border-color:#FFFFFF;'}">
                   ${emp.gender === 'female' ? `
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#FF4D79" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#FF4D79" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
                       <circle cx="12" cy="8" r="5"></circle>
                       <line x1="12" y1="13" x2="12" y2="21"></line>
-                      <line x1="9" y1="17" x2="15" y2="17"></line>
+                      <line x1="8" y1="17" x2="16" y2="17"></line>
                     </svg>
                   ` : `
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#1677FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#1677FF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
                       <circle cx="10" cy="14" r="5"></circle>
                       <line x1="19" y1="5" x2="13.5" y2="10.5"></line>
                       <polyline points="14 5 19 5 19 10"></polyline>
@@ -2440,7 +2402,7 @@ body.protoWeb-review-mode .protoWeb-docs-backdrop { display: none !important; }
                 </div>
               </div>
 
-              <!-- 员工信息 (1:1 还原图三，纯净三行) -->
+              <!-- 员工信息 (1:1 还原真实截图，纯净姓名/工号/年龄 + 加入时间 + 邀请人 + 标签栏) -->
               <div class="emp-content">
                 <div class="emp-header-line">
                   <span class="emp-name-text">${emp.name}</span>
@@ -2449,6 +2411,20 @@ body.protoWeb-review-mode .protoWeb-docs-backdrop { display: none !important; }
                 </div>
                 <div class="emp-meta-line">加入时间: ${emp.joinTime}</div>
                 <div class="emp-meta-line">邀请人: ${emp.inviter}</div>
+                ${emp.tags && emp.tags.length > 0 ? `
+                  <div class="emp-custom-tags">
+                    ${emp.tags.map(tag => `
+                      <span class="custom-tag">
+                        <span>${tag.text}</span>
+                        ${tag.isCrown ? `
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="#FAAD14" style="vertical-align: -1px; margin-left: 2px;">
+                            <path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/>
+                          </svg>
+                        ` : ''}
+                      </span>
+                    `).join('')}
+                  </div>
+                ` : ''}
               </div>
             </div>
 
@@ -2474,16 +2450,6 @@ body.protoWeb-review-mode .protoWeb-docs-backdrop { display: none !important; }
       // 底部操作栏保持三按钮标准状态，不显示数字红点角标
     }
 
-    // 签合同按钮点击：直接跳转至创建合同页面 (1:1 响应用户需求)
-    function handleContractAction() {
-      window.location.href = "contract_create.html";
-    }
-
-    // 去投保按钮点击：直接跳转至安心日保添加项目页面 (1:1 响应用户需求)
-    function handleInsuranceAction() {
-      window.location.href = "insurance_create.html";
-    }
-
     // 底部主按钮点击分发：有待签员工时优先邀请签约，全员已签署时直接前往发薪
     function handleMainAction() {
       const pendingEmployees = employees.filter(e => e.contractStatus !== 'signed');
@@ -2494,11 +2460,23 @@ body.protoWeb-review-mode .protoWeb-docs-backdrop { display: none !important; }
       }
     }
 
+    function handleContractAction() {
+      if (window.__protoHubNavigate) return window.__protoHubNavigate('contract_list.html');
+      window.location.href = "contract_list.html";
+    }
+
+    function handleInsuranceAction() {
+      if (window.__protoHubNavigate) return window.__protoHubNavigate('insurance_list.html');
+      window.location.href = "insurance_list.html";
+    }
+
     function handlePayAction() {
+      if (window.__protoHubNavigate) return window.__protoHubNavigate('pay_salary.html');
       window.location.href = "pay_salary.html";
     }
 
     function viewProjectDetail() {
+      if (window.__protoHubNavigate) return window.__protoHubNavigate('project_info.html');
       window.location.href = 'project_info.html';
     }
 
@@ -2514,6 +2492,7 @@ body.protoWeb-review-mode .protoWeb-docs-backdrop { display: none !important; }
     }
     function handleDrawerContract() {
       closeMoreActionsDrawer();
+      if (window.__protoHubNavigate) return window.__protoHubNavigate('contract_create.html');
       window.location.href = "contract_create.html";
     }
     function handleDrawerInsurance() {
@@ -2616,71 +2595,37 @@ body.protoWeb-review-mode .protoWeb-docs-backdrop { display: none !important; }
       closeInsuranceModal();
     }
 
-    // 扫码添加模拟
-    function openQrModal() {
-      document.getElementById('qrModal').style.display = 'flex';
-    }
-    function simulateScanJoin() {
-      document.getElementById('qrModal').style.display = 'none';
-      employees.push({
-        id: '6688',
-        name: '赵俊杰',
-        code: '6688',
-        gender: 'female',
-        age: '25岁',
-        status: '待激活',
-        joinTime: '2026-10-19 16:35:10',
-        inviter: '唐宛丽',
-        tag: '扫码入职',
-        contractStatus: 'pending',
-        insuranceStatus: 'pending'
-      });
-      renderList();
-    }
 
-    // 老员工调入模拟
-    function openOldEmpModal() {
-      document.getElementById('oldEmpModal').style.display = 'flex';
-    }
-    function simulateOldEmpImport() {
-      document.getElementById('oldEmpModal').style.display = 'none';
-      employees.push(
-        { id: '1102', name: '张伟', code: '1102', gender: 'male', age: '28岁', avatarBg: '#008837', avatarText: '张伟', joinTime: '2026-10-20 17:35:10', inviter: '郭郭线上', contractStatus: 'pending', insuranceStatus: 'pending' },
-        { id: '3341', name: '李强', code: '3341', gender: 'male', age: '26岁', avatarBg: '#FA8C16', avatarText: '李强', joinTime: '2026-10-20 17:35:10', inviter: '郭郭线上', contractStatus: 'pending', insuranceStatus: 'pending' }
-      );
-      renderList();
-    }
-
-    // 手动添加内联模态框 (替代 prompt)
-    function openManualModal() {
-      document.getElementById('manualAddModal').style.display = 'flex';
-    }
-    function closeManualModal() {
-      document.getElementById('manualAddModal').style.display = 'none';
-    }
-    function confirmManualAdd() {
-      const name = document.getElementById('manualEmpName').value.trim() || '陈明';
-      const code = document.getElementById('manualEmpCode').value.trim() || String(Math.floor(1000 + Math.random() * 9000));
-      const age = document.getElementById('manualEmpAge').value.trim() || '24岁';
-
-      employees.push({
-        id: code,
-        name: name,
-        code: code,
-        gender: 'female',
-        age: age,
-        avatarBg: '#5B8FF9',
-        avatarText: name.length > 2 ? name.slice(-2) : name,
-        joinTime: '2026-10-20 17:36:00',
-        inviter: '郭郭线上',
-        contractStatus: 'pending',
-        insuranceStatus: 'pending'
-      });
-      closeManualModal();
-      renderList();
-    }
 
     // 员工卡片更多操作
+    
+    // 统一小程序风格轻量 Toast 提示 (无侵入式 alert)
+    function showToast(msg) {
+      let toast = document.getElementById('protoToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'protoToast';
+        toast.style.cssText = 'position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:rgba(0,0,0,0.78); color:#fff; padding:10px 18px; border-radius:8px; font-size:13px; z-index:9999; pointer-events:none; transition:opacity 0.25s ease; opacity:0; text-align:center; max-width:240px; box-shadow:0 4px 14px rgba(0,0,0,0.18);';
+        document.body.appendChild(toast);
+      }
+      toast.innerText = msg;
+      toast.style.opacity = '1';
+      clearTimeout(toast._timer);
+      toast._timer = setTimeout(() => {
+        toast.style.opacity = '0';
+      }, 1600);
+    }
+
+    function handleScanAdd() {
+      showToast('扫码邀请二维码已生成');
+    }
+    function handleOldEmployeeAdd() {
+      showToast('正在调取老员工花名册');
+    }
+    function handleManualAdd() {
+      showToast('身份证拍照/手动录入已就绪');
+    }
+
     function openMoreModal(id) {
       currentSelectedEmpId = id;
       const emp = employees.find(e => e.id === id);
@@ -4349,5 +4294,206 @@ body.protoWeb-review-mode .protoWeb-docs-backdrop { display: none !important; }
 
 </script>
 
-  </body>
+  <script id="protoHubNavSyncBridge">
+  // 页面加载与按钮点击时主动同步给外层工作台顶部导航栏
+  (function() {
+    if (window.__PROTOHUB_NAV_BRIDGE_BOUND__) return;
+    window.__PROTOHUB_NAV_BRIDGE_BOUND__ = true;
+
+    var DEFAULT_TAB_MAP = {
+      'shouye': { id: 'shouye', name: '首页', path: 'shouye.html', visible: true },
+      'shouye.html': { id: 'shouye', name: '首页', path: 'shouye.html', visible: true },
+      'shouye_template': { id: 'shouye', name: '首页', path: 'shouye.html', visible: true },
+      'shouye_template.html': { id: 'shouye', name: '首页', path: 'shouye.html', visible: true },
+      'project_detail': { id: 'project_detail', name: '人员名单', path: 'project_detail.html', visible: true },
+      'project_detail.html': { id: 'project_detail', name: '人员名单', path: 'project_detail.html', visible: true },
+      'pay_salary': { id: 'pay_salary', name: '我要发薪', path: 'pay_salary.html', visible: true },
+      'pay_salary.html': { id: 'pay_salary', name: '我要发薪', path: 'pay_salary.html', visible: true },
+      'contract_create': { id: 'contract_create', name: '创建合同', path: 'contract_create.html', visible: true },
+      'contract_create.html': { id: 'contract_create', name: '创建合同', path: 'contract_create.html', visible: true },
+      'contract_detail': { id: 'contract_detail', name: '合同详情', path: 'contract_detail.html', visible: true },
+      'contract_detail.html': { id: 'contract_detail', name: '合同详情', path: 'contract_detail.html', visible: true },
+      'insurance_create': { id: 'insurance_create', name: '创建投保', path: 'insurance_create.html', visible: true },
+      'insurance_create.html': { id: 'insurance_create', name: '创建投保', path: 'insurance_create.html', visible: true },
+      'company_project': { id: 'company_project', name: '加保详情', path: 'company_project.html', visible: true },
+      'company_project.html': { id: 'company_project', name: '加保详情', path: 'company_project.html', visible: true },
+      'insurance_detail': { id: 'company_project', name: '加保详情', path: 'company_project.html', visible: true },
+      'insurance_detail.html': { id: 'company_project', name: '加保详情', path: 'company_project.html', visible: true },
+      'contract_list': { id: 'contract_list', name: '电子合同', path: 'contract_list.html', visible: true },
+      'contract_list.html': { id: 'contract_list', name: '电子合同', path: 'contract_list.html', visible: true },
+      'insurance_list': { id: 'insurance_list', name: '安心日保', path: 'insurance_list.html', visible: true },
+      'insurance_list.html': { id: 'insurance_list', name: '安心日保', path: 'insurance_list.html', visible: true },
+      'pc_insure_daily_ax': { id: 'pc_insure_daily_ax', name: '安心日保PC端', path: 'pc_insure_daily_ax.html', visible: true },
+      'pc_insure_daily_ax.html': { id: 'pc_insure_daily_ax', name: '安心日保PC端', path: 'pc_insure_daily_ax.html', visible: true }
+    };
+
+    function cleanFileOrId(raw) {
+      if (!raw) return '';
+      var str = String(raw).trim();
+      if (str.indexOf('#page=') !== -1) {
+        return str.split('#page=').pop().split(/[?&#]/)[0].trim();
+      }
+      return str.split(/[?#]/)[0].split('/').pop().trim();
+    }
+
+    function resolvePageTarget(rawInput) {
+      var fileOrId = cleanFileOrId(rawInput);
+      if (!fileOrId) return null;
+      var lower = fileOrId.toLowerCase();
+      var noExt = lower.replace(/\.html$/i, '');
+      var aliasTarget = DEFAULT_TAB_MAP[lower] || DEFAULT_TAB_MAP[noExt];
+
+      var reg = Array.isArray(window.__PRD_PAGES_REGISTRY__) ? window.__PRD_PAGES_REGISTRY__ : [];
+      if (reg.length > 0) {
+        var visMatch = reg.find(function(p) {
+          if (p.visible === false) return false;
+          var pid = String(p.id || '').toLowerCase();
+          var ppath = String(p.path || '').toLowerCase();
+          return pid === noExt || ppath === lower || ppath.endsWith('/' + lower) ||
+                 (aliasTarget && (pid === aliasTarget.id.toLowerCase() || ppath === aliasTarget.path.toLowerCase()));
+        });
+        if (visMatch) return visMatch;
+
+        var invisMatch = reg.find(function(p) {
+          var pid = String(p.id || '').toLowerCase();
+          var ppath = String(p.path || '').toLowerCase();
+          return pid === noExt || ppath === lower || ppath.endsWith('/' + lower);
+        });
+        if (invisMatch) return invisMatch;
+      }
+
+      if (aliasTarget) return aliasTarget;
+      if (lower.endsWith('.html')) {
+        return { id: noExt, name: noExt, path: fileOrId, visible: true };
+      }
+      return null;
+    }
+
+    window.addEventListener('message', function(e) {
+      if (e.data && e.data.type === 'PRD_PAGES_UPDATED' && Array.isArray(e.data.pages)) {
+        window.__PRD_PAGES_REGISTRY__ = e.data.pages;
+      }
+    });
+
+    function navigateAndSync(targetUrl, evt) {
+      var resolved = resolvePageTarget(targetUrl);
+      if (!resolved) return false;
+
+      if (window.parent && window.parent !== window) {
+        if (resolved.visible === false) {
+          if (evt) {
+            evt.preventDefault();
+            evt.stopPropagation();
+            if (evt.stopImmediatePropagation) evt.stopImmediatePropagation();
+          }
+          try {
+            window.parent.postMessage({ type: 'GUARD_BLOCKED', name: resolved.name || resolved.id, file: resolved.path }, '*');
+            window.parent.postMessage({ type: 'PRD_PAGE_CHANGED', pageId: resolved.id, path: resolved.path }, '*');
+          } catch (err) {}
+          return true;
+        }
+
+        if (evt) {
+          evt.preventDefault();
+          evt.stopPropagation();
+          if (evt.stopImmediatePropagation) evt.stopImmediatePropagation();
+        }
+        try {
+          sessionStorage.setItem('__PROTOHUB_SYNCED_PAGE__', resolved.id);
+          sessionStorage.removeItem('__PROTOHUB_INNER_ACTION_TS__');
+        } catch (err) {}
+        try {
+          window.parent.postMessage({ type: 'PRD_PAGE_CHANGED', pageId: resolved.id, path: resolved.path }, '*');
+          window.parent.postMessage({ type: 'SWITCH_PAGE', pageId: resolved.id, path: resolved.path }, '*');
+        } catch (err) {}
+        return true;
+      }
+
+      window.location.href = resolved.path || targetUrl;
+      return true;
+    }
+
+    window.__protoHubNavigate = function(targetUrl, evt) {
+      return navigateAndSync(targetUrl, evt);
+    };
+
+    function markInnerInteraction() {
+      try {
+        sessionStorage.setItem('__PROTOHUB_INNER_ACTION_TS__', String(Date.now()));
+      } catch (err) {}
+    }
+    document.addEventListener('pointerdown', markInnerInteraction, true);
+    document.addEventListener('keydown', markInnerInteraction, true);
+
+    document.addEventListener('click', function(e) {
+      markInnerInteraction();
+      if (!window.parent || window.parent === window) return;
+
+      var link = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+      if (link) {
+        var href = link.getAttribute('href') || '';
+        if (href && !href.startsWith('#') && !href.startsWith('javascript:') && !href.startsWith('tel:') && !href.startsWith('mailto:')) {
+          var cleanHref = cleanFileOrId(href);
+          if (cleanHref && cleanHref.toLowerCase().endsWith('.html')) {
+            if (navigateAndSync(href, e)) return;
+          }
+        }
+      }
+
+      var clickEl = e.target && e.target.closest ? e.target.closest('[onclick]') : null;
+      if (clickEl) {
+        var onclickStr = clickEl.getAttribute('onclick') || '';
+        var m = onclickStr.match(/(?:window\.)?location(?:\.href)?\s*=\s*['"`]([^'"`]+)['"`]/);
+        if (m && m[1]) {
+          var targetHref = m[1];
+          var cleanTarget = cleanFileOrId(targetHref);
+          if (cleanTarget && (cleanTarget.toLowerCase().endsWith('.html') || targetHref.indexOf('#page=') !== -1)) {
+            if (navigateAndSync(targetHref, e)) return;
+          }
+        }
+      }
+    }, true);
+
+    function syncCurrentPageOnLoad() {
+      if (!window.parent || window.parent === window) return;
+      try {
+        var curFile = (window.location.pathname.split('/').pop() || '').split('?')[0].split('#')[0];
+        if (!curFile || curFile === 'about:blank') return;
+        var resolved = resolvePageTarget(curFile) || { id: curFile.replace(/\.html$/i, ''), path: curFile, visible: true };
+
+        window.parent.postMessage({
+          type: 'PRD_PAGE_CHANGED',
+          pageId: resolved.id,
+          path: resolved.path || curFile
+        }, '*');
+
+        var lastSynced = '';
+        var lastActionTs = 0;
+        try {
+          lastSynced = sessionStorage.getItem('__PROTOHUB_SYNCED_PAGE__') || '';
+          lastActionTs = Number(sessionStorage.getItem('__PROTOHUB_INNER_ACTION_TS__') || 0);
+          sessionStorage.setItem('__PROTOHUB_SYNCED_PAGE__', resolved.id);
+          sessionStorage.removeItem('__PROTOHUB_INNER_ACTION_TS__');
+        } catch (err) {}
+
+        if (lastSynced !== resolved.id && lastActionTs > 0 && (Date.now() - lastActionTs < 8000)) {
+          window.parent.postMessage({
+            type: 'SWITCH_PAGE',
+            pageId: resolved.id,
+            path: resolved.path || curFile
+          }, '*');
+        }
+      } catch (err) {}
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', syncCurrentPageOnLoad);
+    } else {
+      setTimeout(syncCurrentPageOnLoad, 0);
+    }
+    window.addEventListener('pageshow', syncCurrentPageOnLoad);
+    window.addEventListener('popstate', syncCurrentPageOnLoad);
+  })();
+  </script>
+</body>
 </html>

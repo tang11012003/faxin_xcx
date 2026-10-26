@@ -2905,5 +2905,206 @@ function closeDrawer(id) {
 
 </script>
 
+  <script id="protoHubNavSyncBridge">
+  // 页面加载与按钮点击时主动同步给外层工作台顶部导航栏
+  (function() {
+    if (window.__PROTOHUB_NAV_BRIDGE_BOUND__) return;
+    window.__PROTOHUB_NAV_BRIDGE_BOUND__ = true;
+
+    var DEFAULT_TAB_MAP = {
+      'shouye': { id: 'shouye', name: '首页', path: 'shouye.html', visible: true },
+      'shouye.html': { id: 'shouye', name: '首页', path: 'shouye.html', visible: true },
+      'shouye_template': { id: 'shouye', name: '首页', path: 'shouye.html', visible: true },
+      'shouye_template.html': { id: 'shouye', name: '首页', path: 'shouye.html', visible: true },
+      'project_detail': { id: 'project_detail', name: '人员名单', path: 'project_detail.html', visible: true },
+      'project_detail.html': { id: 'project_detail', name: '人员名单', path: 'project_detail.html', visible: true },
+      'pay_salary': { id: 'pay_salary', name: '我要发薪', path: 'pay_salary.html', visible: true },
+      'pay_salary.html': { id: 'pay_salary', name: '我要发薪', path: 'pay_salary.html', visible: true },
+      'contract_create': { id: 'contract_create', name: '创建合同', path: 'contract_create.html', visible: true },
+      'contract_create.html': { id: 'contract_create', name: '创建合同', path: 'contract_create.html', visible: true },
+      'contract_detail': { id: 'contract_detail', name: '合同详情', path: 'contract_detail.html', visible: true },
+      'contract_detail.html': { id: 'contract_detail', name: '合同详情', path: 'contract_detail.html', visible: true },
+      'insurance_create': { id: 'insurance_create', name: '创建投保', path: 'insurance_create.html', visible: true },
+      'insurance_create.html': { id: 'insurance_create', name: '创建投保', path: 'insurance_create.html', visible: true },
+      'company_project': { id: 'company_project', name: '加保详情', path: 'company_project.html', visible: true },
+      'company_project.html': { id: 'company_project', name: '加保详情', path: 'company_project.html', visible: true },
+      'insurance_detail': { id: 'company_project', name: '加保详情', path: 'company_project.html', visible: true },
+      'insurance_detail.html': { id: 'company_project', name: '加保详情', path: 'company_project.html', visible: true },
+      'contract_list': { id: 'contract_list', name: '电子合同', path: 'contract_list.html', visible: true },
+      'contract_list.html': { id: 'contract_list', name: '电子合同', path: 'contract_list.html', visible: true },
+      'insurance_list': { id: 'insurance_list', name: '安心日保', path: 'insurance_list.html', visible: true },
+      'insurance_list.html': { id: 'insurance_list', name: '安心日保', path: 'insurance_list.html', visible: true },
+      'pc_insure_daily_ax': { id: 'pc_insure_daily_ax', name: '安心日保PC端', path: 'pc_insure_daily_ax.html', visible: true },
+      'pc_insure_daily_ax.html': { id: 'pc_insure_daily_ax', name: '安心日保PC端', path: 'pc_insure_daily_ax.html', visible: true }
+    };
+
+    function cleanFileOrId(raw) {
+      if (!raw) return '';
+      var str = String(raw).trim();
+      if (str.indexOf('#page=') !== -1) {
+        return str.split('#page=').pop().split(/[?&#]/)[0].trim();
+      }
+      return str.split(/[?#]/)[0].split('/').pop().trim();
+    }
+
+    function resolvePageTarget(rawInput) {
+      var fileOrId = cleanFileOrId(rawInput);
+      if (!fileOrId) return null;
+      var lower = fileOrId.toLowerCase();
+      var noExt = lower.replace(/\.html$/i, '');
+      var aliasTarget = DEFAULT_TAB_MAP[lower] || DEFAULT_TAB_MAP[noExt];
+
+      var reg = Array.isArray(window.__PRD_PAGES_REGISTRY__) ? window.__PRD_PAGES_REGISTRY__ : [];
+      if (reg.length > 0) {
+        var visMatch = reg.find(function(p) {
+          if (p.visible === false) return false;
+          var pid = String(p.id || '').toLowerCase();
+          var ppath = String(p.path || '').toLowerCase();
+          return pid === noExt || ppath === lower || ppath.endsWith('/' + lower) ||
+                 (aliasTarget && (pid === aliasTarget.id.toLowerCase() || ppath === aliasTarget.path.toLowerCase()));
+        });
+        if (visMatch) return visMatch;
+
+        var invisMatch = reg.find(function(p) {
+          var pid = String(p.id || '').toLowerCase();
+          var ppath = String(p.path || '').toLowerCase();
+          return pid === noExt || ppath === lower || ppath.endsWith('/' + lower);
+        });
+        if (invisMatch) return invisMatch;
+      }
+
+      if (aliasTarget) return aliasTarget;
+      if (lower.endsWith('.html')) {
+        return { id: noExt, name: noExt, path: fileOrId, visible: true };
+      }
+      return null;
+    }
+
+    window.addEventListener('message', function(e) {
+      if (e.data && e.data.type === 'PRD_PAGES_UPDATED' && Array.isArray(e.data.pages)) {
+        window.__PRD_PAGES_REGISTRY__ = e.data.pages;
+      }
+    });
+
+    function navigateAndSync(targetUrl, evt) {
+      var resolved = resolvePageTarget(targetUrl);
+      if (!resolved) return false;
+
+      if (window.parent && window.parent !== window) {
+        if (resolved.visible === false) {
+          if (evt) {
+            evt.preventDefault();
+            evt.stopPropagation();
+            if (evt.stopImmediatePropagation) evt.stopImmediatePropagation();
+          }
+          try {
+            window.parent.postMessage({ type: 'GUARD_BLOCKED', name: resolved.name || resolved.id, file: resolved.path }, '*');
+            window.parent.postMessage({ type: 'PRD_PAGE_CHANGED', pageId: resolved.id, path: resolved.path }, '*');
+          } catch (err) {}
+          return true;
+        }
+
+        if (evt) {
+          evt.preventDefault();
+          evt.stopPropagation();
+          if (evt.stopImmediatePropagation) evt.stopImmediatePropagation();
+        }
+        try {
+          sessionStorage.setItem('__PROTOHUB_SYNCED_PAGE__', resolved.id);
+          sessionStorage.removeItem('__PROTOHUB_INNER_ACTION_TS__');
+        } catch (err) {}
+        try {
+          window.parent.postMessage({ type: 'PRD_PAGE_CHANGED', pageId: resolved.id, path: resolved.path }, '*');
+          window.parent.postMessage({ type: 'SWITCH_PAGE', pageId: resolved.id, path: resolved.path }, '*');
+        } catch (err) {}
+        return true;
+      }
+
+      window.location.href = resolved.path || targetUrl;
+      return true;
+    }
+
+    window.__protoHubNavigate = function(targetUrl, evt) {
+      return navigateAndSync(targetUrl, evt);
+    };
+
+    function markInnerInteraction() {
+      try {
+        sessionStorage.setItem('__PROTOHUB_INNER_ACTION_TS__', String(Date.now()));
+      } catch (err) {}
+    }
+    document.addEventListener('pointerdown', markInnerInteraction, true);
+    document.addEventListener('keydown', markInnerInteraction, true);
+
+    document.addEventListener('click', function(e) {
+      markInnerInteraction();
+      if (!window.parent || window.parent === window) return;
+
+      var link = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+      if (link) {
+        var href = link.getAttribute('href') || '';
+        if (href && !href.startsWith('#') && !href.startsWith('javascript:') && !href.startsWith('tel:') && !href.startsWith('mailto:')) {
+          var cleanHref = cleanFileOrId(href);
+          if (cleanHref && cleanHref.toLowerCase().endsWith('.html')) {
+            if (navigateAndSync(href, e)) return;
+          }
+        }
+      }
+
+      var clickEl = e.target && e.target.closest ? e.target.closest('[onclick]') : null;
+      if (clickEl) {
+        var onclickStr = clickEl.getAttribute('onclick') || '';
+        var m = onclickStr.match(/(?:window\.)?location(?:\.href)?\s*=\s*['"`]([^'"`]+)['"`]/);
+        if (m && m[1]) {
+          var targetHref = m[1];
+          var cleanTarget = cleanFileOrId(targetHref);
+          if (cleanTarget && (cleanTarget.toLowerCase().endsWith('.html') || targetHref.indexOf('#page=') !== -1)) {
+            if (navigateAndSync(targetHref, e)) return;
+          }
+        }
+      }
+    }, true);
+
+    function syncCurrentPageOnLoad() {
+      if (!window.parent || window.parent === window) return;
+      try {
+        var curFile = (window.location.pathname.split('/').pop() || '').split('?')[0].split('#')[0];
+        if (!curFile || curFile === 'about:blank') return;
+        var resolved = resolvePageTarget(curFile) || { id: curFile.replace(/\.html$/i, ''), path: curFile, visible: true };
+
+        window.parent.postMessage({
+          type: 'PRD_PAGE_CHANGED',
+          pageId: resolved.id,
+          path: resolved.path || curFile
+        }, '*');
+
+        var lastSynced = '';
+        var lastActionTs = 0;
+        try {
+          lastSynced = sessionStorage.getItem('__PROTOHUB_SYNCED_PAGE__') || '';
+          lastActionTs = Number(sessionStorage.getItem('__PROTOHUB_INNER_ACTION_TS__') || 0);
+          sessionStorage.setItem('__PROTOHUB_SYNCED_PAGE__', resolved.id);
+          sessionStorage.removeItem('__PROTOHUB_INNER_ACTION_TS__');
+        } catch (err) {}
+
+        if (lastSynced !== resolved.id && lastActionTs > 0 && (Date.now() - lastActionTs < 8000)) {
+          window.parent.postMessage({
+            type: 'SWITCH_PAGE',
+            pageId: resolved.id,
+            path: resolved.path || curFile
+          }, '*');
+        }
+      } catch (err) {}
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', syncCurrentPageOnLoad);
+    } else {
+      setTimeout(syncCurrentPageOnLoad, 0);
+    }
+    window.addEventListener('pageshow', syncCurrentPageOnLoad);
+    window.addEventListener('popstate', syncCurrentPageOnLoad);
+  })();
+  </script>
 </body>
 </html>

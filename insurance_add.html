@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>去投保</title>
+  <title>添加员工</title>
   <style>
     * {
       box-sizing: border-box;
@@ -27,10 +27,10 @@
       display: flex;
       flex-direction: column;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
-      padding-bottom: 40px;
+      box-sizing: border-box;
     }
 
-    /* 顶部导航栏 (1:1 还原真机小程序截图) */
+    /* 顶部原生小程序导航栏 (1:1 还原真机截图) */
     .nav-bar {
       height: 48px;
       background: #FFFFFF;
@@ -60,6 +60,7 @@
       font-size: 17px;
       font-weight: 600;
       color: #202536;
+      letter-spacing: 0.2px;
     }
     .capsule-menu {
       width: 86px;
@@ -103,203 +104,419 @@
       border-radius: 50%;
     }
 
-    /* 表单内容区域 (1:1 像素级复刻图3与真机原型：已彻底去除项目名称) */
-    .form-container {
+    /* 顶部温馨提示 (1:1 浅橙粉色通栏提示框) */
+    .tips-banner {
+      margin: 12px 12px 10px 12px;
+      padding: 10px 14px;
+      background: #FFF2EB;
+      border-radius: 8px;
+      font-size: 13px;
+      color: #C86543;
       display: flex;
-      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      line-height: 18px;
     }
-
-    .form-section-card {
-      background: #FFFFFF;
-      padding: 16px 16px 14px 16px;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-    .form-section-card:active {
-      background: #FAFAFC;
-    }
-
-    .section-divider {
-      height: 1px;
-      background: #F2F3F7;
-      margin: 0 16px;
-    }
-
-    .field-label {
-      font-size: 15px;
+    .tips-banner strong {
       font-weight: 600;
-      color: #202536;
-      line-height: 22px;
+      color: #B45231;
     }
-    .field-input-row {
-      margin-top: 10px;
+
+    /* 搜索栏与添加操作 */
+    .search-row {
+      margin: 4px 12px 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .search-box {
+      flex: 1;
+      height: 38px;
+      background: #FFFFFF;
+      border: 1px solid #EBECEF;
+      border-radius: 19px;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      gap: 8px;
+    }
+    .search-icon {
+      width: 16px;
+      height: 16px;
+      stroke: #9CA3AF;
+      flex-shrink: 0;
+    }
+    .search-input {
+      border: none;
+      outline: none;
+      background: transparent;
+      width: 100%;
+      font-size: 13.5px;
+      color: #202536;
+    }
+    .search-input::placeholder {
+      color: #9CA3AF;
+    }
+    .btn-quick-add {
+      color: #00D679;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 4px 4px;
+      user-select: none;
+      flex-shrink: 0;
+    }
+    .btn-quick-add:active {
+      opacity: 0.8;
+    }
+
+    /* 人员统计行 */
+    .stats-bar {
+      margin: 0 14px 8px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12.5px;
+      color: #86909C;
+    }
+
+    /* 保单截止日期卡片 */
+    .date-card {
+      margin: 0 12px 10px 12px;
+      background: #FFFFFF;
+      border-radius: 10px;
+      padding: 14px 16px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+      cursor: pointer;
+    }
+    .date-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #1D2129;
+      line-height: 20px;
+    }
+    .date-desc {
+      font-size: 12px;
+      color: #86909C;
+      margin-top: 4px;
+      margin-bottom: 8px;
+      line-height: 17px;
+    }
+    .date-val-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
-
-    .selector-text {
-      font-size: 14px;
-      color: #9497B1;
-      display: flex;
-      align-items: center;
-    }
-    .selector-text.has-value {
-      color: #202536;
+    .date-val-text {
+      font-size: 15px;
+      color: #1D2129;
       font-weight: 500;
     }
-    .required-star {
-      color: #FF4D4F;
-      margin-right: 4px;
-      font-size: 14px;
-    }
-    .chevron-right {
-      width: 16px;
-      height: 16px;
-      stroke: #C2C5D6;
-      stroke-width: 2;
-      flex-shrink: 0;
-      margin-left: 8px;
+    .date-arrow {
+      color: #C9CDD4;
+      font-size: 16px;
+      line-height: 1;
     }
 
-    /* 底部操作主按钮 (1:1 还原真机原型：确定) */
-    .btn-submit-wrap {
-      padding: 28px 16px 20px 16px;
+    /* 员工列表卡片 */
+    .employee-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 0 12px 20px 12px;
     }
-    .btn-submit {
+    .employee-card {
+      background: #FFFFFF;
+      border-radius: 10px;
+      padding: 14px 16px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .emp-info-col {
+      display: flex;
+      flex-direction: column;
+    }
+    .emp-name-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .emp-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: #1D2129;
+    }
+    .emp-gender-female {
+      color: #F53F3F;
+      font-weight: 800;
+      font-size: 14px;
+      line-height: 1;
+    }
+    .emp-gender-male {
+      color: #165DFF;
+      font-weight: 800;
+      font-size: 14px;
+      line-height: 1;
+    }
+    .emp-age-badge {
+      background: #F2F3F5;
+      color: #86909C;
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 10px;
+      font-weight: 500;
+      line-height: 14px;
+    }
+    .emp-id-card {
+      margin-top: 6px;
+      font-size: 12.5px;
+      color: #86909C;
+      letter-spacing: 0.2px;
+    }
+
+    /* 操作按钮组 (打电话、删除) */
+    .emp-actions-col {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-emp-action {
+      background: #F2F3F5;
+      color: #4E5969;
+      border: none;
+      border-radius: 4px;
+      font-size: 12.5px;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.15s ease;
+    }
+    .btn-emp-action:active {
+      background: #E5E6EB;
+    }
+
+    
+    /* 方案 A 原地切换: 移出与加回投保样式 */
+    .employee-card.is-removed {
+      background: #F8FAFC;
+      border: 1px dashed #CBD5E1;
+      box-shadow: none;
+      opacity: 0.85;
+      transition: all 0.2s ease;
+    }
+    .employee-card.is-removed .emp-name {
+      color: #64748B;
+    }
+    .tag-uninsured-state {
+      font-size: 11px;
+      background: #F1F5F9;
+      color: #94A3B8;
+      padding: 1px 6px;
+      border-radius: 4px;
+      border: 1px solid #E2E8F0;
+      margin-left: 4px;
+      font-weight: 500;
+    }
+    .btn-emp-action.btn-emp-remove {
+      background: #F4F5F8;
+      color: #4E5969;
+      border: 1px solid #E5E7EB;
+      transition: all 0.15s ease;
+    }
+    .btn-emp-action.btn-emp-remove:hover {
+      background: #FFF1F0;
+      color: #CF1322;
+      border-color: #FFA39E;
+    }
+    .btn-emp-readd {
+      background: #E8F8EE;
+      color: #008837;
+      border: 1px solid #B7EB8F;
+      border-radius: 4px;
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 6px 12px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+    .btn-emp-readd:hover {
+      background: #D9F7BE;
+    }
+    .btn-emp-readd:active {
+      background: #B7EB8F;
+    }
+    .toast-notice {
+      position: fixed;
+      top: 56px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(32, 37, 54, 0.92);
+      color: #FFFFFF;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 12.5px;
+      font-weight: 500;
+      z-index: 9999;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      display: none;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    /* 底部固定“确定加保”绿色按钮 */
+    .bottom-bar {
+      position: sticky;
+      bottom: 0;
+      left: 0;
       width: 100%;
-      height: 48px;
+      background: #FFFFFF;
+      padding: 12px 16px 20px 16px;
+      box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.05);
+      z-index: 50;
+      box-sizing: border-box;
+      margin-top: auto;
+    }
+    .btn-submit-insurance {
+      width: 100%;
+      height: 46px;
       background: #00D679;
+      color: #FFFFFF;
       border: none;
       border-radius: 8px;
-      color: #FFFFFF;
       font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
+      font-weight: 700;
       display: flex;
       align-items: center;
       justify-content: center;
+      cursor: pointer;
       box-shadow: 0 4px 12px rgba(0, 214, 121, 0.28);
       transition: all 0.15s ease;
     }
-    .btn-submit:active {
-      transform: scale(0.98);
+    .btn-submit-insurance:active {
       background: #00BF6C;
+      transform: scale(0.99);
     }
 
-    /* 半屏选择抽屉遮罩 (居中适配 375px 手机视口) */
-    .drawer-overlay {
+    /* 快捷录入员工抽屉/弹窗 */
+    .modal-mask {
       position: fixed;
       inset: 0;
       background: rgba(0, 0, 0, 0.5);
       z-index: 100;
       display: none;
-      align-items: flex-end;
+      align-items: center;
       justify-content: center;
+      padding: 20px;
     }
-    .drawer-sheet {
-      width: 375px;
-      max-width: 100%;
+    .modal-card {
       background: #FFFFFF;
-      border-radius: 16px 16px 0 0;
-      padding: 20px 16px 24px 16px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 330px;
+      padding: 20px 18px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
       box-sizing: border-box;
-      animation: sheetUp 0.22s ease-out;
-      max-height: 80vh;
-      display: flex;
-      flex-direction: column;
     }
-    @keyframes sheetUp {
-      from { transform: translateY(100%); }
-      to { transform: translateY(0); }
-    }
-
-    .drawer-title {
+    .modal-title {
       font-size: 16px;
-      font-weight: 600;
-      color: #202536;
+      font-weight: 700;
+      color: #1D2129;
+      margin-bottom: 14px;
       text-align: center;
+    }
+    .modal-field {
       margin-bottom: 12px;
-      letter-spacing: 0.3px;
     }
-
-    .drawer-list {
-      overflow-y: auto;
-      max-height: 50vh;
-      margin-bottom: 20px;
-    }
-    .drawer-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 4px;
-      border-bottom: 1px solid #F2F3F5;
-      cursor: pointer;
-    }
-    .drawer-item:last-child {
-      border-bottom: none;
-    }
-    .drawer-item-text {
-      font-size: 15px;
-      color: #262626;
-      font-weight: 500;
-    }
-    /* 单选圆形控件 (绿色对钩圆圈，1:1复刻图1与图2) */
-    .radio-circle {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      border: 1.5px solid #D9D9D9;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.15s;
-      flex-shrink: 0;
-    }
-    .drawer-item.selected .radio-circle {
-      border-color: #00D679;
-      background: #00D679;
-    }
-    .radio-inner-check {
-      display: none;
-      width: 12px;
-      height: 12px;
-    }
-    .drawer-item.selected .radio-inner-check {
+    .modal-field label {
       display: block;
+      font-size: 12px;
+      color: #4E5969;
+      margin-bottom: 4px;
     }
-
-    /* 抽屉底部双按钮: [取消] [确定] (1:1 还原用户截图) */
-    .drawer-actions {
+    .modal-input {
+      width: 100%;
+      height: 38px;
+      border: 1px solid #E5E6EB;
+      border-radius: 6px;
+      padding: 0 10px;
+      font-size: 14px;
+      box-sizing: border-box;
+      outline: none;
+    }
+    .modal-input:focus {
+      border-color: #00D679;
+    }
+    .modal-gender-row {
       display: flex;
-      gap: 12px;
+      gap: 16px;
+      margin-top: 6px;
     }
-    .drawer-btn {
-      flex: 1;
-      height: 44px;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 600;
+    .modal-gender-opt {
       display: flex;
       align-items: center;
-      justify-content: center;
+      gap: 4px;
+      font-size: 13px;
+      color: #1D2129;
       cursor: pointer;
+    }
+    .modal-btn-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .modal-btn {
+      flex: 1;
+      height: 38px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
       border: none;
+      cursor: pointer;
     }
-    .drawer-btn-cancel {
-      background: #F4F4F7;
-      color: #565868;
+    .modal-btn-cancel {
+      background: #F2F3F5;
+      color: #4E5969;
     }
-    .drawer-btn-confirm {
+    .modal-btn-confirm {
       background: #00D679;
       color: #FFFFFF;
-      box-shadow: 0 4px 12px rgba(0, 214, 121, 0.25);
     }
-    .drawer-btn:active {
-      opacity: 0.88;
+
+    /* 成功模态弹窗 */
+    .feedback-modal {
+      text-align: center;
+    }
+    .feedback-icon-wrap {
+      width: 48px;
+      height: 48px;
+      background: #E8FFEA;
+      border-radius: 50%;
+      margin: 0 auto 12px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .feedback-icon-wrap svg {
+      width: 26px;
+      height: 26px;
+      stroke: #00D679;
+    }
+    .feedback-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1D2129;
+      margin-bottom: 6px;
+    }
+    .feedback-desc {
+      font-size: 13px;
+      color: #86909C;
+      line-height: 19px;
+      margin-bottom: 18px;
     }
   </style>
-
 <style id="protoMobileAnnotationCss">
 :root {
   --protoMobile-accent: #3388ff;
@@ -983,16 +1200,17 @@ html.protoMobile-ready body {
 </head>
 <body data-proto-platform="mobile">
 
-  <!-- 375px 移动端原型视口容器 -->
+  <!-- 375px 小程序手机容器 (1:1 还原用户截图) -->
   <div class="phone-container" data-proto-app data-proto-platform="web" data-proto-scope="page:insurance_add">
-    <!-- 顶部导航栏 (1:1 还原真机截图：标题已改为“去投保”) -->
+    
+    <!-- 顶部原生小程序导航条 -->
     <div class="nav-bar">
       <div class="nav-back" onclick="goBack()">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="15 18 9 12 15 6"></polyline>
         </svg>
       </div>
-      <div class="nav-title">去投保</div>
+      <div class="nav-title">添加员工</div>
       <div class="capsule-menu">
         <div class="capsule-dots">
           <span></span><span></span><span></span>
@@ -1004,239 +1222,367 @@ html.protoMobile-ready body {
       </div>
     </div>
 
-    <!-- 表单内容区域 (1:1 像素级复刻图3：已彻底去除“项目名称”，仅保留保险商品与派遣单位) -->
-    <div class="form-container">
-      <!-- 模块 1：保险商品 -->
-      <div class="form-section-card" onclick="openProductDrawer()">
-        <div class="field-label">保险商品</div>
-        <div class="field-input-row">
-          <div class="selector-text" id="productSelectorText">
-            <span class="required-star">*</span><span id="productLabel">点击选择保险商品</span>
-          </div>
-          <svg class="chevron-right" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
-        </div>
+    <!-- 顶部温馨提示 (15周岁<被投保人年龄<65周岁) -->
+    <div class="tips-banner">
+      <strong>温馨提示：</strong>
+      <span>15周岁&lt;被投保人年龄&lt;65周岁</span>
+    </div>
+
+    <!-- 搜索检索行与添加按钮 -->
+    <div class="search-row">
+      <div class="search-box">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" class="search-input" id="empSearchInput" placeholder="智能检索员工姓名或身份证 (只展示当前项目)" oninput="handleSearch()">
       </div>
+      
+    </div>
 
-      <div class="section-divider"></div>
+    <!-- 人员列表统计行 (共13人：男8/女5) -->
+    <div class="stats-bar">
+      <span>人员列表</span>
+      <span id="statsCountText">共12人：男8/女4</span>
+    </div>
 
-      <!-- 模块 2：派遣单位 (严格受选保险商品前置依赖约束) -->
-      <div class="form-section-card" onclick="handleEnterpriseClick()">
-        <div class="field-label">派遣单位</div>
-        <div class="field-input-row">
-          <div class="selector-text" id="enterpriseSelectorText">
-            <span class="required-star">*</span><span id="enterpriseLabel">点击选择企业</span>
-          </div>
-          <svg class="chevron-right" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
-        </div>
+    <!-- 保单截止日期卡片 -->
+    <div class="date-card" onclick="openDateModal()">
+      <div class="date-title">保单截止日期</div>
+      <div class="date-desc">默认保障24小时，更换截止日期可延长保障时间</div>
+      <div class="date-val-row">
+        <span class="date-val-text" id="policyDateText">2026-10-27</span>
+        <span class="date-arrow">&gt;</span>
       </div>
     </div>
 
-    <!-- 底部操作按钮 (1:1 还原真机原型：确定) -->
-    <div class="btn-submit-wrap">
-      <button class="btn-submit" onclick="handleSubmit()">确定</button>
+    <!-- 员工卡片列表 -->
+    <div class="employee-list" id="employeeListContainer">
+      <!-- 动态渲染员工卡片 -->
+    </div>
+    
+
+    <!-- 轻量操作反馈 Toast -->
+    <div class="toast-notice" id="toastNotice"></div>
+
+    <!-- 底部固定“确定加保”绿色大按钮 -->
+    <div class="bottom-bar">
+      <button class="btn-submit-insurance" id="btnSubmitInsurance" onclick="submitInsurance()">确定加保 (12人)</button>
+    </div>
+
+  </div>
+
+  <!-- 添加员工模态弹窗 -->
+  <div class="modal-mask" id="addEmpModal">
+    <div class="modal-card">
+      <div class="modal-title">添加加保员工</div>
+      <div class="modal-field">
+        <label>员工姓名</label>
+        <input type="text" class="modal-input" id="newEmpName" placeholder="如: 张三">
+      </div>
+      <div class="modal-field">
+        <label>身份证号</label>
+        <input type="text" class="modal-input" id="newEmpIdCard" placeholder="18位身份证号">
+      </div>
+      <div class="modal-field">
+        <label>联系电话</label>
+        <input type="text" class="modal-input" id="newEmpPhone" placeholder="11位手机号">
+      </div>
+      <div class="modal-field">
+        <label>性别</label>
+        <div class="modal-gender-row">
+          <label class="modal-gender-opt">
+            <input type="radio" name="newEmpGender" value="男" checked> 男
+          </label>
+          <label class="modal-gender-opt">
+            <input type="radio" name="newEmpGender" value="女"> 女
+          </label>
+        </div>
+      </div>
+      <div class="modal-btn-row">
+        <button class="modal-btn modal-btn-cancel" onclick="closeAddModal()">取消</button>
+        <button class="modal-btn modal-btn-confirm" onclick="confirmAddEmp()">确认添加</button>
+      </div>
     </div>
   </div>
 
-  <!-- 抽屉 1：请选择保险商品 (1:1 像素级复刻图1 media_1792640550533_8b5b07b8.png) -->
-  <div class="drawer-overlay" id="productDrawerMask" onclick="handleMaskClick(event, 'productDrawerMask')">
-    <div class="drawer-sheet" onclick="event.stopPropagation()">
-      <div class="drawer-title">请选择保险商品</div>
-      <div class="drawer-list" id="productList">
-        <!-- 选项：FD日保80万、FD日保50万、FD日保30万 -->
-        <div class="drawer-item selected" data-val="FD日保80万" onclick="selectDrawerItem(this, 'product')">
-          <span class="drawer-item-text">FD日保80万</span>
-          <div class="radio-circle">
-            <svg class="radio-inner-check" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
-          </div>
-        </div>
-        <div class="drawer-item" data-val="FD日保50万" onclick="selectDrawerItem(this, 'product')">
-          <span class="drawer-item-text">FD日保50万</span>
-          <div class="radio-circle">
-            <svg class="radio-inner-check" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
-          </div>
-        </div>
-        <div class="drawer-item" data-val="FD日保30万" onclick="selectDrawerItem(this, 'product')">
-          <span class="drawer-item-text">FD日保30万</span>
-          <div class="radio-circle">
-            <svg class="radio-inner-check" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
-          </div>
-        </div>
+  <!-- 加保成功模态弹窗 -->
+  <div class="modal-mask" id="successModal">
+    <div class="modal-card feedback-modal">
+      <div class="feedback-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
       </div>
-      <div class="drawer-actions">
-        <button class="drawer-btn drawer-btn-cancel" onclick="closeDrawer('productDrawerMask')">取消</button>
-        <button class="drawer-btn drawer-btn-confirm" onclick="confirmProductSelection()">确定</button>
-      </div>
+      <div class="feedback-title">加保提交成功</div>
+      <div class="feedback-desc" id="successDesc">已成功为员工提交加保方案，保单即刻生效，可随时在日保详情查看保单信息。</div>
+      <button class="btn-submit-insurance" style="height:40px;font-size:14px;" onclick="closeSuccessModal()">返回详情</button>
     </div>
   </div>
 
-  <!-- 抽屉 2：请选择企业/派遣单位 (1:1 像素级复刻图2 media_1792640570763_c2c0438f.png) -->
-  <div class="drawer-overlay" id="enterpriseDrawerMask" onclick="handleMaskClick(event, 'enterpriseDrawerMask')">
-    <div class="drawer-sheet" onclick="event.stopPropagation()">
-      <div class="drawer-title">请选择企业</div>
-      <div class="drawer-list" id="enterpriseList">
-        <!-- 选项：申通快递、嘉兴无问西东供应链有限公司、苏州顺丰建设有限公司、南京日结圈信息科技有限公司、湛江顺丰速运有限公司 -->
-        <div class="drawer-item selected" data-val="申通快递" onclick="selectDrawerItem(this, 'enterprise')">
-          <span class="drawer-item-text">申通快递</span>
-          <div class="radio-circle">
-            <svg class="radio-inner-check" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
-          </div>
-        </div>
-        <div class="drawer-item" data-val="嘉兴无问西东供应链有限公司" onclick="selectDrawerItem(this, 'enterprise')">
-          <span class="drawer-item-text">嘉兴无问西东供应链有限公司</span>
-          <div class="radio-circle">
-            <svg class="radio-inner-check" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
-          </div>
-        </div>
-        <div class="drawer-item" data-val="苏州顺丰建设有限公司" onclick="selectDrawerItem(this, 'enterprise')">
-          <span class="drawer-item-text">苏州顺丰建设有限公司</span>
-          <div class="radio-circle">
-            <svg class="radio-inner-check" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
-          </div>
-        </div>
-        <div class="drawer-item" data-val="南京日结圈信息科技有限公司" onclick="selectDrawerItem(this, 'enterprise')">
-          <span class="drawer-item-text">南京日结圈信息科技有限公司</span>
-          <div class="radio-circle">
-            <svg class="radio-inner-check" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
-          </div>
-        </div>
-        <div class="drawer-item" data-val="湛江顺丰速运有限公司" onclick="selectDrawerItem(this, 'enterprise')">
-          <span class="drawer-item-text">湛江顺丰速运有限公司</span>
-          <div class="radio-circle">
-            <svg class="radio-inner-check" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
-          </div>
-        </div>
-      </div>
-      <div class="drawer-actions">
-        <button class="drawer-btn drawer-btn-cancel" onclick="closeDrawer('enterpriseDrawerMask')">取消</button>
-        <button class="drawer-btn drawer-btn-confirm" onclick="confirmEnterpriseSelection()">确定</button>
-      </div>
+  <!-- 提示弹窗 (拨号/操作提示) -->
+  <div class="modal-mask" id="callModal">
+    <div class="modal-card feedback-modal">
+      <div class="feedback-title" id="callTitle">模拟呼叫</div>
+      <div class="feedback-desc" id="callDesc">正在调起系统电话拨号...</div>
+      <button class="btn-submit-insurance" style="height:38px;font-size:14px;" onclick="closeCallModal()">知道了</button>
     </div>
   </div>
 
   <script>
-    // 状态记录
-    let tempSelectedProduct = 'FD日保80万';
-    let confirmedProduct = '';
-    let tempSelectedEnterprise = '申通快递';
-    let confirmedEnterprise = '';
+    // 初始员工列表 (严格1:1 还原用户截图中的真实数据与共13人男8女5统计)
+    let employees = [
+      { id: 1, name: "唐嘉欣", gender: "女", age: 28, idCard: "320826199806126028", phone: "13900139002" },
+      { id: 2, name: "赵章麟", gender: "男", age: 27, idCard: "330327199901044419", phone: "13700137003" },
+      { id: 3, name: "金新莱", gender: "女", age: 23, idCard: "320583200304085525", phone: "13600136004" },
+      { id: 4, name: "李超", gender: "男", age: 36, idCard: "610502199004225851", phone: "13500135005" },
+      { id: 5, name: "高光", gender: "男", age: 40, idCard: "320722198601011619", phone: "13812345609" },
+      { id: 6, name: "陈伟", gender: "男", age: 31, idCard: "320102199503152210", phone: "13812345601" },
+      { id: 7, name: "周俊", gender: "男", age: 29, idCard: "320501199708221019", phone: "13812345602" },
+      { id: 8, name: "吴建华", gender: "男", age: 42, idCard: "320502198411053038", phone: "13812345603" },
+      { id: 9, name: "刘洋", gender: "男", age: 25, idCard: "320503200106184017", phone: "13812345604" },
+      { id: 10, name: "孙浩", gender: "男", age: 33, idCard: "320504199309205056", phone: "13812345605" },
+      { id: 11, name: "王敏", gender: "女", age: 26, idCard: "320506200004127024", phone: "13812345607" },
+      { id: 12, name: "林晓雪", gender: "女", age: 24, idCard: "320507200201258043", phone: "13812345608" }
+    ];
+
+    
+    
+    let toastTimer = null;
+
+    // 从 sessionStorage 读取已移出员工的 ID，支持连续多天保持移出状态
+    function getStoredRemovedIds() {
+      try {
+        const stored = sessionStorage.getItem('__INSURANCE_REMOVED_IDS__');
+        return stored ? JSON.parse(stored) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveStoredRemovedIds() {
+      try {
+        const ids = employees.filter(e => e.isRemoved).map(e => e.id);
+        sessionStorage.setItem('__INSURANCE_REMOVED_IDS__', JSON.stringify(ids));
+      } catch (e) {}
+    }
+
+    // 初始化每位员工的状态
+    const initialRemovedIds = getStoredRemovedIds();
+    employees.forEach(emp => {
+      emp.isRemoved = initialRemovedIds.includes(emp.id);
+    });
+
+    function showToastHint(msg) {
+      const toast = document.getElementById('toastNotice');
+      if (!toast) return;
+      toast.innerText = msg;
+      toast.style.display = 'block';
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.style.display = 'none';
+      }, 2000);
+    }
+
+    function toggleEmpStatus(id) {
+      const emp = employees.find(e => e.id === id);
+      if (!emp) return;
+      emp.isRemoved = !emp.isRemoved;
+      saveStoredRemovedIds();
+      handleSearch();
+
+      if (emp.isRemoved) {
+        showToastHint(`已将 ${emp.name} 移出本次加保名单`);
+      } else {
+        showToastHint(`已将 ${emp.name} 重新加回投保名单`);
+      }
+    }
+
+    function renderList(listToRender) {
+      const container = document.getElementById('employeeListContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const list = listToRender || employees;
+
+      if (list.length === 0) {
+        container.innerHTML = '<div style="text-align:center; padding:30px 0; color:#94A3B8; font-size:13px;">未检索到相关员工</div>';
+      } else {
+        list.forEach(emp => {
+          const card = document.createElement('div');
+          card.className = emp.isRemoved ? 'employee-card is-removed' : 'employee-card';
+          
+          const genderHtml = emp.gender === '女' 
+            ? '<span class="emp-gender-female">♀</span>' 
+            : '<span class="emp-gender-male">♂</span>';
+
+          const statusBadge = emp.isRemoved 
+            ? '<span class="tag-uninsured-state">已移出</span>' 
+            : '';
+
+          const actionBtn = emp.isRemoved
+            ? `<button class="btn-emp-readd" onclick="toggleEmpStatus(${emp.id})">加回投保</button>`
+            : `<button class="btn-emp-action btn-emp-remove" onclick="toggleEmpStatus(${emp.id})">移出</button>`;
+
+          card.innerHTML = `
+            <div class="emp-info-col">
+              <div class="emp-name-row">
+                <span class="emp-name">${emp.name}</span>
+                ${genderHtml}
+                <span class="emp-age-badge">${emp.age}岁</span>
+                ${statusBadge}
+              </div>
+              <div class="emp-id-card">身份证：${emp.idCard}</div>
+            </div>
+            <div class="emp-actions-col">
+              <button class="btn-emp-action" onclick="callPhone('${emp.name}', '${emp.phone}')">打电话</button>
+              ${actionBtn}
+            </div>
+          `;
+          container.appendChild(card);
+        });
+      }
+
+      updateStats();
+    }
+
+    function updateStats() {
+      const activeEmps = employees.filter(e => !e.isRemoved);
+      const activeCount = activeEmps.length;
+      const maleActive = activeEmps.filter(e => e.gender === '男').length;
+      const femaleActive = activeEmps.filter(e => e.gender === '女').length;
+      const removedCount = employees.filter(e => e.isRemoved).length;
+
+      const statElem = document.getElementById('statsCountText');
+      if (statElem) {
+        if (removedCount > 0) {
+          statElem.innerText = `实投${activeCount}人：男${maleActive}/女${femaleActive} (${removedCount}人已移出)`;
+        } else {
+          statElem.innerText = `共${activeCount}人：男${maleActive}/女${femaleActive}`;
+        }
+      }
+
+      const submitBtn = document.getElementById('btnSubmitInsurance') || document.querySelector('.btn-submit-insurance');
+      if (submitBtn) {
+        submitBtn.innerText = `确定加保 (${activeCount}人)`;
+      }
+    }
+
+
+
+    function callPhone(name, phone) {
+      document.getElementById('callTitle').innerText = `模拟呼叫 - ${name}`;
+      document.getElementById('callDesc').innerText = `正在向员工 ${name} (${phone}) 发起拨号...`;
+      document.getElementById('callModal').style.display = 'flex';
+    }
+
+    function closeCallModal() {
+      document.getElementById('callModal').style.display = 'none';
+    }
+
+    function openAddModal() {
+      document.getElementById('newEmpName').value = '';
+      document.getElementById('newEmpIdCard').value = '';
+      document.getElementById('newEmpPhone').value = '';
+      document.getElementById('addEmpModal').style.display = 'flex';
+    }
+
+    function closeAddModal() {
+      document.getElementById('addEmpModal').style.display = 'none';
+    }
+
+    function confirmAddEmp() {
+      const name = document.getElementById('newEmpName').value.trim();
+      const idCard = document.getElementById('newEmpIdCard').value.trim();
+      const phone = document.getElementById('newEmpPhone').value.trim() || '13800000000';
+      const genderRadios = document.getElementsByName('newEmpGender');
+      let gender = '男';
+      for (const r of genderRadios) {
+        if (r.checked) {
+          gender = r.value;
+          break;
+        }
+      }
+
+      if (!name) {
+        showToast('请输入员工姓名');
+        return;
+      }
+      if (!idCard || idCard.length < 15) {
+        showToast('请输入有效的身份证号');
+        return;
+      }
+
+      // 计算大致年龄
+      let age = 25;
+      if (idCard.length === 18) {
+        const birthYear = parseInt(idCard.substring(6, 10));
+        if (birthYear > 1950 && birthYear < 2026) {
+          age = 2026 - birthYear;
+        }
+      }
+
+      const newId = Date.now();
+      employees.unshift({
+        id: newId,
+        name,
+        gender,
+        age,
+        idCard,
+        phone
+      });
+
+      closeAddModal();
+      document.getElementById('empSearchInput').value = '';
+      renderList(employees);
+    }
+
+    function openDateModal() {
+      const cur = document.getElementById('policyDateText').innerText;
+      const nextDate = cur === '2026-10-27' ? '2026-10-28' : '2026-10-27';
+      document.getElementById('policyDateText').innerText = nextDate;
+      showToast(`已更换保单截止日期至: ${nextDate}`);
+    }
+
+    function submitInsurance() {
+      const activeEmps = employees.filter(e => !e.isRemoved);
+      if (activeEmps.length === 0) {
+        showToast('请至少保留一名参保员工再提交加保');
+        return;
+      }
+      document.getElementById('successDesc').innerText = "已成功为 " + activeEmps.length + " 名员工提交安心日保方案，保单即刻生效！";
+      document.getElementById('successModal').style.display = 'flex';
+    }
+
+    function closeSuccessModal() {
+      document.getElementById('successModal').style.display = 'none';
+      if (document.referrer) {
+        window.history.back();
+      } else {
+        window.location.href = 'insurance_detail.html';
+      }
+    }
+
+    function showToast(msg) {
+      document.getElementById('callTitle').innerText = '提示';
+      document.getElementById('callDesc').innerText = msg;
+      document.getElementById('callModal').style.display = 'flex';
+    }
 
     function goBack() {
       if (document.referrer) {
         window.history.back();
       } else {
-        window.location.href = 'project_detail.html';
+        window.location.href = 'insurance_detail.html';
       }
     }
 
-    function goToCompanyProject() {
-      window.location.href = 'company_project.html';
-    }
-
-    function goToProjectDetail() {
-      window.location.href = 'project_detail.html';
-    }
-
-    // 1. 保险商品抽屉处理
-    function openProductDrawer() {
-      const current = confirmedProduct || 'FD日保80万';
-      tempSelectedProduct = current;
-      updateDrawerUI('productList', current);
-      document.getElementById('productDrawerMask').style.display = 'flex';
-    }
-
-    function confirmProductSelection() {
-      confirmedProduct = tempSelectedProduct;
-      const label = document.getElementById('productLabel');
-      const box = document.getElementById('productSelectorText');
-      label.innerText = confirmedProduct;
-      box.classList.add('has-value');
-      closeDrawer('productDrawerMask');
-    }
-
-    // 2. 派遣单位前置判断与抽屉处理
-    function handleEnterpriseClick() {
-      // 业务硬约束：未选保险商品时点击无反应
-      if (!confirmedProduct) {
-        return;
-      }
-      const current = confirmedEnterprise || '申通快递';
-      tempSelectedEnterprise = current;
-      updateDrawerUI('enterpriseList', current);
-      document.getElementById('enterpriseDrawerMask').style.display = 'flex';
-    }
-
-    function confirmEnterpriseSelection() {
-      confirmedEnterprise = tempSelectedEnterprise;
-      const label = document.getElementById('enterpriseLabel');
-      const box = document.getElementById('enterpriseSelectorText');
-      label.innerText = confirmedEnterprise;
-      box.classList.add('has-value');
-      closeDrawer('enterpriseDrawerMask');
-    }
-
-    // 抽屉内单选交互
-    function selectDrawerItem(el, type) {
-      const container = el.parentElement;
-      container.querySelectorAll('.drawer-item').forEach(it => it.classList.remove('selected'));
-      el.classList.add('selected');
-      const val = el.getAttribute('data-val');
-      if (type === 'product') {
-        tempSelectedProduct = val;
-      } else {
-        tempSelectedEnterprise = val;
-      }
-    }
-
-    function updateDrawerUI(containerId, activeVal) {
-      const container = document.getElementById(containerId);
-      container.querySelectorAll('.drawer-item').forEach(it => {
-        if (it.getAttribute('data-val') === activeVal) {
-          it.classList.add('selected');
-        } else {
-          it.classList.remove('selected');
-        }
-      });
-    }
-
-    function closeDrawer(id) {
-      document.getElementById(id).style.display = 'none';
-    }
-
-    function handleMaskClick(e, id) {
-      if (e.target.id === id) {
-        closeDrawer(id);
-      }
-    }
-
-    // 底部确定投保：直接跳转到公司项目页面
-    function handleSubmit() {
-      const prod = confirmedProduct || 'FD日保80万';
-      const comp = confirmedEnterprise || '南京日结圈信息科技有限公司';
-      sessionStorage.setItem('insured_product', prod);
-      sessionStorage.setItem('insured_enterprise', comp);
-      window.location.href = 'company_project.html';
-    }
+    // 初始化渲染
+    window.addEventListener('DOMContentLoaded', () => {
+      renderList(employees);
+    });
   </script>
+
 
 <script id="prototypeAnnotationData" type="application/json">
 {
@@ -1247,33 +1593,74 @@ html.protoMobile-ready body {
     "deviceWidth": 390
   },
   "globalMeta": {
-    "name": "去投保 · 原型说明",
+    "name": "原型说明",
     "version": "V1.0",
-    "updatedAt": "2026-10-22"
+    "updatedAt": "2026-10-23"
   },
   "globalSections": [
     {
-      "id": "sec_1",
-      "title": "1. 业务背景与产品定位",
-      "content": "本页面为【去投保】核心业务流转与交互承载页。"
+      "id": "sec_overview",
+      "title": "1. 业务背景与概述",
+      "content": "【添加员工】是安心日保业务的核心加保录单页面。企业可在此检索或快速录入待上岗的灵活用工人员，核对人员身份证、年龄及保单截止日期，完成当日/本期的意外险投保加保闭环。"
     },
     {
-      "id": "sec_2",
-      "title": "2. 交互流转与核心场景",
-      "content": "支持用户在移动端完成核心功能操作与数据查看。"
-    },
-    {
-      "id": "sec_3",
-      "title": "3. 业务规则与异常处理",
-      "content": "弱网环境支持本地缓存重试；接口异常时给出友好 Toast 提示。"
-    },
-    {
-      "id": "sec_4",
-      "title": "4. 版本变更记录",
-      "content": "V1.0 初始版本发布，建立标准 PRD 标注规范。"
+      "id": "sec_rules",
+      "title": "2. 交互与校验规则",
+      "content": "- **投保年龄限制**：严格遵循 `15周岁 < 被投保人年龄 < 65周岁` 的承保合规范围，超出范围给予前置拦截。\n- **人员快捷检索**：支持输入员工姓名拼音或身份证号码实时本地过滤列表。\n- **人员操作与统计**：卡片右侧提供【打电话】与【移出本次】。被移出人员自动沉淀至下方【本次不投保人员】池，支持随时【＋ 加回投保】或一键全部加回，确保发薪与投保属于同一项目。\n- **保单截止日期**：默认为 24 小时日结保障，点击可延长保单覆盖时间。"
     }
   ],
-  "annotations": []
+  "annotations": [
+    {
+      "id": "note_add_01",
+      "scope": "page:insurance_add",
+      "target": "[data-proto-scope=\"page:insurance_add\"] .tips-banner",
+      "title": "投保年龄合规提示",
+      "content": "通栏提示投保年龄红线（15-65周岁），防范未成年工或超龄人员违规投保导致的拒赔风险。",
+      "x": 0.5,
+      "y": 0.5,
+      "scroll": false
+    },
+    {
+      "id": "note_add_02",
+      "scope": "page:insurance_add",
+      "target": "[data-proto-scope=\"page:insurance_add\"] .search-row",
+      "title": "智能检索与添加员工",
+      "content": "为确保与发薪项目人员1:1同构对齐，不开放外部添加散客入口；支持输入姓名或身份证模糊检索当前发薪项目名单。",
+      "x": 0.5,
+      "y": 0.5,
+      "scroll": false
+    },
+    {
+      "id": "note_add_03",
+      "scope": "page:insurance_add",
+      "target": "[data-proto-scope=\"page:insurance_add\"] .date-card",
+      "title": "保单截止日期配置",
+      "content": "展示保障时间，默认保障24小时。点击可快捷切换或延长截止日期以匹配工期。",
+      "x": 0.5,
+      "y": 0.5,
+      "scroll": true
+    },
+    {
+      "id": "note_add_04",
+      "scope": "page:insurance_add",
+      "target": "[data-proto-scope=\"page:insurance_add\"] .employee-list",
+      "title": "员工列表与外呼删除",
+      "content": "清晰展示员工姓名、性别、年龄胶囊及18位身份证号；支持点击【打电话】联系工人，或点击【删除】移出名单。",
+      "x": 0.5,
+      "y": 0.5,
+      "scroll": true
+    },
+    {
+      "id": "note_add_05",
+      "scope": "page:insurance_add",
+      "target": "[data-proto-scope=\"page:insurance_add\"] .bottom-bar",
+      "title": "确定加保提交入口",
+      "content": "吸底绿色主按钮。点击后提交投保审核并弹出成功反馈，完成加保全流程。",
+      "x": 0.5,
+      "y": 0.5,
+      "scroll": false
+    }
+  ]
 }
 </script>
 
@@ -2689,5 +3076,218 @@ html.protoMobile-ready body {
 })();
 
 </script>
+
+  <script>
+  (function() {
+    if (window.parent && window.parent !== window) {
+      try {
+        var p = (window.location.pathname.split('/').pop() || '').split('?')[0].split('#')[0];
+        window.parent.postMessage({ type: 'PRD_PAGE_CHANGED', path: p }, '*');
+      } catch(e) {}
+    }
+  })();
+  </script>
+
+  <script id="protoHubNavSyncBridge">
+  // 页面加载与按钮点击时主动同步给外层工作台顶部导航栏
+  (function() {
+    if (window.__PROTOHUB_NAV_BRIDGE_BOUND__) return;
+    window.__PROTOHUB_NAV_BRIDGE_BOUND__ = true;
+
+    var DEFAULT_TAB_MAP = {
+      'shouye': { id: 'shouye', name: '首页', path: 'shouye.html', visible: true },
+      'shouye.html': { id: 'shouye', name: '首页', path: 'shouye.html', visible: true },
+      'shouye_template': { id: 'shouye', name: '首页', path: 'shouye.html', visible: true },
+      'shouye_template.html': { id: 'shouye', name: '首页', path: 'shouye.html', visible: true },
+      'project_detail': { id: 'project_detail', name: '人员名单', path: 'project_detail.html', visible: true },
+      'project_detail.html': { id: 'project_detail', name: '人员名单', path: 'project_detail.html', visible: true },
+      'pay_salary': { id: 'pay_salary', name: '我要发薪', path: 'pay_salary.html', visible: true },
+      'pay_salary.html': { id: 'pay_salary', name: '我要发薪', path: 'pay_salary.html', visible: true },
+      'contract_create': { id: 'contract_create', name: '创建合同', path: 'contract_create.html', visible: true },
+      'contract_create.html': { id: 'contract_create', name: '创建合同', path: 'contract_create.html', visible: true },
+      'contract_detail': { id: 'contract_detail', name: '合同详情', path: 'contract_detail.html', visible: true },
+      'contract_detail.html': { id: 'contract_detail', name: '合同详情', path: 'contract_detail.html', visible: true },
+      'insurance_create': { id: 'insurance_create', name: '创建投保', path: 'insurance_create.html', visible: true },
+      'insurance_create.html': { id: 'insurance_create', name: '创建投保', path: 'insurance_create.html', visible: true },
+      'company_project': { id: 'company_project', name: '加保详情', path: 'company_project.html', visible: true },
+      'company_project.html': { id: 'company_project', name: '加保详情', path: 'company_project.html', visible: true },
+      'insurance_detail': { id: 'company_project', name: '加保详情', path: 'company_project.html', visible: true },
+      'insurance_detail.html': { id: 'company_project', name: '加保详情', path: 'company_project.html', visible: true },
+      'contract_list': { id: 'contract_list', name: '电子合同', path: 'contract_list.html', visible: true },
+      'contract_list.html': { id: 'contract_list', name: '电子合同', path: 'contract_list.html', visible: true },
+      'insurance_list': { id: 'insurance_list', name: '安心日保', path: 'insurance_list.html', visible: true },
+      'insurance_list.html': { id: 'insurance_list', name: '安心日保', path: 'insurance_list.html', visible: true },
+      'pc_insure_daily_ax': { id: 'pc_insure_daily_ax', name: '安心日保PC端', path: 'pc_insure_daily_ax.html', visible: true },
+      'pc_insure_daily_ax.html': { id: 'pc_insure_daily_ax', name: '安心日保PC端', path: 'pc_insure_daily_ax.html', visible: true }
+    };
+
+    function cleanFileOrId(raw) {
+      if (!raw) return '';
+      var str = String(raw).trim();
+      if (str.indexOf('#page=') !== -1) {
+        return str.split('#page=').pop().split(/[?&#]/)[0].trim();
+      }
+      return str.split(/[?#]/)[0].split('/').pop().trim();
+    }
+
+    function resolvePageTarget(rawInput) {
+      var fileOrId = cleanFileOrId(rawInput);
+      if (!fileOrId) return null;
+      var lower = fileOrId.toLowerCase();
+      var noExt = lower.replace(/\.html$/i, '');
+      var aliasTarget = DEFAULT_TAB_MAP[lower] || DEFAULT_TAB_MAP[noExt];
+
+      var reg = Array.isArray(window.__PRD_PAGES_REGISTRY__) ? window.__PRD_PAGES_REGISTRY__ : [];
+      if (reg.length > 0) {
+        var visMatch = reg.find(function(p) {
+          if (p.visible === false) return false;
+          var pid = String(p.id || '').toLowerCase();
+          var ppath = String(p.path || '').toLowerCase();
+          return pid === noExt || ppath === lower || ppath.endsWith('/' + lower) ||
+                 (aliasTarget && (pid === aliasTarget.id.toLowerCase() || ppath === aliasTarget.path.toLowerCase()));
+        });
+        if (visMatch) return visMatch;
+
+        var invisMatch = reg.find(function(p) {
+          var pid = String(p.id || '').toLowerCase();
+          var ppath = String(p.path || '').toLowerCase();
+          return pid === noExt || ppath === lower || ppath.endsWith('/' + lower);
+        });
+        if (invisMatch) return invisMatch;
+      }
+
+      if (aliasTarget) return aliasTarget;
+      if (lower.endsWith('.html')) {
+        return { id: noExt, name: noExt, path: fileOrId, visible: true };
+      }
+      return null;
+    }
+
+    window.addEventListener('message', function(e) {
+      if (e.data && e.data.type === 'PRD_PAGES_UPDATED' && Array.isArray(e.data.pages)) {
+        window.__PRD_PAGES_REGISTRY__ = e.data.pages;
+      }
+    });
+
+    function navigateAndSync(targetUrl, evt) {
+      var resolved = resolvePageTarget(targetUrl);
+      if (!resolved) return false;
+
+      if (window.parent && window.parent !== window) {
+        if (resolved.visible === false) {
+          if (evt) {
+            evt.preventDefault();
+            evt.stopPropagation();
+            if (evt.stopImmediatePropagation) evt.stopImmediatePropagation();
+          }
+          try {
+            window.parent.postMessage({ type: 'GUARD_BLOCKED', name: resolved.name || resolved.id, file: resolved.path }, '*');
+            window.parent.postMessage({ type: 'PRD_PAGE_CHANGED', pageId: resolved.id, path: resolved.path }, '*');
+          } catch (err) {}
+          return true;
+        }
+
+        if (evt) {
+          evt.preventDefault();
+          evt.stopPropagation();
+          if (evt.stopImmediatePropagation) evt.stopImmediatePropagation();
+        }
+        try {
+          sessionStorage.setItem('__PROTOHUB_SYNCED_PAGE__', resolved.id);
+          sessionStorage.removeItem('__PROTOHUB_INNER_ACTION_TS__');
+        } catch (err) {}
+        try {
+          window.parent.postMessage({ type: 'PRD_PAGE_CHANGED', pageId: resolved.id, path: resolved.path }, '*');
+          window.parent.postMessage({ type: 'SWITCH_PAGE', pageId: resolved.id, path: resolved.path }, '*');
+        } catch (err) {}
+        return true;
+      }
+
+      window.location.href = resolved.path || targetUrl;
+      return true;
+    }
+
+    window.__protoHubNavigate = function(targetUrl, evt) {
+      return navigateAndSync(targetUrl, evt);
+    };
+
+    function markInnerInteraction() {
+      try {
+        sessionStorage.setItem('__PROTOHUB_INNER_ACTION_TS__', String(Date.now()));
+      } catch (err) {}
+    }
+    document.addEventListener('pointerdown', markInnerInteraction, true);
+    document.addEventListener('keydown', markInnerInteraction, true);
+
+    document.addEventListener('click', function(e) {
+      markInnerInteraction();
+      if (!window.parent || window.parent === window) return;
+
+      var link = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+      if (link) {
+        var href = link.getAttribute('href') || '';
+        if (href && !href.startsWith('#') && !href.startsWith('javascript:') && !href.startsWith('tel:') && !href.startsWith('mailto:')) {
+          var cleanHref = cleanFileOrId(href);
+          if (cleanHref && cleanHref.toLowerCase().endsWith('.html')) {
+            if (navigateAndSync(href, e)) return;
+          }
+        }
+      }
+
+      var clickEl = e.target && e.target.closest ? e.target.closest('[onclick]') : null;
+      if (clickEl) {
+        var onclickStr = clickEl.getAttribute('onclick') || '';
+        var m = onclickStr.match(/(?:window\.)?location(?:\.href)?\s*=\s*['"`]([^'"`]+)['"`]/);
+        if (m && m[1]) {
+          var targetHref = m[1];
+          var cleanTarget = cleanFileOrId(targetHref);
+          if (cleanTarget && (cleanTarget.toLowerCase().endsWith('.html') || targetHref.indexOf('#page=') !== -1)) {
+            if (navigateAndSync(targetHref, e)) return;
+          }
+        }
+      }
+    }, true);
+
+    function syncCurrentPageOnLoad() {
+      if (!window.parent || window.parent === window) return;
+      try {
+        var curFile = (window.location.pathname.split('/').pop() || '').split('?')[0].split('#')[0];
+        if (!curFile || curFile === 'about:blank') return;
+        var resolved = resolvePageTarget(curFile) || { id: curFile.replace(/\.html$/i, ''), path: curFile, visible: true };
+
+        window.parent.postMessage({
+          type: 'PRD_PAGE_CHANGED',
+          pageId: resolved.id,
+          path: resolved.path || curFile
+        }, '*');
+
+        var lastSynced = '';
+        var lastActionTs = 0;
+        try {
+          lastSynced = sessionStorage.getItem('__PROTOHUB_SYNCED_PAGE__') || '';
+          lastActionTs = Number(sessionStorage.getItem('__PROTOHUB_INNER_ACTION_TS__') || 0);
+          sessionStorage.setItem('__PROTOHUB_SYNCED_PAGE__', resolved.id);
+          sessionStorage.removeItem('__PROTOHUB_INNER_ACTION_TS__');
+        } catch (err) {}
+
+        if (lastSynced !== resolved.id && lastActionTs > 0 && (Date.now() - lastActionTs < 8000)) {
+          window.parent.postMessage({
+            type: 'SWITCH_PAGE',
+            pageId: resolved.id,
+            path: resolved.path || curFile
+          }, '*');
+        }
+      } catch (err) {}
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', syncCurrentPageOnLoad);
+    } else {
+      setTimeout(syncCurrentPageOnLoad, 0);
+    }
+    window.addEventListener('pageshow', syncCurrentPageOnLoad);
+    window.addEventListener('popstate', syncCurrentPageOnLoad);
+  })();
+  </script>
 </body>
 </html>

@@ -290,90 +290,181 @@ html, body, #app, .page-body {
 </div>
 
 <script>
-// 发薪管理系统专属默认页面清单
-const UNIFIED_STORAGE_KEY = 'FAXIN_PRD_PAGES_REGISTRY_V2';
+// 发薪管理系统专属默认页面清单 (升级版本 V5，完全对齐用户最新截图与九月版本守卫)
+const UNIFIED_STORAGE_KEY = 'FAXIN_PRD_PAGES_REGISTRY_V6';
 const DEFAULT_PAGES = [
   {
     "id": "shouye",
     "name": "首页",
     "path": "shouye.html",
-    "visible": true
+    "visible": true,
+    "order": 1
   },
   {
     "id": "project_detail",
-    "name": "发薪",
+    "name": "人员名单",
     "path": "project_detail.html",
-    "visible": true
+    "visible": true,
+    "order": 2
   },
   {
     "id": "pay_salary",
     "name": "我要发薪",
     "path": "pay_salary.html",
-    "visible": true
-  },
-  {
-    "id": "contract_list",
-    "name": "电子合同",
-    "path": "contract_list.html",
-    "visible": true
+    "visible": true,
+    "order": 3
   },
   {
     "id": "contract_create",
     "name": "创建合同",
     "path": "contract_create.html",
-    "visible": true
+    "visible": true,
+    "order": 4
   },
   {
     "id": "contract_detail",
     "name": "合同详情",
     "path": "contract_detail.html",
-    "visible": true
-  },
-  {
-    "id": "insurance_list",
-    "name": "安心日保",
-    "path": "insurance_list.html",
-    "visible": true
+    "visible": true,
+    "order": 5
   },
   {
     "id": "insurance_create",
     "name": "创建投保",
     "path": "insurance_create.html",
-    "visible": true
+    "visible": true,
+    "order": 6
   },
   {
-    "id": "insurance_detail",
+    "id": "company_project",
     "name": "加保详情",
-    "path": "insurance_detail.html",
-    "visible": true
+    "path": "company_project.html",
+    "visible": true,
+    "order": 7
+  },
+  {
+    "id": "contract_list",
+    "name": "电子合同",
+    "path": "contract_list.html",
+    "visible": true,
+    "order": 8
+  },
+  {
+    "id": "insurance_list",
+    "name": "安心日保",
+    "path": "insurance_list.html",
+    "visible": true,
+    "order": 9
+  },
+  {
+    "id": "pc_insure_daily_ax",
+    "name": "安心日保PC端",
+    "path": "pc_insure_daily_ax.html",
+    "visible": true,
+    "order": 10
   },
   {
     "id": "dispatch_unit",
     "name": "申请派遣单位",
     "path": "dispatch_unit.html",
-    "visible": true
+    "visible": false,
+    "order": 11
+  },
+  {
+    "id": "insurance_add",
+    "name": "添加员工",
+    "path": "insurance_add.html",
+    "visible": false,
+    "order": 12
   }
 ];
 
+const DEFAULT_PAGES_SIG = 'sig_v5_' + DEFAULT_PAGES.map(p => `${p.id}:${p.visible}:${p.order || ''}`).join('|');
+
+// 全能智能别名路由字典 (中文名称、文件名、ID全覆盖)
+const PAGE_ALIAS_MAP = {
+  'shouye': 'shouye',
+  'shouye.html': 'shouye',
+  '首页': 'shouye',
+  '移动端首页': 'shouye',
+
+  'project_detail': 'project_detail',
+  'project_detail.html': 'project_detail',
+  '发薪': 'project_detail',
+  '人员名单': 'project_detail',
+  '发薪-01': 'project_detail',
+  '员工管理与详情': 'project_detail',
+
+  'pay_salary': 'pay_salary',
+  'pay_salary.html': 'pay_salary',
+  '我要发薪': 'pay_salary',
+  '发薪确认': 'pay_salary',
+
+  'contract_list': 'contract_list',
+  'contract_list.html': 'contract_list',
+  '电子合同': 'contract_list',
+  '合同列表': 'contract_list',
+
+  'contract_create': 'contract_create',
+  'contract_create.html': 'contract_create',
+  '创建合同': 'contract_create',
+  '签订合同': 'contract_create',
+
+  'contract_detail': 'contract_detail',
+  'contract_detail.html': 'contract_detail',
+  '合同详情': 'contract_detail',
+
+  'insurance_list': 'insurance_list',
+  'insurance_list.html': 'insurance_list',
+  '安心日保': 'insurance_list',
+  '日保项目': 'insurance_list',
+
+  'insurance_create': 'insurance_create',
+  'insurance_create.html': 'insurance_create',
+  '创建投保': 'insurance_create',
+  '员工批量加保': 'insurance_create',
+
+  'company_project': 'company_project',
+  'company_project.html': 'company_project',
+  'insurance_detail': 'company_project',
+  'insurance_detail.html': 'company_project',
+  '加保详情': 'company_project',
+  '投保详情': 'company_project',
+  '公司项目': 'company_project',
+
+  'insurance_add': 'insurance_add',
+  'insurance_add.html': 'insurance_add',
+  '添加员工': 'insurance_add',
+
+  'dispatch_unit': 'dispatch_unit',
+  'dispatch_unit.html': 'dispatch_unit',
+  '申请派遣单位': 'dispatch_unit',
+
+  'pc_insure_daily_ax': 'pc_insure_daily_ax',
+  'pc_insure_daily_ax.html': 'pc_insure_daily_ax',
+  'pc日保批量加保': 'pc_insure_daily_ax',
+
+  'create_project': 'create_project',
+  'create_project.html': 'create_project',
+  '创建项目': 'create_project',
+
+  'project_info': 'project_info',
+  'project_info.html': 'project_info',
+  '项目详情': 'project_info'
+};
+
 let pageList = [];
 try {
+  const savedSig = localStorage.getItem(UNIFIED_STORAGE_KEY + '_SIG');
   const saved = localStorage.getItem(UNIFIED_STORAGE_KEY);
-  if (saved) {
-    const parsed = JSON.parse(saved);
-    const defaultMap = new Map(DEFAULT_PAGES.map(p => [p.path, p]));
-    const validSaved = Array.isArray(parsed) ? parsed.filter(p => defaultMap.has(p.path)) : [];
-    if (validSaved.length > 0) {
-      DEFAULT_PAGES.forEach(dp => {
-        if (!validSaved.some(p => p.path === dp.path)) {
-          validSaved.push(JSON.parse(JSON.stringify(dp)));
-        }
-      });
-      pageList = validSaved;
-    } else {
-      pageList = JSON.parse(JSON.stringify(DEFAULT_PAGES));
-    }
+  if (saved && savedSig === DEFAULT_PAGES_SIG) {
+    pageList = JSON.parse(saved);
   } else {
     pageList = JSON.parse(JSON.stringify(DEFAULT_PAGES));
+    try {
+      localStorage.setItem(UNIFIED_STORAGE_KEY, JSON.stringify(pageList));
+      localStorage.setItem(UNIFIED_STORAGE_KEY + '_SIG', DEFAULT_PAGES_SIG);
+    } catch(e) {}
   }
 } catch(e) {
   pageList = JSON.parse(JSON.stringify(DEFAULT_PAGES));
@@ -381,16 +472,254 @@ try {
 
 let activePageId = DEFAULT_PAGES.length ? DEFAULT_PAGES[0].id : '';
 
-function init() {
-  const hash = window.location.hash.replace('#page=', '').toLowerCase();
-  const matched = pageList.find(p => p.id.toLowerCase() === hash || p.path.toLowerCase().replace('.html', '') === hash);
-  if (matched) {
-    if (!matched.visible) {
-      matched.visible = true;
+// 智能查找匹配项
+function findMatchedPage(filenameOrId) {
+  if (!filenameOrId) return null;
+  const raw = String(filenameOrId).trim();
+  const clean = raw.toLowerCase().split('?')[0].split('#')[0];
+  const target = clean.endsWith('.html') ? clean.slice(0, -5) : clean;
+  
+  let targetId = PAGE_ALIAS_MAP[raw] || PAGE_ALIAS_MAP[clean] || PAGE_ALIAS_MAP[target];
+  let matched = null;
+  if (targetId) {
+    matched = pageList.find(p => p.id === targetId);
+  }
+  if (!matched) {
+    matched = pageList.find(p => 
+      p.id.toLowerCase() === target || 
+      p.path.toLowerCase().replace('.html', '') === target ||
+      p.name.toLowerCase() === raw.toLowerCase()
+    );
+  }
+  if (!matched) {
+    const fromDefault = DEFAULT_PAGES.find(p => 
+      p.id === targetId || 
+      p.id.toLowerCase() === target || 
+      p.path.toLowerCase().replace('.html', '') === target
+    );
+    if (fromDefault) {
+      matched = JSON.parse(JSON.stringify(fromDefault));
+      pageList.push(matched);
     }
+  }
+  return matched;
+}
+
+// 轻量胶囊 Toast 提示 (严格无 Emoji 规范)
+function showHubToast(msg) {
+  let toast = document.getElementById('hub-nav-guard-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'hub-nav-guard-toast';
+    toast.style.cssText = `
+      position: fixed;
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%) translateY(0);
+      background: rgba(30, 41, 59, 0.92);
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 8px 18px;
+      border-radius: 20px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.22);
+      z-index: 999999;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      letter-spacing: 0.3px;
+    `;
+    document.body.appendChild(toast);
+  }
+  toast.textContent = msg;
+  toast.style.opacity = '1';
+  toast.style.transform = 'translateX(-50%) translateY(0)';
+  clearTimeout(window._hubToastTimer);
+  window._hubToastTimer = setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateX(-50%) translateY(-6px)';
+  }, 2200);
+}
+
+// 自动居中平滑滚动当前选中的 Tab
+function scrollActiveTabIntoView() {
+  setTimeout(() => {
+    const activeTab = document.querySelector('.hub-tab-chip.is-active');
+    if (activeTab) {
+      activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+  }, 30);
+}
+
+// 核心同步与状态更新函数
+function applyPageSync(filenameOrId) {
+  if (!filenameOrId) return;
+  const matched = findMatchedPage(filenameOrId);
+  if (!matched) return;
+
+  // 1. 如果跳转到了未勾选页面：拦截并回滚到当前已勾选页面
+  if (!matched.visible) {
+    const curPg = pageList.find(p => p.id === activePageId);
+    if (curPg && curPg.path !== matched.path) {
+      showHubToast(`页面「${matched.name}」未在页面管理中勾选，暂不开放跳转`);
+      const frame = document.getElementById('hubFrame');
+      if (frame) frame.src = curPg.path;
+    }
+    return;
+  }
+
+  // 2. 如果跳转到了已勾选页面：立刻高亮对应导航栏 Tab
+  if (activePageId !== matched.id) {
+    activePageId = matched.id;
+    try {
+      history.replaceState(null, '', '#page=' + matched.id);
+    } catch(e) {
+      window.location.hash = 'page=' + matched.id;
+    }
+    renderTabs();
+    scrollActiveTabIntoView();
+  }
+}
+
+// 核心：iframe 内部路由守护与拦截未勾选页面 (1:1 传承九月版本经典机制)
+function attachHubFrameNavigationGuard() {
+  const frame = document.getElementById('hubFrame');
+  if (!frame) return;
+  try {
+    const iframeWin = frame.contentWindow;
+    const iframeDoc = frame.contentDocument;
+    if (!iframeWin || !iframeDoc) return;
+
+    // 1. 同步当前实际加载的页面
+    const pathname = iframeWin.location.pathname || '';
+    const rawFile = pathname.split(/[?#]/)[0].split('/').pop();
+    if (rawFile && rawFile !== 'about:blank') {
+      applyPageSync(rawFile);
+    }
+
+    // 2. 捕获 iframe 内的所有点击事件 (capture: true 优先拦截)
+    if (!iframeDoc._hasHubGuardBound) {
+      iframeDoc._hasHubGuardBound = true;
+
+      iframeDoc.addEventListener('click', function(e) {
+        // 检查 A 标签跳转
+        const link = e.target.closest('a');
+        if (link) {
+          const href = link.getAttribute('href');
+          if (href && !href.startsWith('#') && !href.startsWith('javascript:') && !href.startsWith('tel:') && !href.startsWith('mailto:')) {
+            const targetFile = href.split(/[?#]/)[0].split('/').pop();
+            if (targetFile && targetFile.endsWith('.html')) {
+              const matched = findMatchedPage(targetFile);
+              if (matched) {
+                if (!matched.visible) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  e.stopImmediatePropagation();
+                  showHubToast(`「${matched.name}」未在页面管理中勾选，暂不开放跳转`);
+                  return;
+                } else {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  e.stopImmediatePropagation();
+                  switchPage(matched.id);
+                  return;
+                }
+              }
+            }
+          }
+        }
+
+        // 检查含有 onclick 的元素
+        const clickEl = e.target.closest('[onclick]');
+        if (clickEl) {
+          const onclickStr = clickEl.getAttribute('onclick') || '';
+          const match = onclickStr.match(/(?:window\.)?location(?:\.href)?\s*=\s*['"`]([^'"`]+)['"`]/);
+          if (match && match[1]) {
+            const href = match[1];
+            const targetFile = href.split(/[?#]/)[0].split('/').pop();
+            if (targetFile && targetFile.endsWith('.html')) {
+              const matched = findMatchedPage(targetFile);
+              if (matched) {
+                if (!matched.visible) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  e.stopImmediatePropagation();
+                  showHubToast(`「${matched.name}」未在页面管理中勾选，暂不开放跳转`);
+                  return;
+                } else {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  e.stopImmediatePropagation();
+                  switchPage(matched.id);
+                  return;
+                }
+              }
+            }
+          }
+        }
+      }, true);
+    }
+  } catch(err) {
+    // 跨域或安全沙箱环境由 message 监听接管
+  }
+}
+
+// 监听子页面通过 postMessage 发出的跨页面导航通知 (解决 file:// 协议与跨域环境)
+window.addEventListener('message', (event) => {
+  if (!event.data) return;
+  if (event.data.type === 'GUARD_BLOCKED') {
+    showHubToast(`页面「${event.data.name || event.data.file}」未在页面管理中勾选，暂不开放跳转`);
+    return;
+  }
+  if (event.data.type === 'SWITCH_PAGE') {
+    const matched = findMatchedPage(event.data.pageId || event.data.path || event.data.target);
+    if (matched) {
+      if (!matched.visible) {
+        showHubToast(`页面「${matched.name}」未在页面管理中勾选，暂不开放跳转`);
+      } else {
+        switchPage(matched.id);
+      }
+    }
+    return;
+  }
+  if (
+    event.data.type === 'PRD_PAGE_CHANGED' || 
+    event.data.type === 'PAGE_NAVIGATE' ||
+    event.data.type === 'NAVIGATE_TO'
+  ) {
+    applyPageSync(event.data.path || event.data.pageId || event.data.target);
+  }
+});
+
+// 心跳周期性检测
+setInterval(() => {
+  attachHubFrameNavigationGuard();
+}, 120);
+
+function init() {
+  const frame = document.getElementById('hubFrame');
+  if (frame) {
+    frame.addEventListener('load', () => {
+      attachHubFrameNavigationGuard();
+      try {
+        const cw = frame.contentWindow;
+        if (cw) {
+          cw.addEventListener('popstate', attachHubFrameNavigationGuard);
+          cw.addEventListener('hashchange', attachHubFrameNavigationGuard);
+          cw.addEventListener('pageshow', attachHubFrameNavigationGuard);
+        }
+      } catch(e) {}
+    });
+  }
+
+  const hash = window.location.hash.replace('#page=', '').toLowerCase();
+  const matched = findMatchedPage(hash);
+  if (matched && matched.visible) {
     switchPage(matched.id);
   } else {
-    const firstVis = pageList.find(p => p.visible) || pageList[0];
+    const visiblePages = pageList
+      .filter(p => p.visible)
+      .sort((a, b) => (Number(a.order) || 9999) - (Number(b.order) || 9999));
+    const firstVis = visiblePages[0] || pageList[0];
     if (firstVis) switchPage(firstVis.id);
   }
   renderTabs();
@@ -401,7 +730,11 @@ function renderTabs() {
   if (!bar) return;
   bar.innerHTML = '';
 
-  pageList.filter(p => p.visible).forEach(p => {
+  const visiblePages = pageList
+    .filter(p => p.visible)
+    .sort((a, b) => (Number(a.order) || 9999) - (Number(b.order) || 9999));
+
+  visiblePages.forEach(p => {
     const chip = document.createElement('button');
     chip.className = `hub-tab-chip ${p.id === activePageId ? 'is-active' : ''}`;
     chip.textContent = p.name;
@@ -415,13 +748,22 @@ function switchPage(pageId) {
   if (!pg) return;
 
   activePageId = pg.id;
-  window.location.hash = `page=${pg.id}`;
+  try {
+    history.replaceState(null, '', '#page=' + pg.id);
+  } catch(e) {
+    window.location.hash = 'page=' + pg.id;
+  }
 
   renderTabs();
+  scrollActiveTabIntoView();
 
   const frame = document.getElementById('hubFrame');
-  if (frame && !frame.src.endsWith(pg.path)) {
-    frame.src = pg.path;
+  if (frame) {
+    const currentBase = (frame.src || '').split(/[?#]/)[0].split('/').pop();
+    const targetBase = pg.path.split(/[?#]/)[0].split('/').pop();
+    if (currentBase !== targetBase) {
+      frame.src = pg.path;
+    }
   }
 }
 
@@ -481,6 +823,7 @@ function deletePage(idx) {
 function savePages() {
   try {
     localStorage.setItem(UNIFIED_STORAGE_KEY, JSON.stringify(pageList));
+    localStorage.setItem(UNIFIED_STORAGE_KEY + '_SIG', DEFAULT_PAGES_SIG);
   } catch(e){}
   renderTabs();
   closeModal();
@@ -494,9 +837,8 @@ function resetDefaults() {
 window.addEventListener('DOMContentLoaded', init);
 window.addEventListener('hashchange', () => {
   const hash = window.location.hash.replace('#page=', '').toLowerCase();
-  const matched = pageList.find(p => p.id.toLowerCase() === hash || p.path.toLowerCase().replace('.html', '') === hash);
-  if (matched) {
-    if (!matched.visible) matched.visible = true;
+  const matched = findMatchedPage(hash);
+  if (matched && matched.visible) {
     switchPage(matched.id);
   }
 });
