@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>发薪管理系统 · 统一产品需求文档 (PRD) 工作台</title>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif;
+  background: #edf0f6;
+  color: #223355;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* 顶部极简浅色导航总控栏 */
+.top-hub-header {
+  height: 48px;
+  background: #ffffff;
+  border-bottom: 1px solid #dde1eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  flex-shrink: 0;
+  z-index: 100;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.hub-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.hub-tag {
+  background: #1677ff;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+.hub-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+/* 页面切换 Tab 胶囊 */
+.hub-tabs-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  margin: 0 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.hub-tabs-container::-webkit-scrollbar { display: none; }
+
+.hub-tab-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 12px;
+  border-radius: 16px;
+  font-size: 12.5px;
+  font-weight: 500;
+  text-decoration: none;
+  background: #f8fafc;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+.hub-tab-chip:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+  border-color: #94a3b8;
+}
+.hub-tab-chip.is-active {
+  background: #1677ff;
+  color: #ffffff;
+  border-color: #1677ff;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(22, 119, 255, 0.25);
+}
+
+.hub-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.hub-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+.hub-btn:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+.hub-btn.primary {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border-color: #93c5fd;
+  font-weight: 600;
+}
+
+/* 主体容器：100% 呈现目标页面的三栏审阅器 */
+.hub-viewport {
+  flex: 1;
+  width: 100%;
+  height: calc(100vh - 48px);
+  position: relative;
+  background: #edf0f6;
+}
+.hub-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  display: block;
+}
+
+/* 页面管理弹窗 */
+.hub-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(2px);
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.hub-modal.show { display: flex; }
+.hub-modal-box {
+  background: #ffffff;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 540px;
+  padding: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+.hub-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.hub-modal-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e293b;
+}
+.hub-modal-list {
+  max-height: 260px;
+  overflow-y: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 6px;
+  margin-bottom: 14px;
+}
+.hub-modal-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 10px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 13px;
+}
+.hub-modal-item:last-child { border-bottom: none; }
+.hub-input-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+.hub-input {
+  padding: 6px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 12.5px;
+  outline: none;
+}
+.hub-input:focus { border-color: #1677ff; }
+</style>
+
+<style id="cleanScrollbarFix">
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+html, body, #app, .page-body {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+</style>
+
+</head>
+<body>
+
+<!-- 顶部工作台总控栏 -->
+<header class="top-hub-header">
+  <div class="hub-brand">
+    <span class="hub-tag">PRD HUB</span>
+    <span class="hub-title">发薪管理系统 · 产品文档交互工作台</span>
+  </div>
+
+  <!-- 页面切换胶囊 Tab 栏 -->
+  <nav class="hub-tabs-container" id="hubTabsBar">
+    <!-- 动态插入可切换页面 -->
+  </nav>
+
+  <!-- 工具栏 -->
+  <div class="hub-tools">
+    <button class="hub-btn primary" onclick="openModal()">
+      <span class="material-icons" style="font-size:15px">tune</span>
+      <span>页面管理(勾选/新增)</span>
+    </button>
+    <button class="hub-btn" onclick="reloadFrame()" title="刷新当前页面">
+      <span class="material-icons" style="font-size:15px">refresh</span>
+      <span>刷新</span>
+    </button>
+  </div>
+</header>
+
+<!-- 主视口：直接 100% 渲染目标页面的三栏审阅器 -->
+<main class="hub-viewport">
+  <iframe class="hub-frame" id="hubFrame" src="about:blank"></iframe>
+</main>
+
+<!-- 页面展示管理弹窗 -->
+<div class="hub-modal" id="hubModal" onclick="closeModal(event)">
+  <div class="hub-modal-box" onclick="event.stopPropagation()">
+    <div class="hub-modal-head">
+      <strong class="hub-modal-title">页面展示管理 (勾选向开发公开的页面)</strong>
+      <button style="border:none;background:none;font-size:18px;cursor:pointer;color:#64748b" onclick="closeModal()">&times;</button>
+    </div>
+
+    <div style="font-size:12px;color:#64748b;margin-bottom:10px">
+      勾选的页面会显示在顶部导航栏中，点击即可切换体验对应的完整三栏 PRD 原型：
+    </div>
+
+    <div class="hub-modal-list" id="modalPageList"></div>
+
+    <div class="hub-input-row">
+      <input type="text" class="hub-input" id="newPgName" placeholder="页面名称 (如: 极速发薪)" style="flex:1">
+      <input type="text" class="hub-input" id="newPgPath" placeholder="文件路径 (如: shouye.html)" style="flex:1.2">
+      <button class="hub-btn primary" type="button" onclick="handleAddPage()">添加</button>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <button class="hub-btn" onclick="resetDefaults()">恢复默认清单</button>
+      <div style="display:flex;gap:8px">
+        <button class="hub-btn" onclick="closeModal()">取消</button>
+        <button class="hub-btn primary" onclick="savePages()">保存并应用配置</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// 发薪管理系统专属默认页面清单 (升级版本 V5，完全对齐用户最新截图与九月版本守卫)
+const UNIFIED_STORAGE_KEY = 'PRD_PAGES_REGISTRY_BUILD_1793172022988';
+const DEFAULT_PAGES = [
+  {
+    "id": "shouye",
+    "name": "首页",
+    "path": "shouye.html",
+    "filename": "shouye.html",
+    "isWrapperHub": false,
+    "hasAnnotations": false,
+    "visible": true,
+    "order": 1
+  },
+  {
+    "id": "project_detail",
+    "name": "人员名单",
+    "path": "project_detail.html",
+    "visible": true,
+    "order": 2
+  },
+  {
+    "id": "contract_detail",
+    "name": "合同详情",
+    "path": "contract_detail.html",
+    "visible": true,
+    "order": 3
+  },
+  {
+    "id": "insurance_create",
+    "name": "创建投保",
+    "path": "insurance_create.html",
+    "visible": true,
+    "order": 4
+  },
+  {
+    "id": "company_project",
+    "name": "加保详情",
+    "path": "company_project.html",
+    "visible": true,
+    "order": 5
+  },
+  {
+    "id": "contract_list",
+    "name": "电子合同",
+    "path": "contract_list.html",
+    "visible": true,
+    "order": 6
+  },
+  {
+    "id": "insurance_list",
+    "name": "安心日保",
+    "path": "insurance_list.html",
+    "visible": true,
+    "order": 7
+  },
+  {
+    "id": "pc_insure_daily_ax",
+    "name": "安心日保PC端",
+    "path": "pc_insure_daily_ax.html",
+    "visible": true,
+    "order": 8
+  },
+  {
+    "id": "insurance_add",
+    "name": "员工加保",
+    "path": "insurance_add.html",
+    "visible": true,
+    "order": 9
+  }
+];
+
+const DEFAULT_PAGES_SIG = 'sig_v5_' + DEFAULT_PAGES.map(p => `${p.id}:${p.visible}:${p.order || ''}`).join('|');
+
+// 全能智能别名路由字典 (中文名称、文件名、ID全覆盖)
+const PAGE_ALIAS_MAP = {
+  'shouye': 'shouye',
+  'shouye.html': 'shouye',
+  '首页': 'shouye',
+  '移动端首页': 'shouye',
+
+  'project_detail': 'project_detail',
+  'project_detail.html': 'project_detail',
+  '发薪': 'project_detail',
+  '人员名单': 'project_detail',
+  '发薪-01': 'project_detail',
+  '员工管理与详情': 'project_detail',
+
+  'pay_salary': 'pay_salary',
+  'pay_salary.html': 'pay_salary',
+  '我要发薪': 'pay_salary',
+  '发薪确认': 'pay_salary',
+
+  'contract_list': 'contract_list',
+  'contract_list.html': 'contract_list',
+  '电子合同': 'contract_list',
+  '合同列表': 'contract_list',
+
+  'contract_create': 'contract_create',
+  'contract_create.html': 'contract_create',
+  '创建合同': 'contract_create',
+  '签订合同': 'contract_create',
+
+  'contract_detail': 'contract_detail',
+  'contract_detail.html': 'contract_detail',
+  '合同详情': 'contract_detail',
+
+  'insurance_list': 'insurance_list',
+  'insurance_list.html': 'insurance_list',
+  '安心日保': 'insurance_list',
+  '日保项目': 'insurance_list',
+
+  'insurance_create': 'insurance_create',
+  'insurance_create.html': 'insurance_create',
+  '创建投保': 'insurance_create',
+  '员工批量加保': 'insurance_create',
+
+  'company_project': 'company_project',
+  'company_project.html': 'company_project',
+  'insurance_detail': 'company_project',
+  'insurance_detail.html': 'company_project',
+  '加保详情': 'company_project',
+  '投保详情': 'company_project',
+  '公司项目': 'company_project',
+
+  'insurance_add': 'insurance_add',
+  'insurance_add.html': 'insurance_add',
+  '添加员工': 'insurance_add',
+
+  'dispatch_unit': 'dispatch_unit',
+  'dispatch_unit.html': 'dispatch_unit',
+  '申请派遣单位': 'dispatch_unit',
+
+  'pc_insure_daily_ax': 'pc_insure_daily_ax',
+  'pc_insure_daily_ax.html': 'pc_insure_daily_ax',
+  'pc日保批量加保': 'pc_insure_daily_ax',
+
+  'create_project': 'create_project',
+  'create_project.html': 'create_project',
+  '创建项目': 'create_project',
+
+  'project_info': 'project_info',
+  'project_info.html': 'project_info',
+  '项目详情': 'project_info'
+};
+
+let pageList = [];
+try {
+  const savedSig = localStorage.getItem(UNIFIED_STORAGE_KEY + '_SIG');
+  const saved = localStorage.getItem(UNIFIED_STORAGE_KEY);
+  if (saved && savedSig === DEFAULT_PAGES_SIG) {
+    pageList = JSON.parse(saved);
+  } else {
+    pageList = JSON.parse(JSON.stringify(DEFAULT_PAGES));
+    try {
+      localStorage.setItem(UNIFIED_STORAGE_KEY, JSON.stringify(pageList));
+      localStorage.setItem(UNIFIED_STORAGE_KEY + '_SIG', DEFAULT_PAGES_SIG);
+    } catch(e) {}
+  }
+} catch(e) {
+  pageList = JSON.parse(JSON.stringify(DEFAULT_PAGES));
+}
+
+let activePageId = DEFAULT_PAGES.length ? DEFAULT_PAGES[0].id : '';
+
+// 智能查找匹配项
+function findMatchedPage(filenameOrId) {
+  if (!filenameOrId) return null;
+  const raw = String(filenameOrId).trim();
+  const clean = raw.toLowerCase().split('?')[0].split('#')[0];
+  const target = clean.endsWith('.html') ? clean.slice(0, -5) : clean;
+  
+  let targetId = PAGE_ALIAS_MAP[raw] || PAGE_ALIAS_MAP[clean] || PAGE_ALIAS_MAP[target];
+  let matched = null;
+  if (targetId) {
+    matched = pageList.find(p => p.id === targetId);
+  }
+  if (!matched) {
+    matched = pageList.find(p => 
+      p.id.toLowerCase() === target || 
+      p.path.toLowerCase().replace('.html', '') === target ||
+      p.name.toLowerCase() === raw.toLowerCase()
+    );
+  }
+  if (!matched) {
+    const fromDefault = DEFAULT_PAGES.find(p => 
+      p.id === targetId || 
+      p.id.toLowerCase() === target || 
+      p.path.toLowerCase().replace('.html', '') === target
+    );
+    if (fromDefault) {
+      matched = JSON.parse(JSON.stringify(fromDefault));
+      pageList.push(matched);
+    }
+  }
+  return matched;
+}
+
+// 轻量胶囊 Toast 提示 (严格无 Emoji 规范)
+function showHubToast(msg) {
+  let toast = document.getElementById('hub-nav-guard-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'hub-nav-guard-toast';
+    toast.style.cssText = `
+      position: fixed;
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%) translateY(0);
+      background: rgba(30, 41, 59, 0.92);
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 8px 18px;
+      border-radius: 20px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.22);
+      z-index: 999999;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      letter-spacing: 0.3px;
+    `;
+    document.body.appendChild(toast);
+  }
+  toast.textContent = msg;
+  toast.style.opacity = '1';
+  toast.style.transform = 'translateX(-50%) translateY(0)';
+  clearTimeout(window._hubToastTimer);
+  window._hubToastTimer = setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateX(-50%) translateY(-6px)';
+  }, 2200);
+}
+
+// 自动居中平滑滚动当前选中的 Tab
+function scrollActiveTabIntoView() {
+  setTimeout(() => {
+    const activeTab = document.querySelector('.hub-tab-chip.is-active');
+    if (activeTab) {
+      activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+  }, 30);
+}
+
+// 核心同步与状态更新函数
+function applyPageSync(filenameOrId) {
+  if (!filenameOrId) return;
+  const matched = findMatchedPage(filenameOrId);
+  if (!matched) return;
+
+  // 1. 如果跳转到了未勾选页面：拦截并回滚到当前已勾选页面
+  if (!matched.visible) {
+    const curPg = pageList.find(p => p.id === activePageId);
+    if (curPg && curPg.path !== matched.path) {
+      showHubToast(`页面「${matched.name}」未在页面管理中勾选，暂不开放跳转`);
+      const frame = document.getElementById('hubFrame');
+      if (frame) frame.src = curPg.path;
+    }
+    return;
+  }
+
+  // 2. 如果跳转到了已勾选页面：立刻高亮对应导航栏 Tab
+  if (activePageId !== matched.id) {
+    activePageId = matched.id;
+    try {
+      history.replaceState(null, '', '#page=' + matched.id);
+    } catch(e) {
+      window.location.hash = 'page=' + matched.id;
+    }
+    renderTabs();
+    scrollActiveTabIntoView();
+  }
+}
+
+// 核心：iframe 内部路由守护与拦截未勾选页面 (1:1 传承九月版本经典机制)
+function attachHubFrameNavigationGuard() {
+  const frame = document.getElementById('hubFrame');
+  if (!frame) return;
+  try {
+    const iframeWin = frame.contentWindow;
+    const iframeDoc = frame.contentDocument;
+    if (!iframeWin || !iframeDoc) return;
+
+    // 1. 同步当前实际加载的页面
+    const pathname = iframeWin.location.pathname || '';
+    const rawFile = pathname.split(/[?#]/)[0].split('/').pop();
+    if (rawFile && rawFile !== 'about:blank') {
+      applyPageSync(rawFile);
+    }
+
+    // 2. 捕获 iframe 内的所有点击事件 (capture: true 优先拦截)
+    if (!iframeDoc._hasHubGuardBound) {
+      iframeDoc._hasHubGuardBound = true;
+
+      iframeDoc.addEventListener('click', function(e) {
+        // 检查 A 标签跳转
+        const link = e.target.closest('a');
+        if (link) {
+          const href = link.getAttribute('href');
+          if (href && !href.startsWith('#') && !href.startsWith('javascript:') && !href.startsWith('tel:') && !href.startsWith('mailto:')) {
+            const targetFile = href.split(/[?#]/)[0].split('/').pop();
+            if (targetFile && targetFile.endsWith('.html')) {
+              const matched = findMatchedPage(targetFile);
+              if (matched) {
+                if (!matched.visible) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  e.stopImmediatePropagation();
+                  showHubToast(`「${matched.name}」未在页面管理中勾选，暂不开放跳转`);
+                  return;
+                } else {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  e.stopImmediatePropagation();
+                  switchPage(matched.id);
+                  return;
+                }
+              }
+            }
+          }
+        }
+
+        // 检查含有 onclick 的元素
+        const clickEl = e.target.closest('[onclick]');
+        if (clickEl) {
+          const onclickStr = clickEl.getAttribute('onclick') || '';
+          const match = onclickStr.match(/(?:window\.)?location(?:\.href)?\s*=\s*['"`]([^'"`]+)['"`]/);
+          if (match && match[1]) {
+            const href = match[1];
+            const targetFile = href.split(/[?#]/)[0].split('/').pop();
+            if (targetFile && targetFile.endsWith('.html')) {
+              const matched = findMatchedPage(targetFile);
+              if (matched) {
+                if (!matched.visible) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  e.stopImmediatePropagation();
+                  showHubToast(`「${matched.name}」未在页面管理中勾选，暂不开放跳转`);
+                  return;
+                } else {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  e.stopImmediatePropagation();
+                  switchPage(matched.id);
+                  return;
+                }
+              }
+            }
+          }
+        }
+      }, true);
+    }
+  } catch(err) {
+    // 跨域或安全沙箱环境由 message 监听接管
+  }
+}
+
+// 监听子页面通过 postMessage 发出的跨页面导航通知 (解决 file:// 协议与跨域环境)
+window.addEventListener('message', (event) => {
+  if (!event.data) return;
+  if (event.data.type === 'GUARD_BLOCKED') {
+    showHubToast(`页面「${event.data.name || event.data.file}」未在页面管理中勾选，暂不开放跳转`);
+    return;
+  }
+  if (event.data.type === 'SWITCH_PAGE') {
+    const matched = findMatchedPage(event.data.pageId || event.data.path || event.data.target);
+    if (matched) {
+      if (!matched.visible) {
+        showHubToast(`页面「${matched.name}」未在页面管理中勾选，暂不开放跳转`);
+      } else {
+        switchPage(matched.id);
+      }
+    }
+    return;
+  }
+  if (
+    event.data.type === 'PRD_PAGE_CHANGED' || 
+    event.data.type === 'PAGE_NAVIGATE' ||
+    event.data.type === 'NAVIGATE_TO'
+  ) {
+    applyPageSync(event.data.path || event.data.pageId || event.data.target);
+  }
+});
+
+// 心跳周期性检测
+setInterval(() => {
+  attachHubFrameNavigationGuard();
+}, 120);
+
+function init() {
+  const frame = document.getElementById('hubFrame');
+  if (frame) {
+    frame.addEventListener('load', () => {
+      attachHubFrameNavigationGuard();
+      try {
+        const cw = frame.contentWindow;
+        if (cw) {
+          cw.addEventListener('popstate', attachHubFrameNavigationGuard);
+          cw.addEventListener('hashchange', attachHubFrameNavigationGuard);
+          cw.addEventListener('pageshow', attachHubFrameNavigationGuard);
+        }
+      } catch(e) {}
+    });
+  }
+
+  const hash = window.location.hash.replace('#page=', '').toLowerCase();
+  const matched = findMatchedPage(hash);
+  if (matched && matched.visible) {
+    switchPage(matched.id);
+  } else {
+    const visiblePages = pageList
+      .filter(p => p.visible)
+      .sort((a, b) => (Number(a.order) || 9999) - (Number(b.order) || 9999));
+    const firstVis = visiblePages[0] || pageList[0];
+    if (firstVis) switchPage(firstVis.id);
+  }
+  renderTabs();
+}
+
+function renderTabs() {
+  const bar = document.getElementById('hubTabsBar');
+  if (!bar) return;
+  bar.innerHTML = '';
+
+  const visiblePages = pageList
+    .filter(p => p.visible)
+    .sort((a, b) => (Number(a.order) || 9999) - (Number(b.order) || 9999));
+
+  visiblePages.forEach(p => {
+    const chip = document.createElement('button');
+    chip.className = `hub-tab-chip ${p.id === activePageId ? 'is-active' : ''}`;
+    chip.textContent = p.name;
+    chip.onclick = () => switchPage(p.id);
+    bar.appendChild(chip);
+  });
+}
+
+function switchPage(pageId) {
+  const pg = pageList.find(p => p.id === pageId);
+  if (!pg) return;
+
+  activePageId = pg.id;
+  try {
+    history.replaceState(null, '', '#page=' + pg.id);
+  } catch(e) {
+    window.location.hash = 'page=' + pg.id;
+  }
+
+  renderTabs();
+  scrollActiveTabIntoView();
+
+  const frame = document.getElementById('hubFrame');
+  if (frame) {
+    const currentBase = (frame.src || '').split(/[?#]/)[0].split('/').pop();
+    const targetBase = pg.path.split(/[?#]/)[0].split('/').pop();
+    if (currentBase !== targetBase) {
+      frame.src = pg.path;
+    }
+  }
+}
+
+function reloadFrame() {
+  const frame = document.getElementById('hubFrame');
+  if (frame) {
+    frame.src = frame.src;
+  }
+}
+
+// 模态框管理
+function openModal() {
+  renderModalList();
+  document.getElementById('hubModal').classList.add('show');
+}
+function closeModal(e) {
+  if (e && e.target !== e.currentTarget) return;
+  document.getElementById('hubModal').classList.remove('show');
+}
+
+function renderModalList() {
+  const container = document.getElementById('modalPageList');
+  if (!container) return;
+  container.innerHTML = '';
+  pageList.forEach((p, idx) => {
+    const row = document.createElement('div');
+    row.className = 'hub-modal-item';
+    row.innerHTML = `
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+        <input type="checkbox" ${p.visible ? 'checked' : ''} onchange="pageList[${idx}].visible = this.checked" />
+        <span style="font-weight:600;color:#1e293b">${p.name}</span>
+        <span style="color:#94a3b8;font-size:11px">(${p.path})</span>
+      </label>
+      <button style="border:none;background:none;color:#ef4444;cursor:pointer;font-size:14px" onclick="deletePage(${idx})">&times;</button>
+    `;
+    container.appendChild(row);
+  });
+}
+
+function handleAddPage() {
+  const name = document.getElementById('newPgName').value.trim();
+  const path = document.getElementById('newPgPath').value.trim();
+  if (name && path) {
+    const id = path.replace('.html', '').replace(/[^a-zA-Z0-9_-]/g, '_');
+    pageList.push({ id, name, path, visible: true });
+    document.getElementById('newPgName').value = '';
+    document.getElementById('newPgPath').value = '';
+    renderModalList();
+  }
+}
+
+function deletePage(idx) {
+  pageList.splice(idx, 1);
+  renderModalList();
+}
+
+function savePages() {
+  try {
+    localStorage.setItem(UNIFIED_STORAGE_KEY, JSON.stringify(pageList));
+    localStorage.setItem(UNIFIED_STORAGE_KEY + '_SIG', DEFAULT_PAGES_SIG);
+  } catch(e){}
+  renderTabs();
+  closeModal();
+}
+
+function resetDefaults() {
+  pageList = JSON.parse(JSON.stringify(DEFAULT_PAGES));
+  renderModalList();
+}
+
+window.addEventListener('DOMContentLoaded', init);
+window.addEventListener('hashchange', () => {
+  const hash = window.location.hash.replace('#page=', '').toLowerCase();
+  const matched = findMatchedPage(hash);
+  if (matched && matched.visible) {
+    switchPage(matched.id);
+  }
+});
+</script>
+</body>
+</html>
